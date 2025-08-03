@@ -3,7 +3,6 @@ using GameCode.Persistence;
 using GameCode.Persistence.Repositories;
 using SceneFlowManagementSystem.Config;
 using SceneFlowManagementSystem.SceneFlowManager;
-using SceneLoaderSystem;
 using SoundSystem.Config;
 using SoundSystem.SoundManager;
 using UnityEngine;
@@ -29,7 +28,6 @@ public class GlobalInstaller : ScriptableObjectInstaller<GlobalInstaller>
         Container.Bind<SoundConfig>().FromScriptableObject(_soundConfig).AsSingle();
         Container.Bind<SceneConfig>().FromScriptableObject(_sceneConfig).AsSingle();
         Container.Bind<ISoundManager>().To<SoundSystem.SoundManager.SoundManager>().AsSingle().NonLazy();
-        Container.Bind<SceneLoader>().AsSingle();
         Container.Bind<SceneFlowManager>().AsSingle().NonLazy();
     }
 }
