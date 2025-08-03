@@ -1,0 +1,17 @@
+using UnityEngine;
+using UnityEngine.Serialization;
+
+namespace GameOverAndPauseSystem.Config
+{
+    [CreateAssetMenu(fileName = "GameOverAndPauseConfig", menuName = "Game/Config/GameOverAndPause/GameOverAndPauseConfig", order = 0)]
+    public class GameOverAndPauseConfig : ScriptableObject
+    {
+        [SerializeField] private GameStateConfig gameOverstateConfig;
+        [SerializeField] private GameStateConfig pauseStateConfig;
+        [SerializeField] private GameStateConfig gameResumeConfig;
+        
+        public GameStateConfig GameOverStateConfig => gameOverstateConfig;
+        public GameStateConfig PauseStateConfig => pauseStateConfig;
+        public GameStateConfig GameResumeConfig => gameResumeConfig;
+    }
+}

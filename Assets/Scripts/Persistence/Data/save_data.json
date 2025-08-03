@@ -1,0 +1,16 @@
+{
+  "levels": [
+    {
+      "id": "level01",
+      "highestScore": 0
+    },
+    {
+      "id": "level02",
+      "highestScore": 0
+    },
+    {
+      "id": "level03",
+      "highestScore": 0
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14269e5fc7dc84acf953cf3da97a12d7, type: 3}
+  m_Name: GameSceneinstaller
+  m_EditorClassIdentifier: 
+  snakeConfig: {fileID: 11400000, guid: f1558be77dadb49899a6145557ee960d, type: 2}
+  snakeView: {fileID: 3882288117904674181, guid: d92855a084ee24f22aadae11026d0ea3, type: 3}
+  gameplayConfig: {fileID: 11400000, guid: bc603561117634f0d9938ca076dd508e, type: 2}
+  gameplayView: {fileID: 1965676752454085075, guid: 12ac96e9b98664045a2e29547276ea13, type: 3}
+  scoreConfig: {fileID: 11400000, guid: 4fdc5cf1fc43e43a6b44b3608ce3b75e, type: 2}
+  scoreView: {fileID: 6053272593148101688, guid: 564ce8207672f4bfba180b67b63f7217, type: 3}
+  gameOverAndPauseConfig: {fileID: 11400000, guid: b7336a174919b4cb994c1d1f373fb73d, type: 2}
+  gameOverAndPauseView: {fileID: 6966381560408671078, guid: 1b61d872a9d3f4f29a9d0ce7779b27d9, type: 3}

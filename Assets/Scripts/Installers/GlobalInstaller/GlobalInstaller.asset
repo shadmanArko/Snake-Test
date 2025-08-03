@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b539b756458dd4727856a67cbc09ffa7, type: 3}
+  m_Name: GlobalInstaller
+  m_EditorClassIdentifier: 
+  _soundConfig: {fileID: 11400000, guid: 51a4fa73146ef45b6a903aaa62b76303, type: 2}
+  _saveDataJsonFile: {fileID: 4900000, guid: aa53617cfc7142b8afe8b21cc0d93f26, type: 3}
+  _sceneConfig: {fileID: 11400000, guid: 04e88a7cc80914af5affc3057f8e7979, type: 2}
