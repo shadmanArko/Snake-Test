@@ -14,14 +14,10 @@ namespace LevelSystem.Model
     {
         private readonly IEventBus _eventBus;
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
-
         private readonly ReactiveProperty<Vector2Int> _foodPosition = new ReactiveProperty<Vector2Int>();
-        private readonly ReactiveProperty<int> _score = new ReactiveProperty<int>(0);
-
         private readonly GameplayConfig _config;
         
         public IReadOnlyReactiveProperty<Vector2Int> FoodPosition => _foodPosition;
-        public IReadOnlyReactiveProperty<int> Score => _score;
 
         public GameplayModel(IEventBus eventBus, GameplayConfig config)
         {
@@ -41,23 +37,6 @@ namespace LevelSystem.Model
             }
 
             return false;
-        }
-
-        public Vector2Int ValidateGridPosition(Vector2Int position)
-        {
-            var validatedPosition = position;
-
-            if (validatedPosition.x < 0)
-                validatedPosition.x = _config.width - 1;
-            else if (validatedPosition.x >= _config.width)
-                validatedPosition.x = 0;
-
-            if (validatedPosition.y < 0)
-                validatedPosition.y = _config.height - 1;
-            else if (validatedPosition.y >= _config.height)
-                validatedPosition.y = 0;
-
-            return validatedPosition;
         }
 
         public void SpawnFood(List<Vector2Int> occupiedPositions)
@@ -83,7 +62,6 @@ namespace LevelSystem.Model
         {
             _disposables?.Dispose();
             _foodPosition?.Dispose();
-            _score?.Dispose();
         }
     }
 }

@@ -11,6 +11,7 @@ using ScoreSystem.Controller;
 using ScoreSystem.Model;
 using ScoreSystem.View;
 using SnakeSystem;
+using SnakeSystem.Factory;
 using UnityEngine;
 using Zenject;
 
@@ -33,14 +34,14 @@ public class GameSceneinstaller : ScriptableObjectInstaller<GameSceneinstaller>
     {
         Container.Bind<SnakeConfig>().FromScriptableObject(snakeConfig).AsSingle().NonLazy();
         Container.Bind<ISnakeModel>().To<SnakeModel>().AsSingle().NonLazy();
-        Container.Bind<ISnakeView>().FromComponentInNewPrefab(snakeView).AsSingle().NonLazy();
+        Container.Bind<SnakeView>().FromComponentInNewPrefab(snakeView).AsSingle().NonLazy();
         Container.Bind<ISnakeController>().To<SnakeController>().AsSingle().NonLazy();
+        Container.Bind<ISnakeBodyPartFactory>().To<SnakeBodyPartFactory>().AsSingle();
 
         Container.Bind<GameplayConfig>().FromScriptableObject(gameplayConfig).AsSingle().NonLazy();
         Container.Bind<IGameplayModel>().To<GameplayModel>().AsSingle().NonLazy();
         Container.Bind<GameplayView>().FromComponentInNewPrefab(gameplayView).AsSingle().NonLazy();
         Container.Bind<IGameplayController>().To<GameplayController>().AsSingle().NonLazy();
-        Container.Bind<ILevelGrid>().To<LevelGridAdapter>().AsSingle().NonLazy();//todo change name
 
         Container.Bind<ScoreConfig>().FromScriptableObject(scoreConfig).AsSingle();
         Container.Bind<IScoreModel>().To<ScoreModel>().AsSingle().NonLazy();

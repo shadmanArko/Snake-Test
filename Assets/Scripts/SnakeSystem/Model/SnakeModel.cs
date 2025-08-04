@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using _Scripts.EventBus;
+using LevelSystem.Events;
 using SoundSystem.Enums;
 using SoundSystem.Events;
 using UniRx;
@@ -12,39 +13,53 @@ namespace SnakeSystem
     public class SnakeModel : ISnakeModel, IDisposable
     {
         private readonly IEventBus _eventBus;
-        private readonly ILevelGrid _levelGrid;
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly CompositeDisposable _disposables = new();
+        private IDisposable _moveTimer;
 
-        private readonly ReactiveProperty<SnakeState> _state = new ReactiveProperty<SnakeState>(SnakeState.Alive);
-        private readonly ReactiveProperty<Vector2Int> _headPosition = new ReactiveProperty<Vector2Int>();
-        private readonly ReactiveProperty<Direction> _currentDirection = new ReactiveProperty<Direction>();
+        private readonly ReactiveProperty<SnakeState> _state = new(SnakeState.Alive);
+        private readonly ReactiveProperty<Vector2Int> _headPosition = new();
+        private readonly ReactiveProperty<Direction> _currentDirection = new();
 
-        private readonly ReactiveProperty<IReadOnlyList<SnakeMovePosition>> _bodyPositions =
-            new ReactiveProperty<IReadOnlyList<SnakeMovePosition>>(new List<SnakeMovePosition>());
+        private readonly ReactiveProperty<IReadOnlyList<SnakeMovePosition>> _bodyPositions = new(new List<SnakeMovePosition>());
 
-        private SnakeConfig _config;
-        private List<SnakeMovePosition> _moveHistory = new List<SnakeMovePosition>();
-        private int _bodySize = 0;
+        private readonly SnakeConfig _config;
+        private readonly List<SnakeMovePosition> _moveHistory = new();
+        private int _bodySize;
 
         public IReadOnlyReactiveProperty<SnakeState> State => _state;
         public IReadOnlyReactiveProperty<Vector2Int> HeadPosition => _headPosition;
         public IReadOnlyReactiveProperty<Direction> CurrentDirection => _currentDirection;
         public IReadOnlyReactiveProperty<IReadOnlyList<SnakeMovePosition>> BodyPositions => _bodyPositions;
+        
+        public Subject<Direction> DirectionInputSubject { get; set; } = new();
+        public IObservable<Direction> OnDirectionInput => DirectionInputSubject;
 
-        public SnakeModel(IEventBus eventBus, ILevelGrid levelGrid)
+        public Vector2Int FoodPosition{ get; set; } = new();
+
+        public SnakeModel(IEventBus eventBus, SnakeConfig config)
         {
             _eventBus = eventBus;
-            _levelGrid = levelGrid;
+            _config = config;
+            Initialize();
         }
 
-        public void Initialize(SnakeConfig config)
+        private void Initialize()
         {
-            _config = config;
-            _headPosition.Value = config.startPosition;
-            _currentDirection.Value = config.startDirection;
+            _headPosition.Value = _config.startPosition;
+            _currentDirection.Value = _config.startDirection;
             _state.Value = SnakeState.Alive;
             _bodySize = 0;
             _moveHistory.Clear();
+            StartMovementTimer();
+        }
+        
+        private void StartMovementTimer()
+        {
+            _moveTimer?.Dispose();
+            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_config.moveInterval))
+                .Where(_ => State.Value == SnakeState.Alive)
+                .Subscribe(_ => Move())
+                .AddTo(_disposables);
         }
 
         public void SetDirection(Direction direction)
@@ -65,11 +80,11 @@ namespace SnakeSystem
 
             // Calculate new head position
             var newPosition = _headPosition.Value + GetDirectionVector(_currentDirection.Value);
-            newPosition = _levelGrid.ValidateGridPosition(newPosition);
+            newPosition = ValidateGridPosition(newPosition);
             _headPosition.Value = newPosition;
 
             // Check for food
-            if (_levelGrid.TrySnakeEatFood(newPosition))
+            if (FoodPosition == newPosition)
             {
                 EatFood();
             }
@@ -96,7 +111,7 @@ namespace SnakeSystem
         public void EatFood()
         {
             _bodySize++;
-            _eventBus.Publish(new SnakeEatFoodEvent { Position = _headPosition.Value });
+            _eventBus.Publish(new FoodEatenEvent { Position = _headPosition.Value });
 
             if (_config.enableSounds)
             {
@@ -145,6 +160,35 @@ namespace SnakeSystem
                 Direction.Down => new Vector2Int(0, -1),
                 _ => Vector2Int.zero
             };
+        }
+        
+        public float GetAngleFromDirection(Direction direction)
+        {
+            return direction switch
+            {
+                Direction.Right => 0f,
+                Direction.Up => 90f,
+                Direction.Left => 180f,
+                Direction.Down => 270f,
+                _ => 0f
+            };
+        }
+
+        private Vector2Int ValidateGridPosition(Vector2Int position)
+        {
+            var validatedPosition = position;
+
+            if (validatedPosition.x < 0)
+                validatedPosition.x = _config.gridWidth - 1;
+            else if (validatedPosition.x >= _config.gridWidth)
+                validatedPosition.x = 0;
+
+            if (validatedPosition.y < 0)
+                validatedPosition.y = _config.gridHeight - 1;
+            else if (validatedPosition.y >= _config.gridHeight)
+                validatedPosition.y = 0;
+
+            return validatedPosition;
         }
 
         public void Dispose()

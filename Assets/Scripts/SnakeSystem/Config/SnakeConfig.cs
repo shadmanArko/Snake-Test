@@ -12,6 +12,11 @@ namespace SnakeSystem
         [Header("Body")] public Sprite snakeBodySprite;
         public int bodyPartSortingOrder = 1;
 
-        [Header("Sounds")] public bool enableSounds = true;
+        [Header("Sounds")] 
+        public bool enableSounds = true;
+        
+        [Header("Grid")]
+        public int gridWidth = 20;
+        public int gridHeight = 20;
     }
 }

@@ -1,92 +1,89 @@
 using System;
 using _Scripts.EventBus;
+using LevelSystem.Events;
+using SnakeSystem.Factory;
 using UniRx;
+using UnityEngine;
 
 namespace SnakeSystem
 {
     public class SnakeController : ISnakeController, IDisposable
     {
         private readonly ISnakeModel _model;
-        private readonly ISnakeView _view;
+        private readonly SnakeView _view;
         private readonly IEventBus _eventBus;
-        private readonly SnakeConfig _config;
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly ISnakeBodyPartFactory _bodyPartFactory;
+        private readonly CompositeDisposable _disposables = new();
 
         private IDisposable _moveTimer;
 
-        public SnakeController(ISnakeModel model, ISnakeView view, IEventBus eventBus, SnakeConfig config)
+        public SnakeController(ISnakeModel model, SnakeView view, IEventBus eventBus, ISnakeBodyPartFactory bodyPartFactory)
         {
             _model = model;
             _view = view;
             _eventBus = eventBus;
-            _config = config;
+            _bodyPartFactory = bodyPartFactory;
             Initialize();
         }
 
         public void Initialize()
         {
-            _model.Initialize(_config);
-
-            // Bind Model -> View (One-way data flow)
             BindModelToView();
-
-            // Bind View -> Model (Input handling)
-            BindViewToModel();
-
-            // Handle global events
-            SubscribeToEvents();
-
-            // Start movement timer
-            StartMovementTimer();
-        }
-
-        private void BindModelToView()
-        {
-            // Head position changes -> Update view
-            _model.HeadPosition
-                .Subscribe(position => _view.SetHeadPosition(position))
+            SetupInputHandling();
+            
+           _eventBus.OnEvent<SnakeDiedEvent>()
+                .Subscribe(_ =>
+                {
+                    _moveTimer?.Dispose();
+                })
                 .AddTo(_disposables);
-
-            // Head direction changes -> Update view rotation
-            _model.CurrentDirection
-                .Subscribe(direction => _view.SetHeadRotation(direction))
-                .AddTo(_disposables);
-
-            // Body positions change -> Update view body parts
-            _model.BodyPositions
-                .Subscribe(positions => _view.UpdateBodyParts(positions))
-                .AddTo(_disposables);
-        }
-
-        private void BindViewToModel()
-        {
-            // View input -> Model direction change
-            _view.OnDirectionInput
+           
+           _eventBus.OnEvent<FoodSpawnedEvent>()
+               .Subscribe( e => _model.FoodPosition = e.Position)
+               .AddTo(_disposables);
+            
+            _model.OnDirectionInput
                 .Subscribe(direction => _model.SetDirection(direction))
                 .AddTo(_disposables);
         }
 
-        private void SubscribeToEvents()
+        private void BindModelToView()
         {
-            // Listen to global events if needed
-            _eventBus.OnEvent<SnakeDiedEvent>()
-                .Subscribe(evt =>
-                {
-                    // Handle snake death (stop timer, etc.)
-                    _moveTimer?.Dispose();
-                })
+            _model.HeadPosition
+                .Subscribe(position => _view.SetHeadPosition(position))
+                .AddTo(_disposables);
+            
+            _model.CurrentDirection
+                .Subscribe(direction => _view.SetHeadRotation(_model.GetAngleFromDirection(direction)))
+                .AddTo(_disposables);
+            
+            _model.BodyPositions
+                .Subscribe(positions => _view.UpdateBodyParts(positions, () => _bodyPartFactory.CreateBodyPart()))
                 .AddTo(_disposables);
         }
-
-        private void StartMovementTimer()
+        private void SetupInputHandling()
         {
-            _moveTimer?.Dispose();
-            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_config.moveInterval))
-                .Where(_ => _model.State.Value == SnakeState.Alive)
-                .Subscribe(_ => _model.Move())
+            Observable.EveryUpdate()
+                .Where(_ => Input.GetKeyDown(KeyCode.UpArrow))
+                .Subscribe(_ => _model.DirectionInputSubject.OnNext(Direction.Up))
+                .AddTo(_disposables);
+
+            Observable.EveryUpdate()
+                .Where(_ => Input.GetKeyDown(KeyCode.DownArrow))
+                .Subscribe(_ => _model.DirectionInputSubject.OnNext(Direction.Down))
+                .AddTo(_disposables);
+
+            Observable.EveryUpdate()
+                .Where(_ => Input.GetKeyDown(KeyCode.LeftArrow))
+                .Subscribe(_ => _model.DirectionInputSubject.OnNext(Direction.Left))
+                .AddTo(_disposables);
+
+            Observable.EveryUpdate()
+                .Where(_ => Input.GetKeyDown(KeyCode.RightArrow))
+                .Subscribe(_ => _model.DirectionInputSubject.OnNext(Direction.Right))
                 .AddTo(_disposables);
         }
-
+        
         public void Dispose()
         {
             _moveTimer?.Dispose();
