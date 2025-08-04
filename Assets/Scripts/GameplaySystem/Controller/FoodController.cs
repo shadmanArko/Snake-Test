@@ -1,41 +1,40 @@
 using System;
+using System.Collections.Generic;
 using _Scripts.EventBus;
 using LevelSystem.Events;
 using LevelSystem.Model;
 using SnakeSystem;
 using UniRx;
 using UniRx.Triggers;
+using UnityEngine;
 
 namespace LevelSystem.Controller
 {
-    public class GameplayController : IGameplayController, IDisposable
+    public class FoodController : IFoodController, IDisposable
     {
-        private readonly IGameplayModel _model;
-        private readonly GameplayView _view;
-        private readonly ISnakeModel _snakeModel;
+        private readonly IFoodModel _model;
+        private readonly FoodView _view;
         private readonly IEventBus _eventBus;
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
 
-        public GameplayController(
-            IGameplayModel model, 
-            GameplayView view, 
-            ISnakeModel snakeModel,
+        public FoodController(
+            IFoodModel model, 
+            FoodView view, 
             IEventBus eventBus)
         {
             _model = model;
             _view = view;
-            _snakeModel = snakeModel;
             _eventBus = eventBus;
             Initialize();
         }
 
         public void Initialize()
         {
+            _view.ApplyVto(_model.GetVto());
+            
             BindModelToView();
             
             SubscribeToEvents();
-            
-            SpawnInitialFood();
         }
 
         private void BindModelToView()
@@ -48,21 +47,13 @@ namespace LevelSystem.Controller
 
         private void SubscribeToEvents()
         {
-            // When food is eaten, spawn new food
             _eventBus.OnEvent<FoodEatenEvent>()
-                .Subscribe(_ => SpawnNewFood())
+                .Subscribe(e => SpawnNewFood(e.OccupiedPositions))
                 .AddTo(_disposables);
         }
-
-        private void SpawnInitialFood()
+        
+        private void SpawnNewFood(List<Vector2Int> occupiedPositions)
         {
-            var occupiedPositions = _snakeModel.GetAllOccupiedPositions();
-            _model.SpawnFood(occupiedPositions);
-        }
-
-        private void SpawnNewFood()
-        {
-            var occupiedPositions = _snakeModel.GetAllOccupiedPositions();
             _model.SpawnFood(occupiedPositions);
         }
 

@@ -21,8 +21,8 @@ public class GameSceneinstaller : ScriptableObjectInstaller<GameSceneinstaller>
     [SerializeField] private SnakeConfig snakeConfig;
     [SerializeField] private SnakeView snakeView;
     
-    [SerializeField] private GameplayConfig gameplayConfig;
-    [SerializeField] private GameplayView gameplayView;
+    [SerializeField] private FoodConfig foodConfig;
+    [SerializeField] private FoodView foodView;
     
     [SerializeField] private ScoreConfig scoreConfig;
     [SerializeField] private ScoreView scoreView;
@@ -38,10 +38,10 @@ public class GameSceneinstaller : ScriptableObjectInstaller<GameSceneinstaller>
         Container.Bind<ISnakeController>().To<SnakeController>().AsSingle().NonLazy();
         Container.Bind<ISnakeBodyPartFactory>().To<SnakeBodyPartFactory>().AsSingle();
 
-        Container.Bind<GameplayConfig>().FromScriptableObject(gameplayConfig).AsSingle().NonLazy();
-        Container.Bind<IGameplayModel>().To<GameplayModel>().AsSingle().NonLazy();
-        Container.Bind<GameplayView>().FromComponentInNewPrefab(gameplayView).AsSingle().NonLazy();
-        Container.Bind<IGameplayController>().To<GameplayController>().AsSingle().NonLazy();
+        Container.Bind<FoodConfig>().FromScriptableObject(foodConfig).AsSingle().NonLazy();
+        Container.Bind<IFoodModel>().To<FoodModel>().AsSingle().NonLazy();
+        Container.Bind<FoodView>().FromComponentInNewPrefab(foodView).AsSingle().NonLazy();
+        Container.Bind<IFoodController>().To<FoodController>().AsSingle().NonLazy();
 
         Container.Bind<ScoreConfig>().FromScriptableObject(scoreConfig).AsSingle();
         Container.Bind<IScoreModel>().To<ScoreModel>().AsSingle().NonLazy();

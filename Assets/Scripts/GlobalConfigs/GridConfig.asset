@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ccfc81746104fe6b1328d3d7805e6cc, type: 3}
-  m_Name: GameplayConfig
+  m_Script: {fileID: 11500000, guid: 5b5f284b300647bfbc5a47c8b10767e5, type: 3}
+  m_Name: GridConfig
   m_EditorClassIdentifier: 
   width: 20
   height: 20
-  foodSprite: {fileID: 21300000, guid: c3bd1ffb8de1fa441a845a659442868c, type: 3}
-  foodSortingOrder: 2

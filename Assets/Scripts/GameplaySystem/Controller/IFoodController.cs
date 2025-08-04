@@ -1,6 +1,6 @@
 namespace LevelSystem.Controller
 {
-    public interface IGameplayController
+    public interface IFoodController
     {
         void Initialize();
         void Dispose();

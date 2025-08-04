@@ -111,7 +111,11 @@ namespace SnakeSystem
         public void EatFood()
         {
             _bodySize++;
-            _eventBus.Publish(new FoodEatenEvent { Position = _headPosition.Value });
+            _eventBus.Publish(new FoodEatenEvent
+            {
+                Position = _headPosition.Value,
+                OccupiedPositions = GetAllOccupiedPositions()
+            });
 
             if (_config.enableSounds)
             {
@@ -179,13 +183,13 @@ namespace SnakeSystem
             var validatedPosition = position;
 
             if (validatedPosition.x < 0)
-                validatedPosition.x = _config.gridWidth - 1;
-            else if (validatedPosition.x >= _config.gridWidth)
+                validatedPosition.x = _config.gridConfig.width - 1;
+            else if (validatedPosition.x >= _config.gridConfig.width)
                 validatedPosition.x = 0;
 
             if (validatedPosition.y < 0)
-                validatedPosition.y = _config.gridHeight - 1;
-            else if (validatedPosition.y >= _config.gridHeight)
+                validatedPosition.y = _config.gridConfig.height - 1;
+            else if (validatedPosition.y >= _config.gridConfig.height)
                 validatedPosition.y = 0;
 
             return validatedPosition;

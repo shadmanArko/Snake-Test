@@ -10,35 +10,21 @@ using Random = UnityEngine.Random;
 
 namespace LevelSystem.Model
 {
-    public class GameplayModel : IGameplayModel, IDisposable
+    public class FoodModel : IFoodModel, IDisposable
     {
         private readonly IEventBus _eventBus;
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
         private readonly ReactiveProperty<Vector2Int> _foodPosition = new ReactiveProperty<Vector2Int>();
-        private readonly GameplayConfig _config;
+        private readonly FoodConfig _config;
         
         public IReadOnlyReactiveProperty<Vector2Int> FoodPosition => _foodPosition;
 
-        public GameplayModel(IEventBus eventBus, GameplayConfig config)
+        public FoodModel(IEventBus eventBus, FoodConfig config)
         {
             _eventBus = eventBus;
             _config = config;
         }
-
-        public bool TryEatFood(Vector2Int position)
-        {
-            if (position == _foodPosition.Value)
-            {
-                _eventBus.Publish(new FoodEatenEvent
-                {
-                    Position = position,
-                });
-                return true;
-            }
-
-            return false;
-        }
-
+        
         public void SpawnFood(List<Vector2Int> occupiedPositions)
         {
             Vector2Int newFoodPosition;
@@ -48,14 +34,19 @@ namespace LevelSystem.Model
             do
             {
                 newFoodPosition = new Vector2Int(
-                    Random.Range(0, _config.width),
-                    Random.Range(0, _config.height)
+                    Random.Range(0, _config.gridConfig.width),
+                    Random.Range(0, _config.gridConfig.height)
                 );
                 attempts++;
             } while (occupiedPositions.Contains(newFoodPosition) && attempts < maxAttempts);
 
             _foodPosition.Value = newFoodPosition;
             _eventBus.Publish(new FoodSpawnedEvent { Position = newFoodPosition });
+        }
+
+        public Sprite GetVto()
+        {
+            return _config.foodSprite;
         }
 
         public void Dispose()

@@ -1,3 +1,4 @@
+using GlobalConfigs;
 using UnityEngine;
 
 namespace SnakeSystem
@@ -14,9 +15,8 @@ namespace SnakeSystem
 
         [Header("Sounds")] 
         public bool enableSounds = true;
-        
-        [Header("Grid")]
-        public int gridWidth = 20;
-        public int gridHeight = 20;
+
+        [Header("Grid")] 
+        public GridConfig gridConfig;
     }
 }

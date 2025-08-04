@@ -7,7 +7,6 @@ namespace SnakeSystem
     public class SnakeView : MonoBehaviour
     {
         [SerializeField] private Transform headTransform;
-        [SerializeField] private SnakeConfig config;
         
         private readonly List<SnakeBodyPartView> _bodyParts = new();
         
