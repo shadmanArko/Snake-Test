@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GlobalConfigs
+namespace _Scripts.GlobalConfigs
 {
     [CreateAssetMenu(fileName = "GridConfig", menuName = "Game/Config/GridConfig", order = 0)]
     public class GridConfig : ScriptableObject

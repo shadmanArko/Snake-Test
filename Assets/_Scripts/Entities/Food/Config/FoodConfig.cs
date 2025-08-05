@@ -1,4 +1,4 @@
-using GlobalConfigs;
+using _Scripts.GlobalConfigs;
 using UnityEngine;
 
 namespace _Scripts.Entities.Food.Config

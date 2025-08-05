@@ -1,5 +1,5 @@
 using _Scripts.Enums;
-using GlobalConfigs;
+using _Scripts.GlobalConfigs;
 using UnityEngine;
 
 namespace _Scripts.Entities.Snake.Config
