@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MainMenu.View;
 using UniRx;
 using UnityEngine;
@@ -26,7 +28,6 @@ namespace MainMenu.Model
 
         public void Initialize()
         {
-            // Start with Home page active
             SetActivePage(MainMenuPageType.Home);
         }
 
@@ -43,6 +44,32 @@ namespace MainMenu.Model
         public bool IsPageActive(MainMenuPageType pageType)
         {
             return _currentPage.Value == pageType;
+        }
+        
+        public void SetPageActive(MainMenuPageType pageType, List<MainMenuPage> mainMenuPages, bool isActive)
+        {
+            var page = GetPageByType(pageType, mainMenuPages);
+            
+            if (page?.gameObject != null)
+            {
+                page.gameObject.SetActive(isActive);
+            }
+        }
+
+        public void SetAllPagesInactive(List<MainMenuPage> mainMenuPages)
+        {
+            foreach (var page in mainMenuPages)
+            {
+                if (page?.gameObject != null)
+                {
+                    page.gameObject.SetActive(false);
+                }
+            }
+        }
+        
+        private MainMenuPage GetPageByType(MainMenuPageType pageType, List<MainMenuPage> mainMenuPages)
+        {
+            return mainMenuPages?.FirstOrDefault(page => page.type == pageType);
         }
 
         public void Dispose()

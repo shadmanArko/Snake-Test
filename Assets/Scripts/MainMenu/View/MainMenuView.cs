@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using CodeMonkey.Utils;
@@ -7,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace MainMenu.View
 {
-    public class MainMenuView : MonoBehaviour, IMainMenuView
+    public class MainMenuView : MonoBehaviour
     {
         [SerializeField] private Button_UI _playButton;
         [SerializeField] private Button_UI _howToPlayButton;
@@ -19,44 +18,6 @@ namespace MainMenu.View
         public Button_UI HowToPlayButton => _howToPlayButton;
         public Button_UI QuitButton => _quitButton;
         public Button_UI BackButton => _backButton;
-        
-        public void SetPageActive(MainMenuPageType pageType, bool isActive)
-        {
-            var page = GetPageByType(pageType);
-            
-            if (page?.gameObject != null)
-            {
-                page.gameObject.SetActive(isActive);
-            }
-        }
-
-        public void SetAllPagesInactive()
-        {
-            foreach (var page in _mainMenuPages)
-            {
-                if (page?.gameObject != null)
-                {
-                    page.gameObject.SetActive(false);
-                }
-            }
-        }
-        
-        private MainMenuPage GetPageByType(MainMenuPageType pageType)
-        {
-            return _mainMenuPages?.FirstOrDefault(page => page.type == pageType);
-        }
-    }
-
-    [Serializable]
-    public class MainMenuPage
-    {
-        public MainMenuPageType type;
-        public GameObject gameObject;
-    }
-
-    public enum MainMenuPageType
-    {
-        Home,
-        HowToPlay,
+        public List<MainMenuPage> MainMenuPages => _mainMenuPages;
     }
 }

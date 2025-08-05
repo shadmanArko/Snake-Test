@@ -14,7 +14,7 @@ public class MainMenuInstaller : ScriptableObjectInstaller<MainMenuInstaller>
         Container.Bind<IMainMenuModel>().To<MainMenuModel>().AsSingle().NonLazy();
         
         // View
-        Container.Bind<IMainMenuView>().FromComponentInNewPrefab(mainMenuView).AsSingle().NonLazy();
+        Container.Bind<MainMenuView>().FromComponentInNewPrefab(mainMenuView).AsSingle().NonLazy();
         
         // Controller
         Container.Bind<IMainMenuController>().To<MainMenuController>().AsSingle().NonLazy();

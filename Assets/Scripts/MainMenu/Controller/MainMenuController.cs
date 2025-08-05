@@ -15,12 +15,12 @@ namespace MainMenu.Controller
     public class MainMenuController : IMainMenuController, IDisposable
     {
         private readonly IMainMenuModel _model;
-        private readonly IMainMenuView _view;
+        private readonly MainMenuView _view;
         private readonly IEventBus _eventBus;
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
         private readonly UnitOfWork _unitOfWork;
 
-        public MainMenuController(IMainMenuModel model, IMainMenuView view, IEventBus eventBus, UnitOfWork unitOfWork)
+        public MainMenuController(IMainMenuModel model, MainMenuView view, IEventBus eventBus, UnitOfWork unitOfWork)
         {
             _model = model;
             _view = view;
@@ -33,8 +33,8 @@ namespace MainMenu.Controller
         {
             _model.CurrentPage
                 .Subscribe(pageType => {
-                    _view.SetAllPagesInactive();
-                    _view.SetPageActive(pageType, true);
+                    _model.SetAllPagesInactive(_view.MainMenuPages);
+                    _model.SetPageActive(pageType, _view.MainMenuPages, true);
                 })
                 .AddTo(_disposables);
 
