@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 
@@ -8,6 +9,6 @@ namespace LevelSystem.Model
     {
         IReadOnlyReactiveProperty<Vector2Int> FoodPosition { get; }
         void SpawnFood(List<Vector2Int> occupiedPositions);
-        Sprite GetVto();
+        UniTask<Sprite> GetVtoAsync();
     }
 }

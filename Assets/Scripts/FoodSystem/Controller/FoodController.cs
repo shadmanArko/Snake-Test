@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using _Scripts.EventBus;
 using LevelSystem.Events;
 using LevelSystem.Model;
-using SnakeSystem;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -30,7 +29,7 @@ namespace LevelSystem.Controller
 
         public void Initialize()
         {
-            _view.ApplyVto(_model.GetVto());
+            _ = _view.ApplyVto(_model.GetVtoAsync());
             
             BindModelToView();
             

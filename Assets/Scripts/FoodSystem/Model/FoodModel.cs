@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using _Scripts.EventBus;
-using GameCode.Persistence.Models;
+using Cysharp.Threading.Tasks;
+using HelperClasses;
 using LevelSystem.Config;
 using LevelSystem.Events;
 using UniRx;
@@ -17,6 +18,7 @@ namespace LevelSystem.Model
         private readonly ReactiveProperty<Vector2Int> _foodPosition = new ReactiveProperty<Vector2Int>();
         private readonly FoodConfig _config;
         
+        private Sprite _foodSprite;
         public IReadOnlyReactiveProperty<Vector2Int> FoodPosition => _foodPosition;
 
         public FoodModel(IEventBus eventBus, FoodConfig config)
@@ -43,14 +45,16 @@ namespace LevelSystem.Model
             _foodPosition.Value = newFoodPosition;
             _eventBus.Publish(new FoodSpawnedEvent { Position = newFoodPosition });
         }
-
-        public Sprite GetVto()
+        
+        public async UniTask<Sprite> GetVtoAsync()
         {
-            return _config.foodSprite;
+            _foodSprite = await AddressableHelper.LoadSpriteAsync(_config.foodSpriteAddressableKey);
+            return _foodSprite;
         }
-
+        
         public void Dispose()
         {
+            AddressableHelper.ReleaseAsset(_foodSprite);
             _disposables?.Dispose();
             _foodPosition?.Dispose();
         }

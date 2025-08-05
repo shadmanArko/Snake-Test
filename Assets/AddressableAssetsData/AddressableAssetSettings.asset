@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
-  m_DefaultGroup: fd6e84dba864a47aa90d640aa18f58cb
+  m_DefaultGroup: 54eedbc3c33404e73b13f99546be8c62
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: fda05fa2c4911be0e543da1c68d18713
   m_OptimizeCatalogSize: 0
-  m_BuildRemoteCatalog: 0
+  m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
   m_CatalogRequestsTimeout: 0
   m_DisableCatalogUpdateOnStart: 0
@@ -33,19 +33,20 @@ MonoBehaviour:
   m_ShaderBundleCustomNaming: 
   m_MonoScriptBundleNaming: 0
   m_CheckForContentUpdateRestrictionsOption: 0
+  m_BuildAndReleaseBinFileOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
-    m_Id: 
+    m_Id: 4111a225a8cc14bc3a4932bc39d2a96b
   m_RemoteCatalogLoadPath:
-    m_Id: 
-  m_ContentStateBuildPathProfileVariableName: 
+    m_Id: 2fae0a3fa97c943ff9a95bed12eade01
+  m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: 086bf4aefdfae42fd92c52062c6406f2, type: 2}
-  - {fileID: 11400000, guid: 9c122f05c2eb2474caa0ff27f65cbd8d, type: 2}
+  - {fileID: 11400000, guid: d12900e7d5b7644ce9fa8daafc7742d8, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -64,9 +65,11 @@ MonoBehaviour:
       - m_Id: 4fbfca942d20545f688dfbf1c381309e
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 4111a225a8cc14bc3a4932bc39d2a96b
-        m_Value: ServerData/[BuildTarget]
+        m_Value: CCDBuildData/efe04247-ebff-4f5e-bd0c-b9946c356851/53728df1-e3b2-4fd6-93c6-2d9fd398ca99/latest
       - m_Id: 2fae0a3fa97c943ff9a95bed12eade01
-        m_Value: http://[PrivateIpAddress]:[HostingServicePort]
+        m_Value: https://15da59f3-a2ff-46c5-a28d-a545acec5b7c.client-api.unity3dusercontent.com/client_api/v1/environments/dev/buckets/53728df1-e3b2-4fd6-93c6-2d9fd398ca99/release_by_badge/latest/entry_by_path/content/?path=
+      - m_Id: 1fa119e0f08104a99aa94e8e8cac9cc8
+        m_Value: dev
     m_ProfileEntryNames:
     - m_Id: 2478a36f4b1fc4dae9b4b083d42e4ce2
       m_Name: BuildTarget
@@ -82,6 +85,9 @@ MonoBehaviour:
       m_InlineUsage: 0
     - m_Id: 2fae0a3fa97c943ff9a95bed12eade01
       m_Name: Remote.LoadPath
+      m_InlineUsage: 0
+    - m_Id: 1fa119e0f08104a99aa94e8e8cac9cc8
+      m_Name: EnvironmentName
       m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:
@@ -107,3 +113,9 @@ MonoBehaviour:
     m_NextInstanceId: 0
     m_RegisteredServiceTypeRefs: []
     m_PingTimeoutInMilliseconds: 5000
+  m_CcdManagedData:
+    EnvironmentId: 
+    EnvironmentName: 
+    BucketId: 
+    Badge: 
+    State: 0

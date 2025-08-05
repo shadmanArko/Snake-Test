@@ -10,6 +10,6 @@ namespace LevelSystem.Config
         public GridConfig gridConfig;
     
         [Header("Food")]
-        public Sprite foodSprite;
+        public string foodSpriteAddressableKey;
     }
 }

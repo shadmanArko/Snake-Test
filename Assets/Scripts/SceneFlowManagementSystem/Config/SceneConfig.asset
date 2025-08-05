@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5359a9ce41194afc9c1c0e1526c417e9, type: 3}
   m_Name: SceneConfig
   m_EditorClassIdentifier: 
+  bootStrapScene:
+    m_AssetGUID: 9fc0d4010bbf28b4594072e72b8655ab
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   mainMenuScene:
     m_AssetGUID: d5c0be72797afa54f8f5881dd3d063f6
     m_SubObjectName: 
