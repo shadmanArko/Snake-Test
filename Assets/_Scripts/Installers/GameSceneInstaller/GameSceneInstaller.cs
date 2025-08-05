@@ -18,8 +18,8 @@ using _Scripts.Entities.Snake.View;
 using UnityEngine;
 using Zenject;
 
-[CreateAssetMenu(fileName = "GameSceneinstaller", menuName = "Installers/GameSceneinstaller")]
-public class GameSceneinstaller : ScriptableObjectInstaller<GameSceneinstaller>
+[CreateAssetMenu(fileName = "GameSceneInstaller", menuName = "Installers/GameSceneInstaller")]
+public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
 {
     [SerializeField] private SnakeConfig snakeConfig;
     [SerializeField] private SnakeView snakeView;
