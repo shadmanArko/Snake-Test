@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using SoundSystem.Enums;
+using _Scripts.Services.SoundSystem.Enums;
 using UnityEngine;
 
-namespace SoundSystem.Config
+namespace _Scripts.Services.SoundSystem.Config
 {
     [CreateAssetMenu(fileName = "SoundConfig", menuName = "Game/Config/SoundConfig", order = 0)]
     public class SoundConfig : ScriptableObject

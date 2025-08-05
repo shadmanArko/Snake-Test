@@ -1,26 +1,27 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GameCode.Persistence;
-using GameCode.Persistence.Models;
-using UnityEngine;
-using UnityEngine.Serialization;
+using _Scripts.Services.Persistence.Models;
 
-[Serializable]
-public abstract class DataContext
+
+namespace _Scripts.Services.Persistence
 {
-    public SaveData saveData = new SaveData();
-    
-    public abstract Task Load();
-    public abstract Task Save();
-
-    public List<T> Set<T>()
+    [Serializable]
+    public abstract class DataContext
     {
-        if (typeof(T) == typeof(Level))
+        public SaveData saveData = new SaveData();
+
+        public abstract Task Load();
+        public abstract Task Save();
+
+        public List<T> Set<T>()
         {
-            return saveData.levels as List<T>; 
+            if (typeof(T) == typeof(Level))
+            {
+                return saveData.levels as List<T>;
+            }
+
+            return null;
         }
-        return null;
     }
 }

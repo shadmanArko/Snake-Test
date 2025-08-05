@@ -1,12 +1,12 @@
 using System;
-using _Scripts.EventBus;
-using LevelSystem.Events;
-using ScoreSystem.Model;
-using ScoreSystem.View;
+using _Scripts.Entities.Score.Model;
+using _Scripts.Entities.Score.View;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
 using UniRx;
 using UniRx.Triggers;
 
-namespace ScoreSystem.Controller
+namespace _Scripts.Entities.Score.Controller
 {
     public class ScoreController : IScoreController, IDisposable
     {

@@ -1,10 +1,9 @@
 using UnityEngine;
 
-namespace LevelSystem.Events
+namespace _Scripts.Events
 {
-    public struct FoodSpawnedEvent
+    public struct SnakeEatFoodEvent
     {
         public Vector2Int Position;
     }
-
 }

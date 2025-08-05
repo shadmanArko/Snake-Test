@@ -1,4 +1,4 @@
-namespace SnakeSystem
+namespace _Scripts.Entities.Snake.Controller
 {
     public interface ISnakeController
     {

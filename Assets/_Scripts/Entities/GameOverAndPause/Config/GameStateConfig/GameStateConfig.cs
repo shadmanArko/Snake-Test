@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameOverAndPauseSystem.Config
+namespace _Scripts.Entities.GameOverAndPause.Config
 {
     [CreateAssetMenu(fileName = "GameStateConfig", menuName = "Game/Config/GameOverAndPause/GameStateConfig", order = 0)]
     public class GameStateConfig : ScriptableObject

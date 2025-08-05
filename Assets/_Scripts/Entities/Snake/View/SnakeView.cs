@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using _Scripts.Entities.Snake.ValueObjects;
 using UnityEngine;
 
-namespace SnakeSystem
+namespace _Scripts.Entities.Snake.View
 {
     public class SnakeView : MonoBehaviour
     {

@@ -1,6 +1,6 @@
-using GameOverAndPauseSystem.Config;
+using _Scripts.Entities.GameOverAndPause.Config;
 
-namespace GameOverAndPauseSystem.Model
+namespace _Scripts.Entities.GameOverAndPause.Model
 {
     public interface IGameOverAndPauseModel
     {

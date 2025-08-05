@@ -1,10 +1,9 @@
-using System;
-using _Scripts.EventBus;
-using GameCode.Persistence.Models;
-using GameOverAndPauseSystem.Config;
+using _Scripts.Entities.GameOverAndPause.Config;
+using _Scripts.Services.Persistence;
+using _Scripts.Services.Persistence.Models;
 using UnityEngine;
 
-namespace GameOverAndPauseSystem.Model
+namespace _Scripts.Entities.GameOverAndPause.Model
 {
     public class GameOverAndPauseModel : IGameOverAndPauseModel
     {

@@ -1,10 +1,10 @@
-using _Scripts.EventBus;
-using GameCode.Persistence;
-using GameCode.Persistence.Repositories;
-using SceneFlowManagementSystem.Config;
-using SceneFlowManagementSystem.SceneFlowManager;
-using SoundSystem.Config;
-using SoundSystem.SoundManager;
+using _Scripts.Services.EventBus.Core;
+using _Scripts.Services.Persistence;
+using _Scripts.Services.Persistence.Repositories;
+using _Scripts.Services.SceneFlowManagementSystem.Config;
+using _Scripts.Services.SceneFlowManagementSystem.SceneFlowManager;
+using _Scripts.Services.SoundSystem.Config;
+using _Scripts.Services.SoundSystem.SoundManager;
 using UnityEngine;
 using Zenject;
 
@@ -16,6 +16,7 @@ public class GlobalInstaller : ScriptableObjectInstaller<GlobalInstaller>
     [SerializeField] private TextAsset _saveDataJsonFile;
     
     [SerializeField] private SceneConfig _sceneConfig;
+    
     public override void InstallBindings()
     {
         Container.Bind<TextAsset>().FromInstance(_saveDataJsonFile).AsSingle();
@@ -27,7 +28,7 @@ public class GlobalInstaller : ScriptableObjectInstaller<GlobalInstaller>
         Container.Bind<IEventBus>().To<UniRxEventBus>().AsSingle();
         Container.Bind<SoundConfig>().FromScriptableObject(_soundConfig).AsSingle();
         Container.Bind<SceneConfig>().FromScriptableObject(_sceneConfig).AsSingle();
-        Container.Bind<ISoundManager>().To<SoundSystem.SoundManager.SoundManager>().AsSingle().NonLazy();
+        Container.Bind<ISoundManager>().To<_Scripts.Services.SoundSystem.SoundManager.SoundManager>().AsSingle().NonLazy();
         Container.Bind<SceneFlowManager>().AsSingle().NonLazy();
     }
 }

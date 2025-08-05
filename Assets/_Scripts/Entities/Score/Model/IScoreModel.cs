@@ -1,6 +1,6 @@
 using UniRx;
 
-namespace ScoreSystem.Model
+namespace _Scripts.Entities.Score.Model
 {
     public interface IScoreModel
     {

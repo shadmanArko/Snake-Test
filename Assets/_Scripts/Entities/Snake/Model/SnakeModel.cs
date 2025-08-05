@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using _Scripts.EventBus;
-using LevelSystem.Events;
-using SoundSystem.Enums;
-using SoundSystem.Events;
+using _Scripts.Entities.Snake.Config;
+using _Scripts.Entities.Snake.Enums;
+using _Scripts.Entities.Snake.ValueObjects;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
+using _Scripts.Services.SoundSystem.Enums;
 using UniRx;
 using UnityEngine;
 
-namespace SnakeSystem
+namespace _Scripts.Entities.Snake.Model
 {
     public class SnakeModel : ISnakeModel, IDisposable
     {

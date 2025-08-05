@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
-using _Scripts.EventBus;
-using LevelSystem.Events;
-using LevelSystem.Model;
+using _Scripts.Entities.Food.Model;
+using _Scripts.Entities.Food.View;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 
-namespace LevelSystem.Controller
+namespace _Scripts.Entities.Food.Controller
 {
     public class FoodController : IFoodController, IDisposable
     {

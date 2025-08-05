@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GameCode.Persistence
+namespace _Scripts.Services.Persistence
 {
     public class JsonDataContext : DataContext
     {

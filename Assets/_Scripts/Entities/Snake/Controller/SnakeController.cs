@@ -1,11 +1,14 @@
 using System;
-using _Scripts.EventBus;
-using LevelSystem.Events;
-using SnakeSystem.Factory;
+using _Scripts.Entities.Snake.Factory;
+using _Scripts.Entities.Snake.Model;
+using _Scripts.Entities.Snake.View;
+using _Scripts.Entities.Snake.Enums;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
 using UniRx;
 using UnityEngine;
 
-namespace SnakeSystem
+namespace _Scripts.Entities.Snake.Controller
 {
     public class SnakeController : ISnakeController, IDisposable
     {

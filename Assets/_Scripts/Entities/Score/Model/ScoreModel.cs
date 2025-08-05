@@ -1,11 +1,10 @@
 using System;
-using _Scripts.EventBus;
-using GameCode.Persistence.Models;
-using LevelSystem.Events;
-using ScoreSystem.Config;
+using _Scripts.Entities.Score.Config;
+using _Scripts.Services.Persistence.Models;
+using _Scripts.Services.Persistence;
 using UniRx;
 
-namespace ScoreSystem.Model
+namespace _Scripts.Entities.Score.Model
 {
     public class ScoreModel : IScoreModel, IDisposable
     {

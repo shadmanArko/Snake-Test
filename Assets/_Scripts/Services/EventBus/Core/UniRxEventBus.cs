@@ -1,7 +1,7 @@
 using System;
 using UniRx;
 
-namespace _Scripts.EventBus
+namespace _Scripts.Services.EventBus.Core
 {
     public class UniRxEventBus : IEventBus
     {

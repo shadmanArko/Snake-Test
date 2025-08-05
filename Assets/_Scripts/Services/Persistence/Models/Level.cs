@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine.Serialization;
 
-namespace GameCode.Persistence.Models
+namespace _Scripts.Services.Persistence.Models
 {
     [Serializable]
     public class Level : Base

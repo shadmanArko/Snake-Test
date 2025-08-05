@@ -1,16 +1,15 @@
 using System;
-using _Scripts.EventBus;
+using _Scripts.Entities.MainMenu.Enums;
+using _Scripts.Entities.MainMenu.Model;
+using _Scripts.Entities.MainMenu.View;
 using CodeMonkey.Utils;
-using MainMenu.Model;
-using MainMenu.View;
-using SceneFlowManagementSystem.Events;
-using SoundSystem.Enums;
-using SoundSystem.Events;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
+using _Scripts.Services.Persistence;
+using _Scripts.Services.SoundSystem.Enums;
 using UniRx;
-using Unity.VisualScripting;
-using UnityEngine;
 
-namespace MainMenu.Controller
+namespace _Scripts.Entities.MainMenu.Controller
 {
     public class MainMenuController : IMainMenuController, IDisposable
     {

@@ -1,15 +1,15 @@
 using System;
-using _Scripts.EventBus;
-using SceneFlowManagementSystem.Config;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
-using SceneFlowManagementSystem.Events;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
+using _Scripts.Services.SceneFlowManagementSystem.Config;
 using UniRx;
 
-namespace SceneFlowManagementSystem.SceneFlowManager
+namespace _Scripts.Services.SceneFlowManagementSystem.SceneFlowManager
 {
     public class SceneFlowManager : IDisposable
     {

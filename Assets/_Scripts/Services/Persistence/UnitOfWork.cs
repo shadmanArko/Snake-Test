@@ -1,22 +1,23 @@
-using GameCode.Persistence.Repositories;
-using UnityEngine;
-using UnityEngine.Serialization;
+using _Scripts.Services.Persistence.Repositories;
 
-public class UnitOfWork
+namespace _Scripts.Services.Persistence
 {
-    private readonly DataContext _dataContext;
-
-    private readonly Levels _levels;
-
-    public UnitOfWork(DataContext dataContext, Levels levels)
+    public class UnitOfWork
     {
-        _dataContext = dataContext;
-        _levels = levels;
-    }
+        private readonly DataContext _dataContext;
 
-    public Levels Levels => _levels;
-    
-    
-    public async void Save() => await _dataContext.Save();
-    
+        private readonly Levels _levels;
+
+        public UnitOfWork(DataContext dataContext, Levels levels)
+        {
+            _dataContext = dataContext;
+            _levels = levels;
+        }
+
+        public Levels Levels => _levels;
+
+
+        public async void Save() => await _dataContext.Save();
+
+    }
 }

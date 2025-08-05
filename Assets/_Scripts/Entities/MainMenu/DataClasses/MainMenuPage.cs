@@ -1,7 +1,8 @@
 using System;
+using _Scripts.Entities.MainMenu.Enums;
 using UnityEngine;
 
-namespace MainMenu.View
+namespace _Scripts.Entities.MainMenu.DataClasses
 {
     [Serializable]
     public class MainMenuPage

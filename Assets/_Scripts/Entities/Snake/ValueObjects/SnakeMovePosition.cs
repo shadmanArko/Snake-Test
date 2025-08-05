@@ -1,6 +1,7 @@
+using _Scripts.Entities.Snake.Enums;
 using UnityEngine;
 
-namespace SnakeSystem
+namespace _Scripts.Entities.Snake.ValueObjects
 {
     public struct SnakeMovePosition
     {

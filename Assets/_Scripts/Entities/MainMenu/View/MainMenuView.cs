@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
+using _Scripts.Entities.MainMenu.DataClasses;
 using CodeMonkey.Utils;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace MainMenu.View
+namespace _Scripts.Entities.MainMenu.View
 {
     public class MainMenuView : MonoBehaviour
     {

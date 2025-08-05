@@ -1,9 +1,10 @@
 using UnityEngine;
 
-namespace SnakeSystem
+namespace _Scripts.Events
 {
-    public struct SnakeDiedEvent
+    public struct FoodSpawnedEvent
     {
         public Vector2Int Position;
     }
+
 }

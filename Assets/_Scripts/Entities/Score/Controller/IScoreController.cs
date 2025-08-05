@@ -1,4 +1,4 @@
-namespace ScoreSystem.Controller
+namespace _Scripts.Entities.Score.Controller
 {
     public interface IScoreController
     {

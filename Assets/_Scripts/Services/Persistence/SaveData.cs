@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using GameCode.Persistence.Models;
+using _Scripts.Services.Persistence.Models;
 
-namespace GameCode.Persistence
+namespace _Scripts.Services.Persistence
 {
     [Serializable]
     public class SaveData

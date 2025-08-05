@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace LevelSystem.Events
+namespace _Scripts.Events
 {
     public struct FoodEatenEvent
     {

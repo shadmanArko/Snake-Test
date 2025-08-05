@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using _Scripts.EventBus;
+using _Scripts.Entities.Food.Config;
 using Cysharp.Threading.Tasks;
-using HelperClasses;
-using LevelSystem.Config;
-using LevelSystem.Events;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
+using _Scripts.HelperClasses;
 using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace LevelSystem.Model
+namespace _Scripts.Entities.Food.Model
 {
     public class FoodModel : IFoodModel, IDisposable
     {

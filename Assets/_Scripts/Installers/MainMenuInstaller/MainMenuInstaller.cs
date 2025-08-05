@@ -1,6 +1,6 @@
-using MainMenu.Controller;
-using MainMenu.Model;
-using MainMenu.View;
+using _Scripts.Entities.MainMenu.Controller;
+using _Scripts.Entities.MainMenu.Model;
+using _Scripts.Entities.MainMenu.View;
 using UnityEngine;
 using Zenject;
 
@@ -8,15 +8,11 @@ using Zenject;
 public class MainMenuInstaller : ScriptableObjectInstaller<MainMenuInstaller>
 {
     [SerializeField] private MainMenuView mainMenuView;
+    
     public override void InstallBindings()
     {
-        // Model
         Container.Bind<IMainMenuModel>().To<MainMenuModel>().AsSingle().NonLazy();
-        
-        // View
         Container.Bind<MainMenuView>().FromComponentInNewPrefab(mainMenuView).AsSingle().NonLazy();
-        
-        // Controller
         Container.Bind<IMainMenuController>().To<MainMenuController>().AsSingle().NonLazy();
     }
 }

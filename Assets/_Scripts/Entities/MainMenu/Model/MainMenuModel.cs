@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MainMenu.View;
+using _Scripts.Entities.MainMenu.DataClasses;
+using _Scripts.Entities.MainMenu.Enums;
 using UniRx;
 using UnityEngine;
 
-namespace MainMenu.Model
+namespace _Scripts.Entities.MainMenu.Model
 {
     public class MainMenuModel : IMainMenuModel, IDisposable
     {

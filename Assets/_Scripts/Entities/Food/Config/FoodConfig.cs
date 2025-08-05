@@ -1,7 +1,7 @@
 using GlobalConfigs;
 using UnityEngine;
 
-namespace LevelSystem.Config
+namespace _Scripts.Entities.Food.Config
 {
     [CreateAssetMenu(fileName = "FoodConfig", menuName = "Game/Config/FoodConfig")]
     public class FoodConfig : ScriptableObject

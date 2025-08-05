@@ -1,4 +1,4 @@
-namespace GameOverAndPauseSystem.Controller
+namespace _Scripts.Entities.GameOverAndPause.Controller
 {
     public interface IGameOverAndPauseController
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace _Scripts.EventBus
+namespace _Scripts.Services.EventBus.Core
 {
     public interface IEventBus
     {

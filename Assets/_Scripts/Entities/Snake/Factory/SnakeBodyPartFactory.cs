@@ -1,6 +1,8 @@
+using _Scripts.Entities.Snake.Config;
+using _Scripts.Entities.Snake.View;
 using UnityEngine;
 
-namespace SnakeSystem.Factory
+namespace _Scripts.Entities.Snake.Factory
 {
     public class SnakeBodyPartFactory : ISnakeBodyPartFactory
     {

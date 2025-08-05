@@ -1,6 +1,6 @@
-using SoundSystem.Enums;
+using _Scripts.Services.SoundSystem.Enums;
 
-namespace SoundSystem.Events
+namespace _Scripts.Events
 {
     public struct PlaySfxEvent
     {

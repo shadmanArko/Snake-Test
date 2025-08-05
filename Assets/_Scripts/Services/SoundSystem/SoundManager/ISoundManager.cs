@@ -1,6 +1,6 @@
-using SoundSystem.Enums;
+using _Scripts.Services.SoundSystem.Enums;
 
-namespace SoundSystem.SoundManager
+namespace _Scripts.Services.SoundSystem.SoundManager
 {
     public interface ISoundManager
     {

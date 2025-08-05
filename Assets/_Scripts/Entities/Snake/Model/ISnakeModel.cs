@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using _Scripts.Entities.Snake.Enums;
+using _Scripts.Entities.Snake.ValueObjects;
 using UniRx;
 using UnityEngine;
 
-namespace SnakeSystem
+namespace _Scripts.Entities.Snake.Model
 {
     public interface ISnakeModel
     {

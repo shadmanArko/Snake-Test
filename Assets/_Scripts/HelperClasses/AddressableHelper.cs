@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace HelperClasses
+namespace _Scripts.HelperClasses
 {
     public static class AddressableHelper
     {

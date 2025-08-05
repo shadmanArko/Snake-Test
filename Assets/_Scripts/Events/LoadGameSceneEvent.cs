@@ -1,4 +1,4 @@
-namespace SceneFlowManagementSystem.Events
+namespace _Scripts.Events
 {
     public struct LoadGameSceneEvent
     {

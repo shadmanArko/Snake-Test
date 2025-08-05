@@ -1,4 +1,4 @@
-namespace MainMenu.Controller
+namespace _Scripts.Entities.MainMenu.Controller
 {
     public interface IMainMenuController
     {

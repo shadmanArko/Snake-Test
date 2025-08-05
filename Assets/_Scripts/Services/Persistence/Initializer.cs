@@ -1,9 +1,9 @@
 using System.IO;
 using System.Threading.Tasks;
-using GameCode.Persistence.Repositories;
+using _Scripts.Services.Persistence.Repositories;
 using UnityEngine;
 
-namespace GameCode.Persistence
+namespace _Scripts.Services.Persistence
 {
     public class Initializer
     {

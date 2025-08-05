@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 
-namespace LevelSystem.Model
+namespace _Scripts.Entities.Food.Model
 {
     public interface IFoodModel
     {

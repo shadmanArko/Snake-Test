@@ -1,13 +1,12 @@
 using System;
-using _Scripts.EventBus;
-using GameOverAndPauseSystem.Model;
-using GameOverAndPauseSystem.View;
-using SceneFlowManagementSystem.Events;
-using SnakeSystem;
+using _Scripts.Entities.GameOverAndPause.Model;
+using _Scripts.Entities.GameOverAndPause.View;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
 using UniRx;
 using UniRx.Triggers;
 
-namespace GameOverAndPauseSystem.Controller
+namespace _Scripts.Entities.GameOverAndPause.Controller
 {
     public class GameOverAndPauseController : IDisposable, IGameOverAndPauseController
     {

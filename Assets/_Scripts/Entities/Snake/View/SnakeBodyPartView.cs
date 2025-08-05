@@ -1,6 +1,8 @@
+using _Scripts.Entities.Snake.Enums;
+using _Scripts.Entities.Snake.ValueObjects;
 using UnityEngine;
 
-namespace SnakeSystem
+namespace _Scripts.Entities.Snake.View
 {
     public class SnakeBodyPartView : MonoBehaviour
     {

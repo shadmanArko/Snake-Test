@@ -1,9 +1,9 @@
+using _Scripts.Entities.GameOverAndPause.Config;
 using CodeMonkey.Utils;
-using GameOverAndPauseSystem.Config;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameOverAndPauseSystem.View
+namespace _Scripts.Entities.GameOverAndPause.View
 {
     public class GameOverAndPauseView : MonoBehaviour
     {

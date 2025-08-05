@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using _Scripts.EventBus;
-using SoundSystem.Config;
-using SoundSystem.Enums;
-using SoundSystem.Events;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
+using _Scripts.Services.SoundSystem.Config;
+using _Scripts.Services.SoundSystem.Enums;
 using UniRx;
 using UnityEngine;
 using Zenject;
 using Object = UnityEngine.Object;
 
-namespace SoundSystem.SoundManager
+namespace _Scripts.Services.SoundSystem.SoundManager
 {
     public class SoundManager : ISoundManager, IInitializable, IDisposable
     {

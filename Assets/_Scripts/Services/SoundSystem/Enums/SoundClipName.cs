@@ -1,4 +1,4 @@
-namespace SoundSystem.Enums
+namespace _Scripts.Services.SoundSystem.Enums
 {
     public enum SoundClipName
     {

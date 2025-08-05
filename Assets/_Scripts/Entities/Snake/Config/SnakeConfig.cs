@@ -1,7 +1,8 @@
+using _Scripts.Entities.Snake.Enums;
 using GlobalConfigs;
 using UnityEngine;
 
-namespace SnakeSystem
+namespace _Scripts.Entities.Snake.Config
 {
     [CreateAssetMenu(fileName = "SnakeConfig", menuName = "Game/Config/SnakeConfig")]
     public class SnakeConfig : ScriptableObject

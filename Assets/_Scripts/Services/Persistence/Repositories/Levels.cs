@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
-using GameCode.Persistence.Models;
+using _Scripts.Services.Persistence.Models;
 
-namespace GameCode.Persistence.Repositories
+namespace _Scripts.Services.Persistence.Repositories
 {
     [Serializable]
     public class Levels : Repository<Level>

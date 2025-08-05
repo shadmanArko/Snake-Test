@@ -1,4 +1,7 @@
-public class Base
+namespace _Scripts.Services.Persistence.Models
 {
-    public string id;
+    public class Base
+    {
+        public string id;
+    }
 }

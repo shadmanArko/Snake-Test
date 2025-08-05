@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace GameOverAndPauseSystem.Config
+namespace _Scripts.Entities.GameOverAndPause.Config
 {
     [CreateAssetMenu(fileName = "GameOverAndPauseConfig", menuName = "Game/Config/GameOverAndPause/GameOverAndPauseConfig", order = 0)]
     public class GameOverAndPauseConfig : ScriptableObject

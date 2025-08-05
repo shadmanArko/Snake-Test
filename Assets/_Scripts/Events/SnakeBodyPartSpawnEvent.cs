@@ -1,4 +1,6 @@
-namespace SnakeSystem
+using _Scripts.Entities.Snake.View;
+
+namespace _Scripts.Events
 {
     public struct SnakeBodyPartSpawnEvent
     {

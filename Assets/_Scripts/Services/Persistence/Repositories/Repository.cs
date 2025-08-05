@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using _Scripts.Services.Persistence.Models;
 using UnityEngine;
 
-namespace GameCode.Persistence.Repositories
+namespace _Scripts.Services.Persistence.Repositories
 {
     [Serializable]
     public abstract class Repository<T> where T : Base

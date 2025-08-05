@@ -1,8 +1,9 @@
 using System.Collections.Generic;
-using MainMenu.View;
+using _Scripts.Entities.MainMenu.DataClasses;
+using _Scripts.Entities.MainMenu.Enums;
 using UniRx;
 
-namespace MainMenu.Model
+namespace _Scripts.Entities.MainMenu.Model
 {
     public interface IMainMenuModel
     {

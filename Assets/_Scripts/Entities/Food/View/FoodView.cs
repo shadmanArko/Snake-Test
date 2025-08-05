@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace LevelSystem
+namespace _Scripts.Entities.Food.View
 {
     public class FoodView : MonoBehaviour
     {
