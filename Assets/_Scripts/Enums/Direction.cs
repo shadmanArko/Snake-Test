@@ -1,4 +1,4 @@
-namespace _Scripts.Entities.Snake.Enums
+namespace _Scripts.Enums
 {
     public enum Direction
     {

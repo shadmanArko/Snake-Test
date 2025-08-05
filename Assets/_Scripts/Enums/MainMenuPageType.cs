@@ -1,4 +1,4 @@
-namespace _Scripts.Entities.MainMenu.Enums
+namespace _Scripts.Enums
 {
     public enum MainMenuPageType
     {

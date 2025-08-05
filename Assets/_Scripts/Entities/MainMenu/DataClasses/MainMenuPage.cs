@@ -1,5 +1,5 @@
 using System;
-using _Scripts.Entities.MainMenu.Enums;
+using _Scripts.Enums;
 using UnityEngine;
 
 namespace _Scripts.Entities.MainMenu.DataClasses

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using _Scripts.Entities.MainMenu.DataClasses;
-using CodeMonkey.Utils;
+using _Scripts.Services.Utils;
 using UnityEngine;
 
 namespace _Scripts.Entities.MainMenu.View

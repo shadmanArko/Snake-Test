@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using _Scripts.Services.Utils;
+using UnityEngine;
 using CodeMonkey.Utils;
 
 public class MainMenuWindow : MonoBehaviour {
@@ -8,24 +9,24 @@ public class MainMenuWindow : MonoBehaviour {
         HowToPlay,
     }
 
-    private void Awake() {
-        transform.Find("howToPlaySub").GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        transform.Find("mainSub").GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-
-        transform.Find("mainSub").Find("playBtn").GetComponent<Button_UI>().ClickFunc = () => Loader.Load(Loader.Scene.GameScene);
-        transform.Find("mainSub").Find("playBtn").GetComponent<Button_UI>().AddButtonSounds();
-
-        transform.Find("mainSub").Find("quitBtn").GetComponent<Button_UI>().ClickFunc = () => Application.Quit();
-        transform.Find("mainSub").Find("quitBtn").GetComponent<Button_UI>().AddButtonSounds();
-
-        transform.Find("mainSub").Find("howToPlayBtn").GetComponent<Button_UI>().ClickFunc = () => ShowSub(Sub.HowToPlay);
-        transform.Find("mainSub").Find("howToPlayBtn").GetComponent<Button_UI>().AddButtonSounds();
-
-        transform.Find("howToPlaySub").Find("backBtn").GetComponent<Button_UI>().ClickFunc = () => ShowSub(Sub.Main);
-        transform.Find("howToPlaySub").Find("backBtn").GetComponent<Button_UI>().AddButtonSounds();
-
-        ShowSub(Sub.Main);
-    }
+    // private void Awake() {
+    //     transform.Find("howToPlaySub").GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+    //     transform.Find("mainSub").GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+    //
+    //     transform.Find("mainSub").Find("playBtn").GetComponent<Button_UI>().ClickFunc = () => Loader.Load(Loader.Scene.GameScene);
+    //     transform.Find("mainSub").Find("playBtn").GetComponent<Button_UI>().AddButtonSounds();
+    //
+    //     transform.Find("mainSub").Find("quitBtn").GetComponent<Button_UI>().ClickFunc = () => Application.Quit();
+    //     transform.Find("mainSub").Find("quitBtn").GetComponent<Button_UI>().AddButtonSounds();
+    //
+    //     transform.Find("mainSub").Find("howToPlayBtn").GetComponent<Button_UI>().ClickFunc = () => ShowSub(Sub.HowToPlay);
+    //     transform.Find("mainSub").Find("howToPlayBtn").GetComponent<Button_UI>().AddButtonSounds();
+    //
+    //     transform.Find("howToPlaySub").Find("backBtn").GetComponent<Button_UI>().ClickFunc = () => ShowSub(Sub.Main);
+    //     transform.Find("howToPlaySub").Find("backBtn").GetComponent<Button_UI>().AddButtonSounds();
+    //
+    //     ShowSub(Sub.Main);
+    // }
 
     private void ShowSub(Sub sub) {
         transform.Find("mainSub").gameObject.SetActive(false);

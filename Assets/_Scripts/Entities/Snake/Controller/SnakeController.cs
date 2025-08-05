@@ -2,7 +2,7 @@ using System;
 using _Scripts.Entities.Snake.Factory;
 using _Scripts.Entities.Snake.Model;
 using _Scripts.Entities.Snake.View;
-using _Scripts.Entities.Snake.Enums;
+using _Scripts.Enums;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using UniRx;

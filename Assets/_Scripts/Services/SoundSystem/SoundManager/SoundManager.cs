@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using _Scripts.Enums;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using _Scripts.Services.SoundSystem.Config;
-using _Scripts.Services.SoundSystem.Enums;
 using UniRx;
 using UnityEngine;
 using Zenject;

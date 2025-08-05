@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using _Scripts.Entities.MainMenu.DataClasses;
-using _Scripts.Entities.MainMenu.Enums;
+using _Scripts.Enums;
 using UniRx;
 
 namespace _Scripts.Entities.MainMenu.Model

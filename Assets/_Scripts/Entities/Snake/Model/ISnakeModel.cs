@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using _Scripts.Entities.Snake.Enums;
 using _Scripts.Entities.Snake.ValueObjects;
+using _Scripts.Enums;
 using UniRx;
 using UnityEngine;
 

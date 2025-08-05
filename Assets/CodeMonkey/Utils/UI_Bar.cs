@@ -13,6 +13,7 @@
 //#define TOOLTIP_UI // Has Tooltip_UI in project
 
 using System;
+using _Scripts.Services.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 

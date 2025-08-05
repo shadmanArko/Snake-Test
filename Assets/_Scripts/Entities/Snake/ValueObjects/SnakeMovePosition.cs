@@ -1,4 +1,4 @@
-using _Scripts.Entities.Snake.Enums;
+using _Scripts.Enums;
 using UnityEngine;
 
 namespace _Scripts.Entities.Snake.ValueObjects

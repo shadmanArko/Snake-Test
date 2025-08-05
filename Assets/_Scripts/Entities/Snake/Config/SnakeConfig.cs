@@ -1,4 +1,4 @@
-using _Scripts.Entities.Snake.Enums;
+using _Scripts.Enums;
 using GlobalConfigs;
 using UnityEngine;
 

@@ -1,4 +1,4 @@
-using _Scripts.Services.SoundSystem.Enums;
+using _Scripts.Enums;
 
 namespace _Scripts.Events
 {

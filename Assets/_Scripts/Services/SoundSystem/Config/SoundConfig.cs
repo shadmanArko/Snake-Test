@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using _Scripts.Services.SoundSystem.Enums;
+using _Scripts.Enums;
 using UnityEngine;
 
 namespace _Scripts.Services.SoundSystem.Config

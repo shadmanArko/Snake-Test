@@ -1,5 +1,5 @@
 using _Scripts.Entities.GameOverAndPause.Config;
-using CodeMonkey.Utils;
+using _Scripts.Services.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using _Scripts.Entities.Snake.Config;
-using _Scripts.Entities.Snake.Enums;
 using _Scripts.Entities.Snake.ValueObjects;
+using _Scripts.Enums;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
-using _Scripts.Services.SoundSystem.Enums;
 using UniRx;
 using UnityEngine;
 

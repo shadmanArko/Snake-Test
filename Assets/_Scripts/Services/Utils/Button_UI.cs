@@ -18,7 +18,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace CodeMonkey.Utils {
+namespace _Scripts.Services.Utils {
     
     /*
      * Button in the UI
