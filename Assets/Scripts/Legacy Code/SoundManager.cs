@@ -26,7 +26,7 @@ public static class SoundManager {
     }
 
     public static void PlaySound(Sound sound) {
-        GameObject soundGameObject = new GameObject("Sound");
+        GameObject soundGameObject = new GameObject("SoundSystem");
         AudioSource audioSource = soundGameObject.AddComponent<AudioSource>();
         audioSource.PlayOneShot(GetAudioClip(sound));
     }
@@ -37,7 +37,7 @@ public static class SoundManager {
                 return soundAudioClip.audioClip;
             }
         }
-        Debug.LogError("Sound " + sound + " not found!");
+        Debug.LogError("SoundSystem " + sound + " not found!");
         return null;
     }
 

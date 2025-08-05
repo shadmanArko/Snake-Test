@@ -7,5 +7,8 @@ namespace GameOverAndPauseSystem.Model
         GameStateConfig GameOver();
         void Pause();
         void Resume();
+        bool ShowNewHighScoreTextTitle();
+        int GetScore();
+        int GetHighScore();
     }
 }

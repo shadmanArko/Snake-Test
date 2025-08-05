@@ -1,6 +1,7 @@
 using CodeMonkey.Utils;
 using GameOverAndPauseSystem.Config;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameOverAndPauseSystem.View
 {
@@ -9,10 +10,16 @@ namespace GameOverAndPauseSystem.View
         [SerializeField] private GameObject gameOverUI;
         [SerializeField] private GameObject pauseUI;
         [SerializeField] private Button_UI restartButton;
+        [SerializeField] private GameObject newHighScoreTitleTest;
+        [SerializeField] private Text scoreText;
+        [SerializeField] private Text highScoreText;
         
         public GameObject GameOverUI => gameOverUI;
         public GameObject PauseUI => pauseUI;
         public Button_UI RestartButton => restartButton;
+        public GameObject NewHighScoreTitleTest => newHighScoreTitleTest;
+        public Text ScoreText => scoreText;
+        public Text HighScoreText => highScoreText;
 
         public void ApplyVto(GameStateConfig config)
         {

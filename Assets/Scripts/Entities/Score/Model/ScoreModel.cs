@@ -37,6 +37,7 @@ namespace ScoreSystem.Model
                 _level.highestScore = _score.Value;
                 _highScore.Value = _level.highestScore;
             }
+            _level.score = _score.Value;
         }
 
         public void Dispose()

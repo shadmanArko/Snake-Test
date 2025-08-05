@@ -7,6 +7,7 @@ namespace GameCode.Persistence.Models
     [Serializable]
     public class Level : Base
     {
-       public int highestScore;
+        public int score;
+        public int highestScore;
     }
 }

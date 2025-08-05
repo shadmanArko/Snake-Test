@@ -73,7 +73,7 @@ namespace CodeMonkey.Utils {
         private Action internalOnMouseDownFunc, internalOnMouseEnterFunc, internalOnMouseExitFunc;
 
 #if SOUND_MANAGER
-        public Sound_Manager.Sound mouseOverSound, mouseClickSound;
+        public Sound_Manager.SoundSystem mouseOverSound, mouseClickSound;
 #endif
 #if CURSOR_MANAGER
         public CursorManager.CursorType cursorMouseOver, cursorMouseOut;
@@ -157,9 +157,9 @@ namespace CodeMonkey.Utils {
             SetupHoverBehaviour();
 
 #if SOUND_MANAGER
-            // Sound Manager
-            internalOnMouseDownFunc += () => { if (mouseClickSound != Sound_Manager.Sound.None) Sound_Manager.PlaySound(mouseClickSound); };
-            internalOnMouseEnterFunc += () => { if (mouseOverSound != Sound_Manager.Sound.None) Sound_Manager.PlaySound(mouseOverSound); };
+            // SoundSystem Manager
+            internalOnMouseDownFunc += () => { if (mouseClickSound != Sound_Manager.SoundSystem.None) Sound_Manager.PlaySound(mouseClickSound); };
+            internalOnMouseEnterFunc += () => { if (mouseOverSound != Sound_Manager.SoundSystem.None) Sound_Manager.PlaySound(mouseOverSound); };
 #endif
 
 #if CURSOR_MANAGER

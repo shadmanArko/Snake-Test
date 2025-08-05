@@ -25,7 +25,13 @@ namespace GameOverAndPauseSystem.Controller
             _view.RestartButton.ClickFunc += () => _eventBus.Publish(new RestartGameSceneEvent());
             _eventBus.OnEvent<SnakeDiedEvent>()
                 .TakeUntil(_view.gameObject.OnDestroyAsObservable())
-                .Subscribe(_ => _view.ApplyVto(_model.GameOver()));
+                .Subscribe(_ =>
+                {
+                    _view.ApplyVto(_model.GameOver());
+                    _view.NewHighScoreTitleTest.SetActive(_model.ShowNewHighScoreTextTitle());
+                    _view.ScoreText.text = _model.GetScore().ToString();
+                    _view.HighScoreText.text = _model.GetHighScore().ToString();
+                });
         }
 
         public void Dispose()
