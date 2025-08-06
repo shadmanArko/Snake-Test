@@ -16,6 +16,7 @@ using _Scripts.Entities.Snake.Controller;
 using _Scripts.Entities.Snake.Factory;
 using _Scripts.Entities.Snake.Model;
 using _Scripts.Entities.Snake.View;
+using _Scripts.Services.InputSystem;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -53,7 +54,7 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
     public override void InstallBindings()
     {
         Container.Bind<CompositeDisposable>().AsSingle();
-        Container.Bind<GameSceneInit>().AsSingle();
+        Container.Bind<GameSceneInit>().AsSingle().NonLazy();
         
         Container.BindInterfacesTo<SnakeController>().AsSingle();
         Container.BindInterfacesTo<SnakeModel>().AsSingle();
@@ -75,5 +76,21 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
         Container.BindInterfacesTo<GameOverAndPauseModel>().AsSingle();
         Container.BindInterfacesTo<GameOverAndPauseView>().FromComponentInNewPrefab(gameOverAndPauseView).AsSingle();
         Container.BindInterfacesTo<GameOverAndPauseConfig>().FromScriptableObject(gameOverAndPauseConfig).AsSingle();
+        
+    #if UNITY_EDITOR || UNITY_STANDALONE
+        // PC Input for Editor and Standalone builds
+        Container.BindInterfacesTo<PCInput>().AsSingle();
+        Debug.Log("PC Input System Installed");
+        
+    #elif UNITY_ANDROID || UNITY_IOS
+        // Mobile Input for Android and iOS builds
+        Container.BindInterfacesTo<MobileTouchInput>().AsSingle();
+        Debug.Log("Mobile Touch Input System Installed");
+        
+    #else
+        // Fallback to PC input for other platforms
+        Container.BindInterfacesTo<PCInput>().AsSingle();
+        Debug.Log("Fallback PC Input System Installed");
+    #endif
     }
 }

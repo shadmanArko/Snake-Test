@@ -4,10 +4,11 @@ using _Scripts.Entities.GameOverAndPause.View;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using UniRx;
+using Zenject;
 
 namespace _Scripts.Entities.GameOverAndPause.Controller
 {
-    public class GameOverAndPauseController : IDisposable, IGameOverAndPauseController
+    public class GameOverAndPauseController : IDisposable, IGameOverAndPauseController, IInitializable
     {
         private readonly IEventBus _eventBus;
         private readonly IGameOverAndPauseModel _model;
@@ -20,7 +21,10 @@ namespace _Scripts.Entities.GameOverAndPause.Controller
             _model = model;
             _view = view;
             _disposables = disposables;
-
+        }
+        
+        public void Initialize()
+        {
             _view.RestartButton.ClickFunc += OnRestartButtonClicked;
             _eventBus.OnEvent<SnakeDiedEvent>()
                 .Subscribe(_ =>
@@ -29,7 +33,8 @@ namespace _Scripts.Entities.GameOverAndPause.Controller
                     _view.NewHighScoreTitleTest.SetActive(_model.ShowNewHighScoreTextTitle());
                     _view.ScoreText.text = _model.GetScore().ToString();
                     _view.HighScoreText.text = _model.GetHighScore().ToString();
-                }).AddTo(_disposables);
+                })
+                .AddTo(_disposables);
         }
 
         private void OnRestartButtonClicked()
