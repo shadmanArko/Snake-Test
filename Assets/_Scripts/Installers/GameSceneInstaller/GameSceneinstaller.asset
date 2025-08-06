@@ -17,6 +17,6 @@ MonoBehaviour:
   foodConfig: {fileID: 11400000, guid: bc603561117634f0d9938ca076dd508e, type: 2}
   foodView: {fileID: 1965676752454085075, guid: 12ac96e9b98664045a2e29547276ea13, type: 3}
   scoreConfig: {fileID: 11400000, guid: 4fdc5cf1fc43e43a6b44b3608ce3b75e, type: 2}
-  scoreView: {fileID: 3922847293773195861, guid: 564ce8207672f4bfba180b67b63f7217, type: 3}
+  scoreView: {fileID: 6053272593148101688, guid: 564ce8207672f4bfba180b67b63f7217, type: 3}
   gameOverAndPauseConfig: {fileID: 11400000, guid: b7336a174919b4cb994c1d1f373fb73d, type: 2}
   gameOverAndPauseView: {fileID: 6966381560408671078, guid: 1b61d872a9d3f4f29a9d0ce7779b27d9, type: 3}

@@ -56,18 +56,15 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
         Container.Bind<GameSceneInit>().AsSingle();
         
         Container.BindInterfacesTo<SnakeController>().AsSingle();
-        Container.BindInterfacesTo<SnakeConfig>().FromScriptableObject(snakeConfig).AsSingle();
         Container.BindInterfacesTo<SnakeModel>().AsSingle();
         Container.BindInterfacesTo<SnakeView>().FromComponentInNewPrefab(snakeView).AsSingle();
+        Container.BindInterfacesTo<SnakeConfig>().FromScriptableObject(snakeConfig).AsSingle();
+        Container.BindInterfacesTo<SnakeBodyPartFactory>().AsSingle();
         
-        
-        
-        Container.Bind<ISnakeBodyPartFactory>().To<SnakeBodyPartFactory>().AsSingle();
-
-        Container.BindInterfacesAndSelfTo<FoodConfig>().FromScriptableObject(foodConfig).AsSingle().NonLazy();
-        Container.Bind<IFoodModel>().To<FoodModel>().AsSingle().NonLazy();
-        Container.Bind<FoodView>().FromComponentInNewPrefab(foodView).AsSingle().NonLazy();
-        Container.Bind<IFoodController>().To<FoodController>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<FoodConfig>().FromScriptableObject(foodConfig).AsSingle();
+        Container.BindInterfacesTo<FoodModel>().AsSingle();
+        Container.BindInterfacesTo<FoodView>().FromComponentInNewPrefab(foodView).AsSingle();
+        Container.BindInterfacesTo<FoodController>().AsSingle();
 
         Container.Bind<ScoreConfig>().FromScriptableObject(scoreConfig).AsSingle();
         Container.Bind<IScoreModel>().To<ScoreModel>().AsSingle().NonLazy();

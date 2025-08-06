@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using _Scripts.Entities.Food.Config;
 using Cysharp.Threading.Tasks;
 using _Scripts.Events;
@@ -14,17 +15,18 @@ namespace _Scripts.Entities.Food.Model
     public class FoodModel : IFoodModel, IDisposable
     {
         private readonly IEventBus _eventBus;
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly CompositeDisposable _disposables;
         private readonly ReactiveProperty<Vector2Int> _foodPosition = new ReactiveProperty<Vector2Int>();
-        private readonly FoodConfig _config;
+        private readonly IFoodConfig _config;
         
         private Sprite _foodSprite;
         public IReadOnlyReactiveProperty<Vector2Int> FoodPosition => _foodPosition;
 
-        public FoodModel(IEventBus eventBus, FoodConfig config)
+        public FoodModel(IEventBus eventBus, IFoodConfig config, CompositeDisposable disposables)
         {
             _eventBus = eventBus;
             _config = config;
+            _disposables = disposables;
         }
         
         public void SpawnFood(List<Vector2Int> occupiedPositions)
@@ -36,8 +38,8 @@ namespace _Scripts.Entities.Food.Model
             do
             {
                 newFoodPosition = new Vector2Int(
-                    Random.Range(0, _config.gridConfig.width),
-                    Random.Range(0, _config.gridConfig.height)
+                    Random.Range(0, _config.GridConfig.width),
+                    Random.Range(0, _config.GridConfig.height)
                 );
                 attempts++;
             } while (occupiedPositions.Contains(newFoodPosition) && attempts < maxAttempts);
@@ -48,14 +50,13 @@ namespace _Scripts.Entities.Food.Model
         
         public async UniTask<Sprite> GetVtoAsync()
         {
-            _foodSprite = await AddressableHelper.LoadSpriteAsync(_config.foodSpriteAddressableKey);
+            _foodSprite = await AddressableHelper.LoadSpriteAsync(_config.FoodSpriteAddressableKey);
             return _foodSprite;
         }
         
         public void Dispose()
         {
             AddressableHelper.ReleaseAsset(_foodSprite);
-            _disposables?.Dispose();
             _foodPosition?.Dispose();
         }
     }

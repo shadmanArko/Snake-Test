@@ -20,6 +20,7 @@ namespace _Scripts.Tests.Entities.Food.Model
         private GridConfig _testGridConfig;
         private FoodModel _foodModel;
         private const string TestSpriteKey = "test_food_sprite";
+        private CompositeDisposable _disposables;
 
         [SetUp]
         public void SetUp()
@@ -30,14 +31,14 @@ namespace _Scripts.Tests.Entities.Food.Model
             _testGridConfig.height = 10;
 
             _testConfig = ScriptableObject.CreateInstance<FoodConfig>();
-            _testConfig.gridConfig = _testGridConfig;
-            _testConfig.foodSpriteAddressableKey = TestSpriteKey;
+            _testConfig.GridConfig = _testGridConfig;
+            _testConfig.FoodSpriteAddressableKey = TestSpriteKey;
 
             // Setup mock event bus
             _mockEventBus = new MockEventBus();
 
             // Create the system under test
-            _foodModel = new FoodModel(_mockEventBus, _testConfig);
+            _foodModel = new FoodModel(_mockEventBus, _testConfig, _disposables);
         }
 
         [TearDown]
@@ -93,8 +94,8 @@ namespace _Scripts.Tests.Entities.Food.Model
             _foodModel.SpawnFood(occupiedPositions);
 
             // Assert
-            Assert.IsTrue(capturedPosition.x >= 0 && capturedPosition.x < _testConfig.gridConfig.width);
-            Assert.IsTrue(capturedPosition.y >= 0 && capturedPosition.y < _testConfig.gridConfig.height);
+            Assert.IsTrue(capturedPosition.x >= 0 && capturedPosition.x < _testConfig.GridConfig.width);
+            Assert.IsTrue(capturedPosition.y >= 0 && capturedPosition.y < _testConfig.GridConfig.height);
         }
 
         [Test]
@@ -116,8 +117,8 @@ namespace _Scripts.Tests.Entities.Food.Model
 
             // Assert
             Assert.IsFalse(occupiedPositions.Contains(finalPosition));
-            Assert.IsTrue(finalPosition.x >= 0 && finalPosition.x < _testConfig.gridConfig.width);
-            Assert.IsTrue(finalPosition.y >= 0 && finalPosition.y < _testConfig.gridConfig.height);
+            Assert.IsTrue(finalPosition.x >= 0 && finalPosition.x < _testConfig.GridConfig.width);
+            Assert.IsTrue(finalPosition.y >= 0 && finalPosition.y < _testConfig.GridConfig.height);
         }
 
         [Test]
@@ -164,10 +165,10 @@ namespace _Scripts.Tests.Entities.Food.Model
             smallGridConfig.height = 3;
 
             var smallConfig = ScriptableObject.CreateInstance<FoodConfig>();
-            smallConfig.gridConfig = smallGridConfig;
-            smallConfig.foodSpriteAddressableKey = TestSpriteKey;
+            smallConfig.GridConfig = smallGridConfig;
+            smallConfig.FoodSpriteAddressableKey = TestSpriteKey;
 
-            var smallFoodModel = new FoodModel(_mockEventBus, smallConfig);
+            var smallFoodModel = new FoodModel(_mockEventBus, smallConfig, _disposables);
             
             // Occupy most positions
             var occupiedPositions = new List<Vector2Int>

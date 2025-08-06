@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _Scripts.Entities.Food.View
 {
-    public class FoodView : MonoBehaviour
+    public class FoodView : MonoBehaviour, IFoodView
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
         
@@ -12,20 +12,9 @@ namespace _Scripts.Entities.Food.View
             transform.position = new Vector3(position.x, position.y, 0);
         }
         
-        public async UniTaskVoid ApplyVto(UniTask<Sprite> spriteTask)
+        public void ApplyVto(Sprite sprite)
         {
-            try
-            {
-                var sprite = await spriteTask;
-                if (sprite != null)
-                {
-                    _spriteRenderer.sprite = sprite;
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Failed to apply VTO sprite: {e.Message}");
-            }
+            _spriteRenderer.sprite = sprite;
         }
     }
 

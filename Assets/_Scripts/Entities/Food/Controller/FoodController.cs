@@ -4,6 +4,7 @@ using _Scripts.Entities.Food.Model;
 using _Scripts.Entities.Food.View;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -13,34 +14,47 @@ namespace _Scripts.Entities.Food.Controller
     public class FoodController : IFoodController, IDisposable
     {
         private readonly IFoodModel _model;
-        private readonly FoodView _view;
+        private readonly IFoodView _view;
         private readonly IEventBus _eventBus;
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly CompositeDisposable _disposables;
 
         public FoodController(
             IFoodModel model, 
-            FoodView view, 
-            IEventBus eventBus)
+            IFoodView view, 
+            IEventBus eventBus, 
+            CompositeDisposable disposables)
         {
             _model = model;
             _view = view;
             _eventBus = eventBus;
+            _disposables = disposables;
             Initialize();
         }
 
         public void Initialize()
         {
-            _ = _view.ApplyVto(_model.GetVtoAsync());
+            SetupView();
             
             BindModelToView();
             
             SubscribeToEvents();
         }
 
+        private void SetupView()
+        {
+            LoadAndApplySprite().Forget();
+        }
+
+        private async UniTaskVoid LoadAndApplySprite()
+        {
+            Sprite sprite = await _model.GetVtoAsync();
+            _view.ApplyVto(sprite);
+        }
+
+
         private void BindModelToView()
         {
             _model.FoodPosition
-                .TakeUntil(_view.gameObject.OnDestroyAsObservable())
                 .Subscribe(position => _view.SetFoodPosition(position))
                 .AddTo(_disposables);
         }
@@ -59,7 +73,6 @@ namespace _Scripts.Entities.Food.Controller
 
         public void Dispose()
         {
-            _disposables?.Dispose();
         }
     }
 }
