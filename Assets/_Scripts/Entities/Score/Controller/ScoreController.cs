@@ -5,41 +5,42 @@ using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using UniRx;
 using UniRx.Triggers;
+using Zenject;
 
 namespace _Scripts.Entities.Score.Controller
 {
-    public class ScoreController : IScoreController, IDisposable
+    public class ScoreController : IScoreController, IDisposable, IInitializable
     {
         private readonly IScoreModel _model;
-        private readonly ScoreView _view;
+        private readonly IScoreView _view;
         private readonly IEventBus _eventBus;
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
-
-        public ScoreController(IScoreModel model, ScoreView view, IEventBus eventBus)
+        private readonly CompositeDisposable _disposables;
+        
+        public ScoreController(IScoreModel model, IScoreView view, IEventBus eventBus, CompositeDisposable disposables)
         {
             _model = model;
             _view = view;
             _eventBus = eventBus;
-
+            _disposables = disposables;
+        }
+        
+        public void Initialize()
+        {
             _model.Score
-                .TakeUntil(_view.gameObject.OnDestroyAsObservable())
                 .Subscribe(score => _view.ScoreText.text = score.ToString())
                 .AddTo(_disposables);
             
             _model.HighScore
-                .TakeUntil(_view.gameObject.OnDestroyAsObservable())
                 .Subscribe(score => _view.HighScoreText.text = score.ToString())
                 .AddTo(_disposables);
             
             _eventBus.OnEvent<FoodEatenEvent>()
-                .TakeUntil(_view.gameObject.OnDestroyAsObservable())
                 .Subscribe(_ => _model.UpdateScore())
                 .AddTo(_disposables);
         }
-
+       
         public void Dispose()
         {
-            _disposables?.Dispose();
         }
     }
 }

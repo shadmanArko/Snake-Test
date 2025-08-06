@@ -3,7 +3,13 @@ using UnityEngine.UI;
 
 namespace _Scripts.Entities.Score.View
 {
-    public class ScoreView : MonoBehaviour
+    public interface IScoreView
+    {
+        Text ScoreText { get; }
+        Text HighScoreText { get; }
+    }
+
+    public class ScoreView : MonoBehaviour, IScoreView
     {
         [SerializeField] private Text _scoreText;
         [SerializeField] private Text _highScoreText;

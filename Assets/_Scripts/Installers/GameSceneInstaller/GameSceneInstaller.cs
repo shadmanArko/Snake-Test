@@ -61,15 +61,15 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
         Container.BindInterfacesTo<SnakeConfig>().FromScriptableObject(snakeConfig).AsSingle();
         Container.BindInterfacesTo<SnakeBodyPartFactory>().AsSingle();
         
-        Container.BindInterfacesTo<FoodConfig>().FromScriptableObject(foodConfig).AsSingle();
+        Container.BindInterfacesTo<FoodController>().AsSingle();
         Container.BindInterfacesTo<FoodModel>().AsSingle();
         Container.BindInterfacesTo<FoodView>().FromComponentInNewPrefab(foodView).AsSingle();
-        Container.BindInterfacesTo<FoodController>().AsSingle();
+        Container.BindInterfacesTo<FoodConfig>().FromScriptableObject(foodConfig).AsSingle();
 
-        Container.Bind<ScoreConfig>().FromScriptableObject(scoreConfig).AsSingle();
-        Container.Bind<IScoreModel>().To<ScoreModel>().AsSingle().NonLazy();
-        Container.Bind<IScoreController>().To<ScoreController>().AsSingle().NonLazy();
-        Container.Bind<ScoreView>().FromComponentInNewPrefab(scoreView).AsSingle();
+        Container.BindInterfacesTo<ScoreController>().AsSingle();
+        Container.BindInterfacesTo<ScoreModel>().AsSingle();
+        Container.BindInterfacesTo<ScoreView>().FromComponentInNewPrefab(scoreView).AsSingle();
+        Container.BindInterfacesTo<ScoreConfig>().FromScriptableObject(scoreConfig).AsSingle();
 
         Container.Bind<GameOverAndPauseConfig>().FromScriptableObject(gameOverAndPauseConfig).AsSingle();
         Container.Bind<IGameOverAndPauseModel>().To<GameOverAndPauseModel>().AsSingle();
