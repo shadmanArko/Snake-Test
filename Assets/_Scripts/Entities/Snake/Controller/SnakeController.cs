@@ -7,26 +7,28 @@ using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace _Scripts.Entities.Snake.Controller
 {
-    public class SnakeController : ISnakeController, IDisposable
+    public class SnakeController : ISnakeController, IDisposable, IInitializable
     {
         private readonly ISnakeModel _model;
-        private readonly SnakeView _view;
+        private readonly ISnakeView _view;
         private readonly IEventBus _eventBus;
         private readonly ISnakeBodyPartFactory _bodyPartFactory;
-        private readonly CompositeDisposable _disposables = new();
+        private readonly CompositeDisposable _disposables;
 
         private IDisposable _moveTimer;
 
-        public SnakeController(ISnakeModel model, SnakeView view, IEventBus eventBus, ISnakeBodyPartFactory bodyPartFactory)
+        public SnakeController(ISnakeModel model, ISnakeView view, IEventBus eventBus,
+            ISnakeBodyPartFactory bodyPartFactory, CompositeDisposable disposables)
         {
             _model = model;
             _view = view;
             _eventBus = eventBus;
             _bodyPartFactory = bodyPartFactory;
-            Initialize();
+            _disposables = disposables;
         }
 
         public void Initialize()
@@ -90,7 +92,6 @@ namespace _Scripts.Entities.Snake.Controller
         public void Dispose()
         {
             _moveTimer?.Dispose();
-            _disposables?.Dispose();
         }
     }
 }

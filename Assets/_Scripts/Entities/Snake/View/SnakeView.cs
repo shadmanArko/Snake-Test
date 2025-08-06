@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace _Scripts.Entities.Snake.View
 {
-    public class SnakeView : MonoBehaviour
+    public class SnakeView : MonoBehaviour, ISnakeView
     {
         [SerializeField] private Transform headTransform;
         

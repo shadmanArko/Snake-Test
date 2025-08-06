@@ -8,15 +8,15 @@ using _Scripts.Services.SoundSystem.SoundManager;
 using UnityEngine;
 using Zenject;
 
-[CreateAssetMenu(fileName = "GlobalInstaller", menuName = "Installers/GlobalInstaller")]
-public class GlobalInstaller : ScriptableObjectInstaller<GlobalInstaller>
+[CreateAssetMenu(fileName = "BaseInstaller", menuName = "Installers/BaseInstaller")]
+public class BaseInstaller : ScriptableObjectInstaller<BaseInstaller>
 {
     [SerializeField] private SoundConfig _soundConfig;
     
     [SerializeField] private TextAsset _saveDataJsonFile;
     
     [SerializeField] private SceneConfig _sceneConfig;
-    
+
     public override void InstallBindings()
     {
         Container.Bind<TextAsset>().FromInstance(_saveDataJsonFile).AsSingle();

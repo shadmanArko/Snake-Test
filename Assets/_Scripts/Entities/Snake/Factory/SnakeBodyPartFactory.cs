@@ -6,9 +6,9 @@ namespace _Scripts.Entities.Snake.Factory
 {
     public class SnakeBodyPartFactory : ISnakeBodyPartFactory
     {
-        private readonly SnakeConfig _config;
+        private readonly ISnakeConfig _config;
     
-        public SnakeBodyPartFactory(SnakeConfig config)
+        public SnakeBodyPartFactory(ISnakeConfig config)
         {
             _config = config;
         }
@@ -17,8 +17,8 @@ namespace _Scripts.Entities.Snake.Factory
         {
             var bodyPartGO = new GameObject("SnakeBodyPart");
             var spriteRenderer = bodyPartGO.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = _config.snakeBodySprite;
-            spriteRenderer.sortingOrder = _config.bodyPartSortingOrder;
+            spriteRenderer.sprite = _config.SnakeBodySprite;
+            spriteRenderer.sortingOrder = _config.BodyPartSortingOrder;
             return bodyPartGO.AddComponent<SnakeBodyPartView>();
         }
     }

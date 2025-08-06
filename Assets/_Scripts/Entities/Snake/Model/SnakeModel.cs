@@ -23,7 +23,7 @@ namespace _Scripts.Entities.Snake.Model
 
         private readonly ReactiveProperty<IReadOnlyList<SnakeMovePosition>> _bodyPositions = new(new List<SnakeMovePosition>());
 
-        private readonly SnakeConfig _config;
+        private readonly ISnakeConfig _config;
         private readonly List<SnakeMovePosition> _moveHistory = new();
         private int _bodySize;
 
@@ -37,7 +37,7 @@ namespace _Scripts.Entities.Snake.Model
 
         public Vector2Int FoodPosition{ get; set; } = new();
 
-        public SnakeModel(IEventBus eventBus, SnakeConfig config)
+        public SnakeModel(IEventBus eventBus, ISnakeConfig config)
         {
             _eventBus = eventBus;
             _config = config;
@@ -46,8 +46,8 @@ namespace _Scripts.Entities.Snake.Model
 
         private void Initialize()
         {
-            _headPosition.Value = _config.startPosition;
-            _currentDirection.Value = _config.startDirection;
+            _headPosition.Value = _config.StartPosition;
+            _currentDirection.Value = _config.StartDirection;
             _state.Value = SnakeState.Alive;
             _bodySize = 0;
             _moveHistory.Clear();
@@ -57,7 +57,7 @@ namespace _Scripts.Entities.Snake.Model
         private void StartMovementTimer()
         {
             _moveTimer?.Dispose();
-            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_config.moveInterval))
+            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_config.MoveInterval))
                 .Where(_ => State.Value == SnakeState.Alive)
                 .Subscribe(_ => Move())
                 .AddTo(_disposables);
@@ -118,7 +118,7 @@ namespace _Scripts.Entities.Snake.Model
                 OccupiedPositions = GetAllOccupiedPositions()
             });
 
-            if (_config.enableSounds)
+            if (_config.EnableSounds)
             {
                 _eventBus.Publish(new PlaySfxEvent { ClipName = SoundClipName.SnakeEat });
             }
@@ -129,7 +129,7 @@ namespace _Scripts.Entities.Snake.Model
             _state.Value = SnakeState.Dead;
             _eventBus.Publish(new SnakeDiedEvent { Position = _headPosition.Value });
 
-            if (_config.enableSounds)
+            if (_config.EnableSounds)
             {
                 _eventBus.Publish(new PlaySfxEvent { ClipName = SoundClipName.SnakeDie });
             }
@@ -184,13 +184,13 @@ namespace _Scripts.Entities.Snake.Model
             var validatedPosition = position;
 
             if (validatedPosition.x < 0)
-                validatedPosition.x = _config.gridConfig.width - 1;
-            else if (validatedPosition.x >= _config.gridConfig.width)
+                validatedPosition.x = _config.GridConfig.width - 1;
+            else if (validatedPosition.x >= _config.GridConfig.width)
                 validatedPosition.x = 0;
 
             if (validatedPosition.y < 0)
-                validatedPosition.y = _config.gridConfig.height - 1;
-            else if (validatedPosition.y >= _config.gridConfig.height)
+                validatedPosition.y = _config.GridConfig.height - 1;
+            else if (validatedPosition.y >= _config.GridConfig.height)
                 validatedPosition.y = 0;
 
             return validatedPosition;

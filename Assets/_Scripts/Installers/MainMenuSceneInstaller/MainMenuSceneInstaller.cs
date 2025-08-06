@@ -4,11 +4,10 @@ using _Scripts.Entities.MainMenu.View;
 using UnityEngine;
 using Zenject;
 
-[CreateAssetMenu(fileName = "MainMenuInstaller", menuName = "Installers/MainMenuInstaller")]
-public class MainMenuInstaller : ScriptableObjectInstaller<MainMenuInstaller>
+[CreateAssetMenu(fileName = "MainMenuSceneInstaller", menuName = "Installers/MainMenuSceneInstaller")]
+public class MainMenuSceneInstaller : ScriptableObjectInstaller<MainMenuSceneInstaller>
 {
     [SerializeField] private MainMenuView mainMenuView;
-    
     public override void InstallBindings()
     {
         Container.Bind<IMainMenuModel>().To<MainMenuModel>().AsSingle().NonLazy();
