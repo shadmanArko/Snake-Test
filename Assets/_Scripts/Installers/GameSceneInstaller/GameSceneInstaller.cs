@@ -1,3 +1,4 @@
+using System;
 using _Scripts.Entities.GameOverAndPause.Config;
 using _Scripts.Entities.GameOverAndPause.Controller;
 using _Scripts.Entities.GameOverAndPause.Model;
@@ -15,8 +16,24 @@ using _Scripts.Entities.Snake.Controller;
 using _Scripts.Entities.Snake.Factory;
 using _Scripts.Entities.Snake.Model;
 using _Scripts.Entities.Snake.View;
+using UniRx;
 using UnityEngine;
 using Zenject;
+
+
+public class GameSceneInit : IInitializable, IDisposable
+{
+    [Inject] private CompositeDisposable _disposables;
+    public void Dispose()
+    {
+        _disposables?.Dispose();
+    }
+
+    public void Initialize()
+    {
+        
+    }
+}
 
 [CreateAssetMenu(fileName = "GameSceneInstaller", menuName = "Installers/GameSceneInstaller")]
 public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
@@ -35,13 +52,19 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
 
     public override void InstallBindings()
     {
-        Container.Bind<SnakeConfig>().FromScriptableObject(snakeConfig).AsSingle().NonLazy();
-        Container.Bind<ISnakeModel>().To<SnakeModel>().AsSingle().NonLazy();
-        Container.Bind<SnakeView>().FromComponentInNewPrefab(snakeView).AsSingle().NonLazy();
-        Container.Bind<ISnakeController>().To<SnakeController>().AsSingle().NonLazy();
+        Container.Bind<CompositeDisposable>().AsSingle();
+        Container.Bind<GameSceneInit>().AsSingle();
+        
+        Container.BindInterfacesTo<SnakeController>().AsSingle();
+        Container.BindInterfacesTo<SnakeConfig>().FromScriptableObject(snakeConfig).AsSingle();
+        Container.BindInterfacesTo<SnakeModel>().AsSingle();
+        Container.BindInterfacesTo<SnakeView>().FromComponentInNewPrefab(snakeView).AsSingle();
+        
+        
+        
         Container.Bind<ISnakeBodyPartFactory>().To<SnakeBodyPartFactory>().AsSingle();
 
-        Container.Bind<FoodConfig>().FromScriptableObject(foodConfig).AsSingle().NonLazy();
+        Container.BindInterfacesAndSelfTo<FoodConfig>().FromScriptableObject(foodConfig).AsSingle().NonLazy();
         Container.Bind<IFoodModel>().To<FoodModel>().AsSingle().NonLazy();
         Container.Bind<FoodView>().FromComponentInNewPrefab(foodView).AsSingle().NonLazy();
         Container.Bind<IFoodController>().To<FoodController>().AsSingle().NonLazy();

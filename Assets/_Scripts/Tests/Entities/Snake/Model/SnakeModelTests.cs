@@ -5,7 +5,6 @@ using NUnit.Framework;
 using UniRx;
 using _Scripts.Entities.Snake.Config;
 using _Scripts.Entities.Snake.Model;
-using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using _Scripts.GlobalConfigs;
 using _Scripts.Enums;
@@ -29,12 +28,12 @@ namespace _Scripts.Tests.Entities.Snake.Model
             _testGridConfig.height = 20;
 
             _testConfig = ScriptableObject.CreateInstance<SnakeConfig>();
-            _testConfig.moveInterval = 0.2f;
-            _testConfig.startPosition = new Vector2Int(10, 10);
-            _testConfig.startDirection = Direction.Right;
-            _testConfig.bodyPartSortingOrder = 1;
-            _testConfig.enableSounds = true;
-            _testConfig.gridConfig = _testGridConfig;
+            _testConfig.MoveInterval = 0.2f;
+            _testConfig.StartPosition = new Vector2Int(10, 10);
+            _testConfig.StartDirection = Direction.Right;
+            _testConfig.BodyPartSortingOrder = 1;
+            _testConfig.EnableSounds = true;
+            _testConfig.GridConfig = _testGridConfig;
 
             // Setup mock event bus
             _mockEventBus = new MockEventBus();
@@ -63,7 +62,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
             Assert.IsNotNull(_snakeModel);
             Assert.IsNotNull(_snakeModel.BodyPositions);
             Assert.IsNotNull(_snakeModel.CurrentDirection);
-            Assert.AreEqual(_testConfig.startDirection, _snakeModel.CurrentDirection.Value);
+            Assert.AreEqual(_testConfig.StartDirection, _snakeModel.CurrentDirection.Value);
         }
 
         [Test]
@@ -81,7 +80,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
         public void CurrentDirection_InitialValueMatchesConfig()
         {
             // Assert
-            Assert.AreEqual(_testConfig.startDirection, _snakeModel.CurrentDirection.Value);
+            Assert.AreEqual(_testConfig.StartDirection, _snakeModel.CurrentDirection.Value);
         }
 
         [Test]
@@ -165,7 +164,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
 
             // Assert
             Assert.IsTrue(wasNotified);
-            Assert.AreEqual(_testConfig.startDirection, capturedDirection);
+            Assert.AreEqual(_testConfig.StartDirection, capturedDirection);
         }
 
         // [Test]
@@ -196,9 +195,9 @@ namespace _Scripts.Tests.Entities.Snake.Model
         {
             // Arrange
             var customConfig = ScriptableObject.CreateInstance<SnakeConfig>();
-            customConfig.startDirection = Direction.Down;
-            customConfig.startPosition = new Vector2Int(5, 5);
-            customConfig.gridConfig = _testGridConfig;
+            customConfig.StartDirection = Direction.Down;
+            customConfig.StartPosition = new Vector2Int(5, 5);
+            customConfig.GridConfig = _testGridConfig;
 
             // Act
             var customSnakeModel = new SnakeModel(_mockEventBus, customConfig);
@@ -220,9 +219,9 @@ namespace _Scripts.Tests.Entities.Snake.Model
             {
                 // Arrange
                 var config = ScriptableObject.CreateInstance<SnakeConfig>();
-                config.startDirection = direction;
-                config.startPosition = new Vector2Int(10, 10);
-                config.gridConfig = _testGridConfig;
+                config.StartDirection = direction;
+                config.StartPosition = new Vector2Int(10, 10);
+                config.GridConfig = _testGridConfig;
 
                 // Act
                 var snakeModel = new SnakeModel(_mockEventBus, config);

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa70c79da0841bd9a121f5f6d4c1560, type: 3}
   m_Name: SnakeConfig
   m_EditorClassIdentifier: 
-  moveInterval: 0.2
-  startPosition: {x: 10, y: 10}
-  startDirection: 1
-  snakeBodySprite: {fileID: 21300000, guid: 699ec0eb3513a9e4d9ec52b08a8544ba, type: 3}
-  bodyPartSortingOrder: 1
-  enableSounds: 1
-  gridConfig: {fileID: 11400000, guid: b638d7e384dc84aa18209f663824e503, type: 2}
+  _moveInterval: 0.2
+  _startPosition: {x: 10, y: 10}
+  _startDirection: 1
+  _snakeBodySprite: {fileID: 21300000, guid: 699ec0eb3513a9e4d9ec52b08a8544ba, type: 3}
+  _bodyPartSortingOrder: 1
+  _enableSounds: 1
+  _gridConfig: {fileID: 11400000, guid: b638d7e384dc84aa18209f663824e503, type: 2}
