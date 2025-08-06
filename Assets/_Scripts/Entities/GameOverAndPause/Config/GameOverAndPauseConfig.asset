@@ -15,3 +15,4 @@ MonoBehaviour:
   gameOverstateConfig: {fileID: 11400000, guid: d142f84a7766e45deb9f5a5ec062675a, type: 2}
   pauseStateConfig: {fileID: 11400000, guid: 4ffb6caedb3f5443f9b7e9c17ae74ce8, type: 2}
   gameResumeConfig: {fileID: 11400000, guid: bbb68b34c7e9a4855b8c0ddbf2893026, type: 2}
+  gameLevelConfig: {fileID: 11400000, guid: db9a2203e16f24ca0bc8bbd5c1001449, type: 2}

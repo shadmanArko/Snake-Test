@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace _Scripts.Entities.GameOverAndPause.View
 {
-    public class GameOverAndPauseView : MonoBehaviour
+    public class GameOverAndPauseView : MonoBehaviour, IGameOverAndPauseView
     {
         [SerializeField] private GameObject gameOverUI;
         [SerializeField] private GameObject pauseUI;
@@ -23,8 +23,8 @@ namespace _Scripts.Entities.GameOverAndPause.View
 
         public void ApplyVto(GameStateConfig config)
         {
-            gameOverUI.SetActive(config.ShowGameOverUI);
-            pauseUI.SetActive(config.ShowPauseUI);
+            GameOverUI.SetActive(config.ShowGameOverUI);
+            PauseUI.SetActive(config.ShowPauseUI);
         }
     }
 }

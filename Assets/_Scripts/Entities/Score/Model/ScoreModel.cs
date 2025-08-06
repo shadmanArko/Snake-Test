@@ -24,7 +24,7 @@ namespace _Scripts.Entities.Score.Model
             _unitOfWork = unitOfWork;
             _config = config;
             _disposables = disposables;
-            _level = _unitOfWork.Levels.GetById(_config.LevelId);
+            _level = _unitOfWork.Levels.GetById(_config.GameLevelConfig.LevelId);
             _highScore.Value = _level.highestScore;
         }
 

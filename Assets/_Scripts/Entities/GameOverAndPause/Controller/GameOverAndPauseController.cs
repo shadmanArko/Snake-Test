@@ -4,7 +4,6 @@ using _Scripts.Entities.GameOverAndPause.View;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using UniRx;
-using UniRx.Triggers;
 
 namespace _Scripts.Entities.GameOverAndPause.Controller
 {
@@ -12,31 +11,36 @@ namespace _Scripts.Entities.GameOverAndPause.Controller
     {
         private readonly IEventBus _eventBus;
         private readonly IGameOverAndPauseModel _model;
-        private readonly GameOverAndPauseView _view;
-        private readonly CompositeDisposable _disposables = new();
+        private readonly IGameOverAndPauseView _view;
+        private readonly CompositeDisposable _disposables;
 
-        public GameOverAndPauseController(IEventBus eventBus, IGameOverAndPauseModel model, GameOverAndPauseView view)
+        public GameOverAndPauseController(IEventBus eventBus, IGameOverAndPauseModel model, IGameOverAndPauseView view, CompositeDisposable disposables)
         {
             _eventBus = eventBus;
             _model = model;
             _view = view;
+            _disposables = disposables;
 
-            _view.RestartButton.ClickFunc += () => _eventBus.Publish(new RestartGameSceneEvent());
+            _view.RestartButton.ClickFunc += OnRestartButtonClicked;
             _eventBus.OnEvent<SnakeDiedEvent>()
-                .TakeUntil(_view.gameObject.OnDestroyAsObservable())
                 .Subscribe(_ =>
                 {
                     _view.ApplyVto(_model.GameOver());
                     _view.NewHighScoreTitleTest.SetActive(_model.ShowNewHighScoreTextTitle());
                     _view.ScoreText.text = _model.GetScore().ToString();
                     _view.HighScoreText.text = _model.GetHighScore().ToString();
-                });
+                }).AddTo(_disposables);
+        }
+
+        private void OnRestartButtonClicked()
+        {
+            _eventBus.Publish(new RestartGameSceneEvent());
         }
 
         public void Dispose()
         {
-            _view.RestartButton.ClickFunc -= () => _eventBus.Publish(new RestartGameSceneEvent());
-            _disposables.Dispose();
+            _view.RestartButton.ClickFunc -= OnRestartButtonClicked;
+            _disposables?.Dispose();
         }
     }
 }

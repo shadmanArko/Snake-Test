@@ -7,16 +7,16 @@ namespace _Scripts.Entities.GameOverAndPause.Model
 {
     public class GameOverAndPauseModel : IGameOverAndPauseModel
     {
-        private readonly GameOverAndPauseConfig _config;
+        private readonly IGameOverAndPauseConfig _config;
         private readonly UnitOfWork _unitOfWork;
         
-        private Level _level;
+        private readonly Level _level;
 
-        public GameOverAndPauseModel(GameOverAndPauseConfig config, UnitOfWork unitOfWork)
+        public GameOverAndPauseModel(IGameOverAndPauseConfig config, UnitOfWork unitOfWork)
         {
             _config = config;
             _unitOfWork = unitOfWork;
-            _level = _unitOfWork.Levels.GetById("level01");
+            _level = _unitOfWork.Levels.GetById(_config.GameLevelConfig.LevelId);
         }
 
         public GameStateConfig GameOver()

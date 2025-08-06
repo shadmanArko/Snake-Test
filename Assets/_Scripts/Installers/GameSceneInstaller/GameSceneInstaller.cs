@@ -71,9 +71,9 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
         Container.BindInterfacesTo<ScoreView>().FromComponentInNewPrefab(scoreView).AsSingle();
         Container.BindInterfacesTo<ScoreConfig>().FromScriptableObject(scoreConfig).AsSingle();
 
-        Container.Bind<GameOverAndPauseConfig>().FromScriptableObject(gameOverAndPauseConfig).AsSingle();
-        Container.Bind<IGameOverAndPauseModel>().To<GameOverAndPauseModel>().AsSingle();
-        Container.Bind<IGameOverAndPauseController>().To<GameOverAndPauseController>().AsSingle().NonLazy();
-        Container.Bind<GameOverAndPauseView>().FromComponentInNewPrefab(gameOverAndPauseView).AsSingle();
+        Container.BindInterfacesTo<GameOverAndPauseController>().AsSingle();
+        Container.BindInterfacesTo<GameOverAndPauseModel>().AsSingle();
+        Container.BindInterfacesTo<GameOverAndPauseView>().FromComponentInNewPrefab(gameOverAndPauseView).AsSingle();
+        Container.BindInterfacesTo<GameOverAndPauseConfig>().FromScriptableObject(gameOverAndPauseConfig).AsSingle();
     }
 }

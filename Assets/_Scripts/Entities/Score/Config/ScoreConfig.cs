@@ -1,3 +1,4 @@
+using _Scripts.GlobalConfigs;
 using UnityEngine;
 
 namespace _Scripts.Entities.Score.Config
@@ -5,17 +6,17 @@ namespace _Scripts.Entities.Score.Config
     [CreateAssetMenu(fileName = "ScoreConfig", menuName = "Game/Config/ScoreConfig", order = 0)]
     public class ScoreConfig : ScriptableObject, IScoreConfig
     {
-        [SerializeField] private string levelId = "level01";
+        [SerializeField] private GameLevelConfig gameLevelConfig;
         
         [Header("Score")]
         [SerializeField] private int scorePerFood = 10;
         
-        public string LevelId
+        public GameLevelConfig GameLevelConfig
         {
-            get => levelId;
-            set => levelId = value;
+            get => gameLevelConfig;
+            set => gameLevelConfig = value;
         }
-
+        
         public int ScorePerFood
         {
             get => scorePerFood;
