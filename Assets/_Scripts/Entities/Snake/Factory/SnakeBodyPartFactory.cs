@@ -13,11 +13,11 @@ namespace _Scripts.Entities.Snake.Factory
             _config = config;
         }
     
-        public SnakeBodyPartView CreateBodyPart()
+        public SnakeBodyPartView CreateBodyPart(Sprite snakeBodySprite)
         {
             var bodyPartGO = new GameObject("SnakeBodyPart");
             var spriteRenderer = bodyPartGO.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = _config.SnakeBodySprite;
+            spriteRenderer.sprite = snakeBodySprite;
             spriteRenderer.sortingOrder = _config.BodyPartSortingOrder;
             return bodyPartGO.AddComponent<SnakeBodyPartView>();
         }

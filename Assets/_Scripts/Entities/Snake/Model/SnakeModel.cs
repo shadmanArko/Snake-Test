@@ -5,7 +5,9 @@ using _Scripts.Entities.Snake.Config;
 using _Scripts.Entities.Snake.ValueObjects;
 using _Scripts.Enums;
 using _Scripts.Events;
+using _Scripts.HelperClasses;
 using _Scripts.Services.EventBus.Core;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 
@@ -14,7 +16,7 @@ namespace _Scripts.Entities.Snake.Model
     public class SnakeModel : ISnakeModel, IDisposable
     {
         private readonly IEventBus _eventBus;
-        private readonly CompositeDisposable _disposables = new();
+        private readonly CompositeDisposable _disposables;
         private IDisposable _moveTimer;
 
         private readonly ReactiveProperty<SnakeState> _state = new(SnakeState.Alive);
@@ -26,32 +28,44 @@ namespace _Scripts.Entities.Snake.Model
         private readonly ISnakeConfig _config;
         private readonly List<SnakeMovePosition> _moveHistory = new();
         private int _bodySize;
+        private Sprite _snakeHeadSprite;
+        private Sprite _snakeBodySprite;
 
         public IReadOnlyReactiveProperty<SnakeState> State => _state;
         public IReadOnlyReactiveProperty<Vector2Int> HeadPosition => _headPosition;
         public IReadOnlyReactiveProperty<Direction> CurrentDirection => _currentDirection;
         public IReadOnlyReactiveProperty<IReadOnlyList<SnakeMovePosition>> BodyPositions => _bodyPositions;
+        public Sprite SnakeHeadSprite => _snakeHeadSprite;
+        public Sprite SnakeBodySprite => _snakeBodySprite;
         
         public Subject<Direction> DirectionInputSubject { get; set; } = new();
         public IObservable<Direction> OnDirectionInput => DirectionInputSubject;
 
         public Vector2Int FoodPosition{ get; set; } = new();
 
-        public SnakeModel(IEventBus eventBus, ISnakeConfig config)
+        public SnakeModel(IEventBus eventBus, ISnakeConfig config, CompositeDisposable disposables)
         {
             _eventBus = eventBus;
             _config = config;
-            Initialize();
-        }
-
-        private void Initialize()
-        {
+            _disposables = disposables;
             _headPosition.Value = _config.StartPosition;
             _currentDirection.Value = _config.StartDirection;
             _state.Value = SnakeState.Alive;
             _bodySize = 0;
             _moveHistory.Clear();
             StartMovementTimer();
+        }
+        
+        public async UniTask LoadSnakeHeadSprite()
+        {
+           
+                _snakeHeadSprite = await AddressableHelper.LoadSpriteAsync(_config.SnakeHeadSpriteAddressableKey);
+                
+        }
+        
+        public async UniTask LoadSnakeBodySprite()
+        {
+                _snakeBodySprite = await AddressableHelper.LoadSpriteAsync(_config.SnakeBodySpriteAddressableKey);
         }
         
         private void StartMovementTimer()
@@ -217,9 +231,14 @@ namespace _Scripts.Entities.Snake.Model
             }
         }
         
+        public async UniTask<Sprite> GetVtoAsync()
+        {
+            return await AddressableHelper.LoadSpriteAsync(_config.SnakeHeadSpriteAddressableKey);
+        }
         public void Dispose()
         {
-            _disposables?.Dispose();
+            AddressableHelper.ReleaseAsset(_snakeHeadSprite);
+            AddressableHelper.ReleaseAsset(_snakeBodySprite);
             _state?.Dispose();
             _headPosition?.Dispose();
             _currentDirection?.Dispose();

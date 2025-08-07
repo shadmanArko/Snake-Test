@@ -5,7 +5,9 @@ using _Scripts.Entities.Snake.View;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using _Scripts.Services.InputSystem;
+using Cysharp.Threading.Tasks;
 using UniRx;
+using UnityEngine;
 using Zenject;
 
 namespace _Scripts.Entities.Snake.Controller
@@ -34,6 +36,7 @@ namespace _Scripts.Entities.Snake.Controller
 
         public void Initialize()
         {
+            SetupModelAndView().Forget();
             BindModelToView();
             SetupInputHandling();
             
@@ -53,6 +56,14 @@ namespace _Scripts.Entities.Snake.Controller
                 .AddTo(_disposables);
         }
 
+        private async UniTaskVoid SetupModelAndView()
+        {
+            await _model.LoadSnakeHeadSprite();
+            await _model.LoadSnakeBodySprite();
+            //Sprite sprite = await _model.GetVtoAsync();
+            _view.ApplyVto(_model.SnakeHeadSprite);;
+        }
+
         private void BindModelToView()
         {
             _model.HeadPosition
@@ -64,7 +75,7 @@ namespace _Scripts.Entities.Snake.Controller
                 .AddTo(_disposables);
             
             _model.BodyPositions
-                .Subscribe(positions => _view.UpdateBodyParts(positions, () => _bodyPartFactory.CreateBodyPart()))
+                .Subscribe(positions => _view.UpdateBodyParts(positions, () => _bodyPartFactory.CreateBodyPart(_model.SnakeBodySprite)))
                 .AddTo(_disposables);
         }
 

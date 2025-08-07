@@ -11,9 +11,13 @@ namespace _Scripts.Entities.Snake.Config
         [SerializeField] private float _moveInterval = 0.2f;
         [SerializeField] private Vector2Int _startPosition = new Vector2Int(10, 10);
         [SerializeField] private Direction _startDirection = Direction.Right;
+        
+        [Header("AssetKey")] 
+        [SerializeField] private string _snakeHeadSpriteAddressableKey;
+        [SerializeField] private string _snakeBodySpriteAddressableKey;
+        
 
         [Header("Body")] 
-        [SerializeField] private Sprite _snakeBodySprite;
         [SerializeField] private int _bodyPartSortingOrder = 1;
 
         [Header("Sounds")] 
@@ -39,13 +43,7 @@ namespace _Scripts.Entities.Snake.Config
             get => _startDirection;
             set => _startDirection = value;
         }
-
-        public Sprite SnakeBodySprite
-        {
-            get => _snakeBodySprite;
-            set => _snakeBodySprite = value;
-        }
-
+        
         public int BodyPartSortingOrder
         {
             get => _bodyPartSortingOrder;
@@ -62,6 +60,18 @@ namespace _Scripts.Entities.Snake.Config
         {
             get => _gridConfig;
             set => _gridConfig = value;
+        }
+
+        public string SnakeHeadSpriteAddressableKey 
+        { 
+            get => _snakeHeadSpriteAddressableKey; 
+            set => _snakeHeadSpriteAddressableKey = value; 
+        }
+
+        public string SnakeBodySpriteAddressableKey
+        {
+            get => _snakeBodySpriteAddressableKey; 
+            set => _snakeBodySpriteAddressableKey = value;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _Scripts.Entities.Snake.ValueObjects;
 using _Scripts.Enums;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 
@@ -20,10 +21,15 @@ namespace _Scripts.Entities.Snake.Model
         void Die();
         float GetAngleFromDirection(Direction direction);
         
+        public Sprite SnakeHeadSprite { get; }
+        public Sprite SnakeBodySprite { get; }
+        UniTask LoadSnakeHeadSprite();
+        UniTask LoadSnakeBodySprite();
         List<Vector2Int> GetAllOccupiedPositions();
         Subject<Direction> DirectionInputSubject { get; set; }
         IObservable<Direction> OnDirectionInput { get; }
         bool IsValidDirectionChange(Direction newDirection);
         public Vector2Int FoodPosition{ get; set; }
+        UniTask<Sprite> GetVtoAsync();
     }
 }

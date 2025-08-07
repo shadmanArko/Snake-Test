@@ -16,7 +16,9 @@ using _Scripts.Entities.Snake.Controller;
 using _Scripts.Entities.Snake.Factory;
 using _Scripts.Entities.Snake.Model;
 using _Scripts.Entities.Snake.View;
+using _Scripts.HelperClasses;
 using _Scripts.Services.InputSystem;
+using _Scripts.Services.Persistence;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -25,9 +27,12 @@ using Zenject;
 public class GameSceneInit : IInitializable, IDisposable
 {
     [Inject] private CompositeDisposable _disposables;
+    [Inject] private IUnitOfWork _unitOfWork;
     public void Dispose()
     {
+        _unitOfWork.Save();
         _disposables?.Dispose();
+        AddressableHelper.ReleaseAllAssets();
     }
 
     public void Initialize()

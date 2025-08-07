@@ -15,7 +15,8 @@ MonoBehaviour:
   _moveInterval: 0.2
   _startPosition: {x: 10, y: 10}
   _startDirection: 1
-  _snakeBodySprite: {fileID: 21300000, guid: 699ec0eb3513a9e4d9ec52b08a8544ba, type: 3}
+  _snakeHeadSpriteAddressableKey: SnakeHead
+  _snakeBodySpriteAddressableKey: SnakeBody
   _bodyPartSortingOrder: 1
   _enableSounds: 1
   _gridConfig: {fileID: 11400000, guid: b638d7e384dc84aa18209f663824e503, type: 2}

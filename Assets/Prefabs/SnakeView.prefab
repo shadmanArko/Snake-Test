@@ -98,4 +98,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   headTransform: {fileID: 5829574565219249292}
-  config: {fileID: 11400000, guid: f1558be77dadb49899a6145557ee960d, type: 2}
+  headSpriteRenderer: {fileID: 2109971072179344027}

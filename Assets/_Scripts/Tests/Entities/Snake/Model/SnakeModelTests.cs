@@ -18,6 +18,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
         private SnakeConfig _testConfig;
         private GridConfig _testGridConfig;
         private SnakeModel _snakeModel;
+        private CompositeDisposable _disposables;
 
         [SetUp]
         public void SetUp()
@@ -39,7 +40,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
             _mockEventBus = new MockEventBus();
 
             // Create the system under test
-            _snakeModel = new SnakeModel(_mockEventBus, _testConfig);
+            _snakeModel = new SnakeModel(_mockEventBus, _testConfig, _disposables);
         }
 
         [TearDown]
@@ -200,7 +201,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
             customConfig.GridConfig = _testGridConfig;
 
             // Act
-            var customSnakeModel = new SnakeModel(_mockEventBus, customConfig);
+            var customSnakeModel = new SnakeModel(_mockEventBus, customConfig, _disposables);;
 
             // Assert
             Assert.AreEqual(Direction.Down, customSnakeModel.CurrentDirection.Value);
@@ -224,7 +225,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
                 config.GridConfig = _testGridConfig;
 
                 // Act
-                var snakeModel = new SnakeModel(_mockEventBus, config);
+                var snakeModel = new SnakeModel(_mockEventBus, config, _disposables);
 
                 // Assert
                 Assert.AreEqual(direction, snakeModel.CurrentDirection.Value, 

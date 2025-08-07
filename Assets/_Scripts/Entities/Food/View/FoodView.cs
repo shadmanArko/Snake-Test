@@ -12,9 +12,9 @@ namespace _Scripts.Entities.Food.View
             transform.position = new Vector3(position.x, position.y, 0);
         }
         
-        public void ApplyVto(Sprite sprite)
+        public void ApplyVto(Sprite foodSprite)
         {
-            _spriteRenderer.sprite = sprite;
+            _spriteRenderer.sprite = foodSprite;
         }
     }
 

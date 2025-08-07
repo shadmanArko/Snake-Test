@@ -8,6 +8,7 @@ namespace _Scripts.Entities.Snake.View
     public class SnakeView : MonoBehaviour, ISnakeView
     {
         [SerializeField] private Transform headTransform;
+        [SerializeField] private SpriteRenderer headSpriteRenderer;
         
         private readonly List<SnakeBodyPartView> _bodyParts = new();
         
@@ -49,6 +50,11 @@ namespace _Scripts.Entities.Snake.View
                     _bodyParts[i].UpdatePosition(positions[i]);
                 }
             }
+        }
+
+        public void ApplyVto(Sprite snakeHeadSprite)
+        {
+            headSpriteRenderer.sprite = snakeHeadSprite;
         }
     }
 }

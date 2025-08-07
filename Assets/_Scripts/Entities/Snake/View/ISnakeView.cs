@@ -10,5 +10,6 @@ namespace _Scripts.Entities.Snake.View
         void SetHeadPosition(Vector2Int position);
         void SetHeadRotation(float angle);
         void UpdateBodyParts(IReadOnlyList<SnakeMovePosition> positions, Func<SnakeBodyPartView> bodyPartCreator);
+        void ApplyVto(Sprite snakeHeadSprite);
     }
 }
