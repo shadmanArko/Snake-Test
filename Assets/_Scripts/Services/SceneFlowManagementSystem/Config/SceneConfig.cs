@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 namespace _Scripts.Services.SceneFlowManagementSystem.Config
 {
     [CreateAssetMenu(fileName = "SceneConfig", menuName = "Game/Config/SceneConfig", order = 0)]
-    public class SceneConfig : ScriptableObject
+    public class SceneConfig : ScriptableObject, ISceneConfig
     {
         [SerializeField] private AssetReference bootStrapScene;
         [SerializeField] private AssetReference mainMenuScene;

@@ -110,7 +110,7 @@ public class Snake : MonoBehaviour {
                 // Snake ate food, grow body
                 snakeBodySize++;
                 CreateSnakeBodyPart();
-                SoundManager.PlaySound(SoundManager.Sound.SnakeEat);
+                SoundManagers.PlaySound(SoundManagers.Sound.SnakeEat);
             }
 
             if (snakeMovePositionList.Count >= snakeBodySize + 1) {
@@ -126,7 +126,7 @@ public class Snake : MonoBehaviour {
                     //CMDebug.TextPopup("DEAD!", transform.position);
                     state = State.Dead;
                     GameHandler.SnakeDied();
-                    SoundManager.PlaySound(SoundManager.Sound.SnakeDie);
+                    SoundManagers.PlaySound(SoundManagers.Sound.SnakeDie);
                 }
             }
 

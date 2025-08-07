@@ -23,6 +23,7 @@ namespace _Scripts.Entities.Snake.Model
         List<Vector2Int> GetAllOccupiedPositions();
         Subject<Direction> DirectionInputSubject { get; set; }
         IObservable<Direction> OnDirectionInput { get; }
+        bool IsValidDirectionChange(Direction newDirection);
         public Vector2Int FoodPosition{ get; set; }
     }
 }

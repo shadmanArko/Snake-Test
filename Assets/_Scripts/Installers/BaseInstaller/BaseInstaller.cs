@@ -19,16 +19,18 @@ public class BaseInstaller : ScriptableObjectInstaller<BaseInstaller>
 
     public override void InstallBindings()
     {
+        Container.Bind<Levels>().AsSingle();
         Container.Bind<TextAsset>().FromInstance(_saveDataJsonFile).AsSingle();
         Container.Bind<DataContext>().To<JsonDataContext>().AsSingle();
-        Container.Bind<Initializer>().AsSingle().NonLazy();
-        Container.Bind<Levels>().AsSingle();
-        Container.Bind<UnitOfWork>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<PersistenceSystemInitializer>().AsSingle();
+        Container.BindInterfacesTo<UnitOfWork>().AsSingle();
         
-        Container.Bind<IEventBus>().To<UniRxEventBus>().AsSingle();
-        Container.Bind<SoundConfig>().FromScriptableObject(_soundConfig).AsSingle();
-        Container.Bind<SceneConfig>().FromScriptableObject(_sceneConfig).AsSingle();
-        Container.Bind<ISoundManager>().To<_Scripts.Services.SoundSystem.SoundManager.SoundManager>().AsSingle().NonLazy();
-        Container.Bind<SceneFlowManager>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<UniRxEventBus>().AsSingle();
+        
+        Container.BindInterfacesTo<SoundConfig>().FromScriptableObject(_soundConfig).AsSingle();
+        Container.BindInterfacesTo<SoundManager>().AsSingle();
+
+        Container.BindInterfacesTo<SceneFlowManager>().AsSingle();
+        Container.BindInterfacesTo<SceneConfig>().FromScriptableObject(_sceneConfig).AsSingle();
     }
 }

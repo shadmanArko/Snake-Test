@@ -14,7 +14,7 @@ using _Scripts.Services.Utils;
 using UnityEngine;
 using CodeMonkey.Utils;
 
-public static class SoundManager {
+public class SoundManagers {
 
     public enum Sound {
         SnakeMove,
@@ -40,9 +40,9 @@ public static class SoundManager {
         return null;
     }
 
-    public static void AddButtonSounds(this Button_UI buttonUI) {
-        buttonUI.MouseOverOnceFunc += () => SoundManager.PlaySound(Sound.ButtonOver);
-        buttonUI.ClickFunc += () => SoundManager.PlaySound(Sound.ButtonClick);
+    public static void AddButtonSounds( Button_UI buttonUI) {
+        buttonUI.MouseOverOnceFunc += () => SoundManagers.PlaySound(Sound.ButtonOver);
+        buttonUI.ClickFunc += () => SoundManagers.PlaySound(Sound.ButtonClick);
     }
 
 }

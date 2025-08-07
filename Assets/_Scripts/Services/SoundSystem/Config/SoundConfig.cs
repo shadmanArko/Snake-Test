@@ -4,8 +4,13 @@ using UnityEngine;
 
 namespace _Scripts.Services.SoundSystem.Config
 {
+    public interface ISoundConfig
+    {
+        Dictionary<SoundClipName, AudioClip> BuildLookup();
+    }
+
     [CreateAssetMenu(fileName = "SoundConfig", menuName = "Game/Config/SoundConfig", order = 0)]
-    public class SoundConfig : ScriptableObject
+    public class SoundConfig : ScriptableObject, ISoundConfig
     {
         [System.Serializable]
         public class AudioEntry

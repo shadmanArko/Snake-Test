@@ -11,7 +11,7 @@ namespace _Scripts.Entities.Score.Model
         private readonly CompositeDisposable _disposables;
         private readonly ReactiveProperty<int> _score = new ReactiveProperty<int>(0);
         private readonly ReactiveProperty<int> _highScore = new ReactiveProperty<int>(0);
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IScoreConfig _config;
         
         private Level _level;
@@ -19,7 +19,7 @@ namespace _Scripts.Entities.Score.Model
         public IReadOnlyReactiveProperty<int> Score => _score;
         public IReadOnlyReactiveProperty<int> HighScore => _highScore;
 
-        public ScoreModel(UnitOfWork unitOfWork, IScoreConfig config, CompositeDisposable disposables)
+        public ScoreModel(IUnitOfWork unitOfWork, IScoreConfig config, CompositeDisposable disposables)
         {
             _unitOfWork = unitOfWork;
             _config = config;

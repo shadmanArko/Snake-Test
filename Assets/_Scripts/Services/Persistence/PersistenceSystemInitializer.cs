@@ -1,11 +1,13 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using _Scripts.Services.Persistence.Repositories;
 using UnityEngine;
+using Zenject;
 
 namespace _Scripts.Services.Persistence
 {
-    public class Initializer
+    public class PersistenceSystemInitializer : IInitializable, IPersistenceSystemInitializer
     {
         private readonly DataContext _context;
 
@@ -15,15 +17,25 @@ namespace _Scripts.Services.Persistence
 
         private static string SaveDataFilePath => $"{Application.persistentDataPath}/Saves/save_data.json";
         
-        public Initializer(DataContext context, Levels levels, TextAsset saveDataJsonFile)
+        public PersistenceSystemInitializer(DataContext context, Levels levels, TextAsset saveDataJsonFile)
         {
             _context = context;
             _levels = levels;
             _saveDataJsonFile = saveDataJsonFile;
-
-            _ = LoadDataAsync();
         }
-        public async Task LoadDataAsync()
+        
+        public async void Initialize()
+        {
+            try
+            {
+                await LoadDataAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Unable to load data:" + e);
+            }
+        }
+        private async Task LoadDataAsync()
         {
             Debug.Log(Application.persistentDataPath);
             var rootSaveDirectory = Path.Combine(Application.persistentDataPath, "Saves");
@@ -49,7 +61,7 @@ namespace _Scripts.Services.Persistence
 
         private async Task BootstrapSaveData()
         {
-            using var writer = new StreamWriter(SaveDataFilePath);
+            await using var writer = new StreamWriter(SaveDataFilePath);
             await writer.WriteAsync(_saveDataJsonFile.text);
         }
     }

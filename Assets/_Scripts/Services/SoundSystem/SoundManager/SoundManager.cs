@@ -13,32 +13,28 @@ namespace _Scripts.Services.SoundSystem.SoundManager
 {
     public class SoundManager : ISoundManager, IInitializable, IDisposable
     {
-        private readonly AudioSource _sfxSource;
-        private readonly AudioSource _musicSource;
+        private AudioSource _sfxSource;
+        private AudioSource _musicSource;
         private readonly Dictionary<SoundClipName, AudioClip> _clipMap;
         private readonly IEventBus _eventBus;
+        private readonly ISoundConfig _config;
         private readonly CompositeDisposable _disposables = new();
 
         private float _sfxVolume = 1f;
         private float _musicVolume = 1f;
         private bool _isMuted = false;
 
-        public SoundManager(SoundConfig config, IEventBus eventBus)
+        public SoundManager(ISoundConfig config, IEventBus eventBus)
         {
             _eventBus = eventBus;
-
-            var go = new GameObject("[SoundManager]");
-            Object.DontDestroyOnLoad(go);
-
-            _sfxSource = go.AddComponent<AudioSource>();
-            _musicSource = go.AddComponent<AudioSource>();
-
-            _clipMap = config.BuildLookup();
-            Initialize();
+            _config = config;
+            _clipMap = _config.BuildLookup();
         }
-
+        
         public void Initialize()
         {
+            CreateAudioSources();
+            
             _eventBus.OnEvent<PlaySfxEvent>()
                 .Subscribe(e => PlaySfx(e.ClipName))
                 .AddTo(_disposables);
@@ -46,6 +42,15 @@ namespace _Scripts.Services.SoundSystem.SoundManager
             _eventBus.OnEvent<PlayMusicEvent>()
                 .Subscribe(e => PlayMusic(e.ClipName, e.Loop))
                 .AddTo(_disposables);
+        }
+        
+        private void CreateAudioSources()
+        {
+            var go = new GameObject("[SoundManager]");
+            Object.DontDestroyOnLoad(go);
+
+            _sfxSource = go.AddComponent<AudioSource>();
+            _musicSource = go.AddComponent<AudioSource>();
         }
 
         public void Dispose()

@@ -8,11 +8,11 @@ namespace _Scripts.Entities.GameOverAndPause.Model
     public class GameOverAndPauseModel : IGameOverAndPauseModel
     {
         private readonly IGameOverAndPauseConfig _config;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         
         private readonly Level _level;
 
-        public GameOverAndPauseModel(IGameOverAndPauseConfig config, UnitOfWork unitOfWork)
+        public GameOverAndPauseModel(IGameOverAndPauseConfig config, IUnitOfWork unitOfWork)
         {
             _config = config;
             _unitOfWork = unitOfWork;

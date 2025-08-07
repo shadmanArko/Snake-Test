@@ -8,14 +8,15 @@ using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using _Scripts.Services.SceneFlowManagementSystem.Config;
 using UniRx;
+using Zenject;
 
 namespace _Scripts.Services.SceneFlowManagementSystem.SceneFlowManager
 {
-    public class SceneFlowManager : IDisposable
+    public class SceneFlowManager : IDisposable, ISceneFlowManager, IInitializable
     {
         private const string BootstrapScene = "Bootstrap";
         
-        private readonly SceneConfig _config;
+        private readonly ISceneConfig _config;
         private readonly IEventBus _eventBus;
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
         
@@ -23,7 +24,7 @@ namespace _Scripts.Services.SceneFlowManagementSystem.SceneFlowManager
         private AsyncOperationHandle<SceneInstance> _loadingHandle;
         private AsyncOperationHandle<SceneInstance> _gameHandle;
 
-        public SceneFlowManager(SceneConfig config, IEventBus eventBus)
+        public SceneFlowManager(ISceneConfig config, IEventBus eventBus)
         {
             _config = config;
             _eventBus = eventBus;
@@ -33,11 +34,9 @@ namespace _Scripts.Services.SceneFlowManagementSystem.SceneFlowManager
             
             _eventBus.OnEvent<RestartGameSceneEvent>()
                 .Subscribe(_ => RestartGameScene()).AddTo(_disposables);
-            
-            Initialize();
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             LoadMainMenuScene();
         }

@@ -4,7 +4,6 @@ using _Scripts.Entities.MainMenu.View;
 using _Scripts.Enums;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
-using _Scripts.Services.Persistence;
 using _Scripts.Services.Utils;
 using UniRx;
 
@@ -16,14 +15,12 @@ namespace _Scripts.Entities.MainMenu.Controller
         private readonly MainMenuView _view;
         private readonly IEventBus _eventBus;
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
-        private readonly UnitOfWork _unitOfWork;
 
-        public MainMenuController(IMainMenuModel model, MainMenuView view, IEventBus eventBus, UnitOfWork unitOfWork)
+        public MainMenuController(IMainMenuModel model, MainMenuView view, IEventBus eventBus)
         {
             _model = model;
             _view = view;
             _eventBus = eventBus;
-            _unitOfWork = unitOfWork;
             Initialize();
         }
 

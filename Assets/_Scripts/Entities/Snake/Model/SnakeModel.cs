@@ -196,6 +196,27 @@ namespace _Scripts.Entities.Snake.Model
             return validatedPosition;
         }
 
+        public bool IsValidDirectionChange(Direction newDirection)
+        {
+            // Get current direction from model (you might need to expose this property)
+            var currentDirection = _currentDirection.Value;
+            
+            // Prevent immediate reverse direction (snake can't go backwards into itself)
+            switch (currentDirection)
+            {
+                case Direction.Up:
+                    return newDirection != Direction.Down;
+                case Direction.Down:
+                    return newDirection != Direction.Up;
+                case Direction.Left:
+                    return newDirection != Direction.Right;
+                case Direction.Right:
+                    return newDirection != Direction.Left;
+                default:
+                    return true;
+            }
+        }
+        
         public void Dispose()
         {
             _disposables?.Dispose();
