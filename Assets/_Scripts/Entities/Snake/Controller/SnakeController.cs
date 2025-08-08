@@ -7,7 +7,6 @@ using _Scripts.Services.EventBus.Core;
 using _Scripts.Services.InputSystem;
 using Cysharp.Threading.Tasks;
 using UniRx;
-using UnityEngine;
 using Zenject;
 
 namespace _Scripts.Entities.Snake.Controller
@@ -23,8 +22,13 @@ namespace _Scripts.Entities.Snake.Controller
 
         private IDisposable _moveTimer;
 
-        public SnakeController(ISnakeModel model, ISnakeView view, IEventBus eventBus,
-            ISnakeBodyPartFactory bodyPartFactory, IGameInput gameInput, CompositeDisposable disposables)
+        public SnakeController(
+            ISnakeModel model, 
+            ISnakeView view, 
+            IEventBus eventBus,
+            ISnakeBodyPartFactory bodyPartFactory, 
+            IGameInput gameInput, 
+            CompositeDisposable disposables)
         {
             _model = model;
             _view = view;
@@ -39,29 +43,19 @@ namespace _Scripts.Entities.Snake.Controller
             SetupModelAndView().Forget();
             BindModelToView();
             SetupInputHandling();
-            
-           _eventBus.OnEvent<SnakeDiedEvent>()
-                .Subscribe(_ =>
-                {
-                    _moveTimer?.Dispose();
-                })
-                .AddTo(_disposables);
-           
-           _eventBus.OnEvent<FoodSpawnedEvent>()
-               .Subscribe( e => _model.FoodPosition = e.Position)
-               .AddTo(_disposables);
-            
-            _model.OnDirectionInput
-                .Subscribe(direction => _model.SetDirection(direction))
-                .AddTo(_disposables);
+            SubscribeToEvents();
+        }
+
+        public void Dispose()
+        {
+            _moveTimer?.Dispose();
         }
 
         private async UniTaskVoid SetupModelAndView()
         {
             await _model.LoadSnakeHeadSprite();
             await _model.LoadSnakeBodySprite();
-            //Sprite sprite = await _model.GetVtoAsync();
-            _view.ApplyVto(_model.SnakeHeadSprite);;
+            _view.ApplyVto(_model.SnakeHeadSprite);
         }
 
         private void BindModelToView()
@@ -88,10 +82,20 @@ namespace _Scripts.Entities.Snake.Controller
                 .Subscribe(direction => _model.DirectionInputSubject.OnNext(direction))
                 .AddTo(_disposables);
         }
-        
-        public void Dispose()
+
+        private void SubscribeToEvents()
         {
-            _moveTimer?.Dispose();
+            _eventBus.OnEvent<SnakeDiedEvent>()
+                .Subscribe(_ => _moveTimer?.Dispose())
+                .AddTo(_disposables);
+           
+            _eventBus.OnEvent<FoodSpawnedEvent>()
+                .Subscribe(eventArgs => _model.FoodPosition = eventArgs.Position)
+                .AddTo(_disposables);
+            
+            _model.OnDirectionInput
+                .Subscribe(direction => _model.SetDirection(direction))
+                .AddTo(_disposables);
         }
     }
 }

@@ -7,6 +7,8 @@ namespace _Scripts.Entities.Snake.View
 {
     public class SnakeView : MonoBehaviour, ISnakeView
     {
+        private const float HeadRotationOffset = -90f;
+        
         [SerializeField] private Transform headTransform;
         [SerializeField] private SpriteRenderer headSpriteRenderer;
         
@@ -19,30 +21,51 @@ namespace _Scripts.Entities.Snake.View
 
         public void SetHeadRotation(float angle)
         {
-            headTransform.eulerAngles = new Vector3(0, 0, angle - 90);
+            headTransform.eulerAngles = new Vector3(0, 0, angle + HeadRotationOffset);
         }
 
         public void UpdateBodyParts(IReadOnlyList<SnakeMovePosition> positions, Func<SnakeBodyPartView> bodyPartCreator)
         {
-            // Remove excess body parts
-            while (_bodyParts.Count > positions.Count)
+            AdjustBodyPartCount(positions.Count, bodyPartCreator);
+            UpdateBodyPartPositions(positions);
+        }
+
+        public void ApplyVto(Sprite snakeHeadSprite)
+        {
+            headSpriteRenderer.sprite = snakeHeadSprite;
+        }
+
+        private void AdjustBodyPartCount(int targetCount, Func<SnakeBodyPartView> bodyPartCreator)
+        {
+            RemoveExcessBodyParts(targetCount);
+            AddRequiredBodyParts(targetCount, bodyPartCreator);
+        }
+
+        private void RemoveExcessBodyParts(int targetCount)
+        {
+            while (_bodyParts.Count > targetCount)
             {
                 var lastPart = _bodyParts[^1];
                 _bodyParts.RemoveAt(_bodyParts.Count - 1);
+                
                 if (lastPart != null)
                 {
                     Destroy(lastPart.gameObject);
                 }
             }
+        }
 
-            // Add new body parts using the provided creator
-            while (_bodyParts.Count < positions.Count)
+        private void AddRequiredBodyParts(int targetCount, Func<SnakeBodyPartView> bodyPartCreator)
+        {
+            while (_bodyParts.Count < targetCount)
             {
                 var bodyPart = bodyPartCreator();
                 _bodyParts.Add(bodyPart);
             }
+        }
 
-            // Update positions
+        private void UpdateBodyPartPositions(IReadOnlyList<SnakeMovePosition> positions)
+        {
             for (int i = 0; i < positions.Count; i++)
             {
                 if (i < _bodyParts.Count && _bodyParts[i] != null)
@@ -50,11 +73,6 @@ namespace _Scripts.Entities.Snake.View
                     _bodyParts[i].UpdatePosition(positions[i]);
                 }
             }
-        }
-
-        public void ApplyVto(Sprite snakeHeadSprite)
-        {
-            headSpriteRenderer.sprite = snakeHeadSprite;
         }
     }
 }

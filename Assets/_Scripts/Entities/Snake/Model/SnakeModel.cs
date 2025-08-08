@@ -18,17 +18,16 @@ namespace _Scripts.Entities.Snake.Model
     {
         private readonly IEventBus _eventBus;
         private readonly CompositeDisposable _disposables;
-        private IDisposable _moveTimer;
-
+        private readonly ISnakeConfig _snakeConfig;
+        private readonly GameConfig _gameConfig;
+        
         private readonly ReactiveProperty<SnakeState> _state = new(SnakeState.Alive);
         private readonly ReactiveProperty<Vector2Int> _headPosition = new();
         private readonly ReactiveProperty<Direction> _currentDirection = new();
-
         private readonly ReactiveProperty<IReadOnlyList<SnakeMovePosition>> _bodyPositions = new(new List<SnakeMovePosition>());
-
-        private readonly ISnakeConfig _snakeConfig;
-        private readonly GameConfig _gameConfig;
         private readonly List<SnakeMovePosition> _moveHistory = new();
+
+        private IDisposable _moveTimer;
         private int _bodySize;
         private Sprite _snakeHeadSprite;
         private Sprite _snakeBodySprite;
@@ -42,8 +41,7 @@ namespace _Scripts.Entities.Snake.Model
         
         public Subject<Direction> DirectionInputSubject { get; set; } = new();
         public IObservable<Direction> OnDirectionInput => DirectionInputSubject;
-
-        public Vector2Int FoodPosition{ get; set; } = new();
+        public Vector2Int FoodPosition { get; set; } = new();
 
         public SnakeModel(IEventBus eventBus, ISnakeConfig snakeConfig, CompositeDisposable disposables, GameConfig gameConfig)
         {
@@ -51,11 +49,8 @@ namespace _Scripts.Entities.Snake.Model
             _snakeConfig = snakeConfig;
             _disposables = disposables;
             _gameConfig = gameConfig;
-            _headPosition.Value = _snakeConfig.StartPosition;
-            _currentDirection.Value = _snakeConfig.StartDirection;
-            _state.Value = SnakeState.Alive;
-            _bodySize = 0;
-            _moveHistory.Clear();
+            
+            InitializeSnake();
             StartMovementTimer();
         }
         
@@ -67,15 +62,6 @@ namespace _Scripts.Entities.Snake.Model
         public async UniTask LoadSnakeBodySprite()
         {
             _snakeBodySprite = await AddressableHelper.LoadSpriteAsync(_gameConfig.snakeBodySpriteAddressableKey);
-        }
-        
-        private void StartMovementTimer()
-        {
-            _moveTimer?.Dispose();
-            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_gameConfig.snakeMoveInterval))
-                .Where(_ => State.Value == SnakeState.Alive)
-                .Subscribe(_ => Move())
-                .AddTo(_disposables);
         }
 
         public void SetDirection(Direction direction)
@@ -90,38 +76,12 @@ namespace _Scripts.Entities.Snake.Model
         {
             if (_state.Value != SnakeState.Alive) return;
 
-            var previousDirection = _moveHistory.Count > 0 ? _moveHistory[0].CurrentDirection : _currentDirection.Value;
-            var movePosition = new SnakeMovePosition(_headPosition.Value, _currentDirection.Value, previousDirection);
-            _moveHistory.Insert(0, movePosition);
-
-            // Calculate new head position
-            var newPosition = _headPosition.Value + GetDirectionVector(_currentDirection.Value);
-            newPosition = ValidateGridPosition(newPosition);
-            _headPosition.Value = newPosition;
-
-            // Check for food
-            if (FoodPosition == newPosition)
-            {
-                EatFood();
-            }
-
-            // Trim move history
-            if (_moveHistory.Count > _bodySize)
-            {
-                _moveHistory.RemoveAt(_moveHistory.Count - 1);
-            }
-
-            // Update body positions
-            _bodyPositions.Value = _moveHistory.Take(_bodySize).ToList();
-
-            // Check self collision
-            if (CheckSelfCollision())
-            {
-                Die();
-                return;
-            }
-
-            _eventBus.Publish(new SnakeMoveEvent { Position = newPosition, Direction = _currentDirection.Value });
+            UpdateMoveHistory();
+            MoveHead();
+            CheckFood();
+            TrimMoveHistory();
+            UpdateBodyPositions();
+            CheckSelfCollision();
         }
 
         public void EatFood()
@@ -153,13 +113,116 @@ namespace _Scripts.Entities.Snake.Model
         public List<Vector2Int> GetAllOccupiedPositions()
         {
             var positions = new List<Vector2Int> { _headPosition.Value };
-            positions.AddRange(_bodyPositions.Value.Select(bp => bp.GridPosition));
+            positions.AddRange(_bodyPositions.Value.Select(bodyPosition => bodyPosition.GridPosition));
             return positions;
         }
 
-        private bool CheckSelfCollision()
+        public bool IsValidDirectionChange(Direction newDirection)
         {
-            return _bodyPositions.Value.Any(bp => bp.GridPosition == _headPosition.Value);
+            var currentDirection = _currentDirection.Value;
+            
+            return currentDirection switch
+            {
+                Direction.Up => newDirection != Direction.Down,
+                Direction.Down => newDirection != Direction.Up,
+                Direction.Left => newDirection != Direction.Right,
+                Direction.Right => newDirection != Direction.Left,
+                _ => true
+            };
+        }
+        
+        public async UniTask<Sprite> GetVtoAsync()
+        {
+            return await AddressableHelper.LoadSpriteAsync(_gameConfig.snakeHeadSpriteAddressableKey);
+        }
+
+        public float GetAngleFromDirection(Direction direction)
+        {
+            return direction switch
+            {
+                Direction.Right => 0f,
+                Direction.Up => 90f,
+                Direction.Left => 180f,
+                Direction.Down => 270f,
+                _ => 0f
+            };
+        }
+
+        public void Dispose()
+        {
+            _moveTimer?.Dispose();
+            AddressableHelper.ReleaseAsset(_snakeHeadSprite);
+            AddressableHelper.ReleaseAsset(_snakeBodySprite);
+            _state?.Dispose();
+            _headPosition?.Dispose();
+            _currentDirection?.Dispose();
+            _bodyPositions?.Dispose();
+            DirectionInputSubject?.Dispose();
+        }
+
+        private void InitializeSnake()
+        {
+            _headPosition.Value = _snakeConfig.StartPosition;
+            _currentDirection.Value = _snakeConfig.StartDirection;
+            _state.Value = SnakeState.Alive;
+            _bodySize = 0;
+            _moveHistory.Clear();
+        }
+        
+        private void StartMovementTimer()
+        {
+            _moveTimer?.Dispose();
+            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_gameConfig.snakeMoveInterval))
+                .Where(_ => State.Value == SnakeState.Alive)
+                .Subscribe(_ => Move())
+                .AddTo(_disposables);
+        }
+
+        private void UpdateMoveHistory()
+        {
+            var previousDirection = _moveHistory.Count > 0 ? _moveHistory[0].CurrentDirection : _currentDirection.Value;
+            var movePosition = new SnakeMovePosition(_headPosition.Value, _currentDirection.Value, previousDirection);
+            _moveHistory.Insert(0, movePosition);
+        }
+
+        private void MoveHead()
+        {
+            var newPosition = _headPosition.Value + GetDirectionVector(_currentDirection.Value);
+            newPosition = ValidateGridPosition(newPosition);
+            _headPosition.Value = newPosition;
+        }
+
+        private void CheckFood()
+        {
+            if (FoodPosition == _headPosition.Value)
+            {
+                EatFood();
+            }
+        }
+
+        private void TrimMoveHistory()
+        {
+            if (_moveHistory.Count > _bodySize)
+            {
+                _moveHistory.RemoveAt(_moveHistory.Count - 1);
+            }
+        }
+
+        private void UpdateBodyPositions()
+        {
+            _bodyPositions.Value = _moveHistory.Take(_bodySize).ToList();
+        }
+
+        private void CheckSelfCollision()
+        {
+            if (_bodyPositions.Value.Any(bodyPosition => bodyPosition.GridPosition == _headPosition.Value))
+            {
+                Die();
+            }
+            else
+            {
+                _eventBus.Publish(new SnakeMoveEvent { Position = _headPosition.Value, Direction = _currentDirection.Value });
+            }
         }
 
         private bool IsOppositeDirection(Direction newDirection, Direction currentDirection)
@@ -181,18 +244,6 @@ namespace _Scripts.Entities.Snake.Model
                 _ => Vector2Int.zero
             };
         }
-        
-        public float GetAngleFromDirection(Direction direction)
-        {
-            return direction switch
-            {
-                Direction.Right => 0f,
-                Direction.Up => 90f,
-                Direction.Left => 180f,
-                Direction.Down => 270f,
-                _ => 0f
-            };
-        }
 
         private Vector2Int ValidateGridPosition(Vector2Int position)
         {
@@ -209,41 +260,6 @@ namespace _Scripts.Entities.Snake.Model
                 validatedPosition.y = 0;
 
             return validatedPosition;
-        }
-
-        public bool IsValidDirectionChange(Direction newDirection)
-        {
-            // Get current direction from model (you might need to expose this property)
-            var currentDirection = _currentDirection.Value;
-            
-            // Prevent immediate reverse direction (snake can't go backwards into itself)
-            switch (currentDirection)
-            {
-                case Direction.Up:
-                    return newDirection != Direction.Down;
-                case Direction.Down:
-                    return newDirection != Direction.Up;
-                case Direction.Left:
-                    return newDirection != Direction.Right;
-                case Direction.Right:
-                    return newDirection != Direction.Left;
-                default:
-                    return true;
-            }
-        }
-        
-        public async UniTask<Sprite> GetVtoAsync()
-        {
-            return await AddressableHelper.LoadSpriteAsync(_gameConfig.snakeHeadSpriteAddressableKey);
-        }
-        public void Dispose()
-        {
-            AddressableHelper.ReleaseAsset(_snakeHeadSprite);
-            AddressableHelper.ReleaseAsset(_snakeBodySprite);
-            _state?.Dispose();
-            _headPosition?.Dispose();
-            _currentDirection?.Dispose();
-            _bodyPositions?.Dispose();
         }
     }
 }
