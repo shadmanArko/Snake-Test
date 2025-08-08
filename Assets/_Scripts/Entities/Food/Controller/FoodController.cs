@@ -37,6 +37,10 @@ namespace _Scripts.Entities.Food.Controller
             SetupModelAndView().Forget();
         }
 
+        public void Dispose()
+        {
+        }
+
         private async UniTask SetupModelAndView()
         {
             await _model.LoadFoodSprite();
@@ -53,17 +57,13 @@ namespace _Scripts.Entities.Food.Controller
         private void SubscribeToEvents()
         {
             _eventBus.OnEvent<FoodEatenEvent>()
-                .Subscribe(e => SpawnNewFood(e.OccupiedPositions))
+                .Subscribe(eventArgs => SpawnNewFood(eventArgs.OccupiedPositions))
                 .AddTo(_disposables);
         }
         
         private void SpawnNewFood(List<Vector2Int> occupiedPositions)
         {
             _model.SpawnFood(occupiedPositions);
-        }
-
-        public void Dispose()
-        {
         }
     }
 }
