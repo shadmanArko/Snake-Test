@@ -3,7 +3,6 @@ using _Scripts.Entities.GameOverAndPause.Config;
 using _Scripts.Entities.GameOverAndPause.Controller;
 using _Scripts.Entities.GameOverAndPause.Model;
 using _Scripts.Entities.GameOverAndPause.View;
-using _Scripts.Entities.Food.Config;
 using _Scripts.Entities.Food.Controller;
 using _Scripts.Entities.Food.Model;
 using _Scripts.Entities.Food.View;
@@ -47,7 +46,6 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
     [SerializeField] private SnakeConfig snakeConfig;
     [SerializeField] private SnakeView snakeView;
     
-    [SerializeField] private FoodConfig foodConfig;
     [SerializeField] private FoodView foodView;
     
     [SerializeField] private ScoreConfig scoreConfig;
@@ -70,8 +68,7 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
         Container.BindInterfacesTo<FoodController>().AsSingle();
         Container.BindInterfacesTo<FoodModel>().AsSingle();
         Container.BindInterfacesTo<FoodView>().FromComponentInNewPrefab(foodView).AsSingle();
-        Container.BindInterfacesTo<FoodConfig>().FromScriptableObject(foodConfig).AsSingle();
-
+        
         Container.BindInterfacesTo<ScoreController>().AsSingle();
         Container.BindInterfacesTo<ScoreModel>().AsSingle();
         Container.BindInterfacesTo<ScoreView>().FromComponentInNewPrefab(scoreView).AsSingle();

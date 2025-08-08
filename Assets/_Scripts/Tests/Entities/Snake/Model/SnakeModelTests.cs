@@ -29,18 +29,18 @@ namespace _Scripts.Tests.Entities.Snake.Model
             _testGameConfig.gridHeight = 20;
 
             _testConfig = ScriptableObject.CreateInstance<SnakeConfig>();
-            _testConfig.GameConfig.snakeMoveInterval = 0.2f;
+            _testGameConfig.snakeMoveInterval = 0.2f;
             _testConfig.StartPosition = new Vector2Int(10, 10);
             _testConfig.StartDirection = Direction.Right;
             _testConfig.BodyPartSortingOrder = 1;
             _testConfig.EnableSounds = true;
-            _testConfig.GameConfig = _testGameConfig;
+            
 
             // Setup mock event bus
             _mockEventBus = new MockEventBus();
 
             // Create the system under test
-            _snakeModel = new SnakeModel(_mockEventBus, _testConfig, _disposables);
+            _snakeModel = new SnakeModel(_mockEventBus, _testConfig, _disposables, _testGameConfig);
         }
 
         [TearDown]
@@ -198,10 +198,10 @@ namespace _Scripts.Tests.Entities.Snake.Model
             var customConfig = ScriptableObject.CreateInstance<SnakeConfig>();
             customConfig.StartDirection = Direction.Down;
             customConfig.StartPosition = new Vector2Int(5, 5);
-            customConfig.GameConfig = _testGameConfig;
+            
 
             // Act
-            var customSnakeModel = new SnakeModel(_mockEventBus, customConfig, _disposables);;
+            var customSnakeModel = new SnakeModel(_mockEventBus, customConfig, _disposables, _testGameConfig);;
 
             // Assert
             Assert.AreEqual(Direction.Down, customSnakeModel.CurrentDirection.Value);
@@ -222,10 +222,9 @@ namespace _Scripts.Tests.Entities.Snake.Model
                 var config = ScriptableObject.CreateInstance<SnakeConfig>();
                 config.StartDirection = direction;
                 config.StartPosition = new Vector2Int(10, 10);
-                config.GameConfig = _testGameConfig;
 
                 // Act
-                var snakeModel = new SnakeModel(_mockEventBus, config, _disposables);
+                var snakeModel = new SnakeModel(_mockEventBus, config, _disposables,_testGameConfig);
 
                 // Assert
                 Assert.AreEqual(direction, snakeModel.CurrentDirection.Value, 

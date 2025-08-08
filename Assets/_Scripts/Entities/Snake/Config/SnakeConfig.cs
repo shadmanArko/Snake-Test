@@ -17,10 +17,6 @@ namespace _Scripts.Entities.Snake.Config
         [Header("Sounds")] 
         [SerializeField] private bool _enableSounds = true;
 
-        [Header("Grid")] 
-        [SerializeField] private GameConfig gameConfig;
-        
-
         public Vector2Int StartPosition
         {
             get => _startPosition;
@@ -43,12 +39,6 @@ namespace _Scripts.Entities.Snake.Config
         {
             get => _enableSounds;
             set => _enableSounds = value;
-        }
-
-        public GameConfig GameConfig
-        {
-            get => gameConfig;
-            set => gameConfig = value;
         }
     }
 }

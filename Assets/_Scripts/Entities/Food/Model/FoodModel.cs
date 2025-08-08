@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using _Scripts.Entities.Food.Config;
 using Cysharp.Threading.Tasks;
 using _Scripts.Events;
+using _Scripts.GlobalConfigs;
 using _Scripts.Services.EventBus.Core;
 using _Scripts.HelperClasses;
 using UniRx;
@@ -16,13 +16,13 @@ namespace _Scripts.Entities.Food.Model
         private readonly IEventBus _eventBus;
         private readonly CompositeDisposable _disposables;
         private readonly ReactiveProperty<Vector2Int> _foodPosition = new ReactiveProperty<Vector2Int>();
-        private readonly IFoodConfig _config;
+        private readonly GameConfig _config;
         
         private Sprite _foodSprite;
         public IReadOnlyReactiveProperty<Vector2Int> FoodPosition => _foodPosition;
         public Sprite FoodSprite => _foodSprite;
 
-        public FoodModel(IEventBus eventBus, IFoodConfig config, CompositeDisposable disposables)
+        public FoodModel(IEventBus eventBus, GameConfig config, CompositeDisposable disposables)
         {
             _eventBus = eventBus;
             _config = config;
@@ -38,11 +38,11 @@ namespace _Scripts.Entities.Food.Model
             do
             {
                 newFoodPosition = new Vector2Int(
-                    Random.Range(0, _config.GameConfig.gridWidth),
-                    Random.Range(0, _config.GameConfig.gridHeight)
+                    Random.Range(0, _config.gridWidth),
+                    Random.Range(0, _config.gridHeight)
                 );
                 attempts++;
-            } while (occupiedPositions.Contains(newFoodPosition) && attempts < _config.GameConfig.maxFoodSpawnAttempts);
+            } while (occupiedPositions.Contains(newFoodPosition) && attempts < _config.maxFoodSpawnAttempts);
 
             _foodPosition.Value = newFoodPosition;
             _eventBus.Publish(new FoodSpawnedEvent { Position = newFoodPosition });
@@ -52,7 +52,7 @@ namespace _Scripts.Entities.Food.Model
         {
             try
             {
-                _foodSprite = await AddressableHelper.LoadSpriteAsync(_config.GameConfig.foodSpriteAddressableKey);
+                _foodSprite = await AddressableHelper.LoadSpriteAsync(_config.foodSpriteAddressableKey);
             }
             catch (Exception e)
             {

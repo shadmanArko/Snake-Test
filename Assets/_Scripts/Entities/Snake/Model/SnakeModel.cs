@@ -5,6 +5,7 @@ using _Scripts.Entities.Snake.Config;
 using _Scripts.Entities.Snake.ValueObjects;
 using _Scripts.Enums;
 using _Scripts.Events;
+using _Scripts.GlobalConfigs;
 using _Scripts.HelperClasses;
 using _Scripts.Services.EventBus.Core;
 using Cysharp.Threading.Tasks;
@@ -25,7 +26,8 @@ namespace _Scripts.Entities.Snake.Model
 
         private readonly ReactiveProperty<IReadOnlyList<SnakeMovePosition>> _bodyPositions = new(new List<SnakeMovePosition>());
 
-        private readonly ISnakeConfig _config;
+        private readonly ISnakeConfig _snakeConfig;
+        private readonly GameConfig _gameConfig;
         private readonly List<SnakeMovePosition> _moveHistory = new();
         private int _bodySize;
         private Sprite _snakeHeadSprite;
@@ -43,13 +45,14 @@ namespace _Scripts.Entities.Snake.Model
 
         public Vector2Int FoodPosition{ get; set; } = new();
 
-        public SnakeModel(IEventBus eventBus, ISnakeConfig config, CompositeDisposable disposables)
+        public SnakeModel(IEventBus eventBus, ISnakeConfig snakeConfig, CompositeDisposable disposables, GameConfig gameConfig)
         {
             _eventBus = eventBus;
-            _config = config;
+            _snakeConfig = snakeConfig;
             _disposables = disposables;
-            _headPosition.Value = _config.StartPosition;
-            _currentDirection.Value = _config.StartDirection;
+            _gameConfig = gameConfig;
+            _headPosition.Value = _snakeConfig.StartPosition;
+            _currentDirection.Value = _snakeConfig.StartDirection;
             _state.Value = SnakeState.Alive;
             _bodySize = 0;
             _moveHistory.Clear();
@@ -58,18 +61,18 @@ namespace _Scripts.Entities.Snake.Model
         
         public async UniTask LoadSnakeHeadSprite()
         {
-            _snakeHeadSprite = await AddressableHelper.LoadSpriteAsync(_config.GameConfig.snakeHeadSpriteAddressableKey);
+            _snakeHeadSprite = await AddressableHelper.LoadSpriteAsync(_gameConfig.snakeHeadSpriteAddressableKey);
         }
         
         public async UniTask LoadSnakeBodySprite()
         {
-            _snakeBodySprite = await AddressableHelper.LoadSpriteAsync(_config.GameConfig.snakeBodySpriteAddressableKey);
+            _snakeBodySprite = await AddressableHelper.LoadSpriteAsync(_gameConfig.snakeBodySpriteAddressableKey);
         }
         
         private void StartMovementTimer()
         {
             _moveTimer?.Dispose();
-            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_config.GameConfig.snakeMoveInterval))
+            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_gameConfig.snakeMoveInterval))
                 .Where(_ => State.Value == SnakeState.Alive)
                 .Subscribe(_ => Move())
                 .AddTo(_disposables);
@@ -130,7 +133,7 @@ namespace _Scripts.Entities.Snake.Model
                 OccupiedPositions = GetAllOccupiedPositions()
             });
 
-            if (_config.EnableSounds)
+            if (_snakeConfig.EnableSounds)
             {
                 _eventBus.Publish(new PlaySfxEvent { ClipName = SoundClipName.SnakeEat });
             }
@@ -141,7 +144,7 @@ namespace _Scripts.Entities.Snake.Model
             _state.Value = SnakeState.Dead;
             _eventBus.Publish(new SnakeDiedEvent { Position = _headPosition.Value });
 
-            if (_config.EnableSounds)
+            if (_snakeConfig.EnableSounds)
             {
                 _eventBus.Publish(new PlaySfxEvent { ClipName = SoundClipName.SnakeDie });
             }
@@ -196,13 +199,13 @@ namespace _Scripts.Entities.Snake.Model
             var validatedPosition = position;
 
             if (validatedPosition.x < 0)
-                validatedPosition.x = _config.GameConfig.gridWidth - 1;
-            else if (validatedPosition.x >= _config.GameConfig.gridWidth)
+                validatedPosition.x = _gameConfig.gridWidth - 1;
+            else if (validatedPosition.x >= _gameConfig.gridWidth)
                 validatedPosition.x = 0;
 
             if (validatedPosition.y < 0)
-                validatedPosition.y = _config.GameConfig.gridHeight - 1;
-            else if (validatedPosition.y >= _config.GameConfig.gridHeight)
+                validatedPosition.y = _gameConfig.gridHeight - 1;
+            else if (validatedPosition.y >= _gameConfig.gridHeight)
                 validatedPosition.y = 0;
 
             return validatedPosition;
@@ -231,7 +234,7 @@ namespace _Scripts.Entities.Snake.Model
         
         public async UniTask<Sprite> GetVtoAsync()
         {
-            return await AddressableHelper.LoadSpriteAsync(_config.GameConfig.snakeHeadSpriteAddressableKey);
+            return await AddressableHelper.LoadSpriteAsync(_gameConfig.snakeHeadSpriteAddressableKey);
         }
         public void Dispose()
         {

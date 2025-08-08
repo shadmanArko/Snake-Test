@@ -10,6 +10,5 @@ namespace _Scripts.Entities.Snake.Config
         Direction StartDirection { get; set; }
         int BodyPartSortingOrder { get; set; }
         bool EnableSounds { get; set; }
-        GameConfig GameConfig { get; set; }
     }
 }

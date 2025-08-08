@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using NUnit.Framework;
 using UniRx;
-using _Scripts.Entities.Food.Config;
 using _Scripts.Entities.Food.Model;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
@@ -16,7 +15,7 @@ namespace _Scripts.Tests.Entities.Food.Model
     public class FoodModelTests
     {
         private MockEventBus _mockEventBus;
-        private FoodConfig _testConfig;
+        private GameConfig _testConfig;
         private GameConfig _testGameConfig;
         private FoodModel _foodModel;
         private const string TestSpriteKey = "test_food_sprite";
@@ -30,9 +29,8 @@ namespace _Scripts.Tests.Entities.Food.Model
             _testGameConfig.gridWidth = 10;
             _testGameConfig.gridHeight = 10;
 
-            _testConfig = ScriptableObject.CreateInstance<FoodConfig>();
-            _testConfig.GameConfig = _testGameConfig;
-            _testConfig.GameConfig.foodSpriteAddressableKey = TestSpriteKey;
+            _testConfig = ScriptableObject.CreateInstance<GameConfig>();
+            _testConfig.foodSpriteAddressableKey = TestSpriteKey;
 
             // Setup mock event bus
             _mockEventBus = new MockEventBus();
@@ -94,8 +92,8 @@ namespace _Scripts.Tests.Entities.Food.Model
             _foodModel.SpawnFood(occupiedPositions);
 
             // Assert
-            Assert.IsTrue(capturedPosition.x >= 0 && capturedPosition.x < _testConfig.GameConfig.gridWidth);
-            Assert.IsTrue(capturedPosition.y >= 0 && capturedPosition.y < _testConfig.GameConfig.gridHeight);
+            Assert.IsTrue(capturedPosition.x >= 0 && capturedPosition.x < _testConfig.gridWidth);
+            Assert.IsTrue(capturedPosition.y >= 0 && capturedPosition.y < _testConfig.gridHeight);
         }
 
         [Test]
@@ -117,8 +115,8 @@ namespace _Scripts.Tests.Entities.Food.Model
 
             // Assert
             Assert.IsFalse(occupiedPositions.Contains(finalPosition));
-            Assert.IsTrue(finalPosition.x >= 0 && finalPosition.x < _testConfig.GameConfig.gridWidth);
-            Assert.IsTrue(finalPosition.y >= 0 && finalPosition.y < _testConfig.GameConfig.gridHeight);
+            Assert.IsTrue(finalPosition.x >= 0 && finalPosition.x < _testConfig.gridWidth);
+            Assert.IsTrue(finalPosition.y >= 0 && finalPosition.y < _testConfig.gridHeight);
         }
 
         [Test]
@@ -164,9 +162,9 @@ namespace _Scripts.Tests.Entities.Food.Model
             smallGridConfig.gridWidth = 3;
             smallGridConfig.gridHeight = 3;
 
-            var smallConfig = ScriptableObject.CreateInstance<FoodConfig>();
-            smallConfig.GameConfig = smallGridConfig;
-            smallConfig.GameConfig.foodSpriteAddressableKey = TestSpriteKey;
+            var smallConfig = ScriptableObject.CreateInstance<GameConfig>();
+            smallConfig = smallGridConfig;
+            smallConfig.foodSpriteAddressableKey = TestSpriteKey;
 
             var smallFoodModel = new FoodModel(_mockEventBus, smallConfig, _disposables);
             
