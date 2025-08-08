@@ -15,3 +15,4 @@ MonoBehaviour:
   _soundConfig: {fileID: 11400000, guid: 51a4fa73146ef45b6a903aaa62b76303, type: 2}
   _saveDataJsonFile: {fileID: 4900000, guid: aa53617cfc7142b8afe8b21cc0d93f26, type: 3}
   _sceneConfig: {fileID: 11400000, guid: 04e88a7cc80914af5affc3057f8e7979, type: 2}
+  _gameConfig: {fileID: 11400000, guid: f1311bd983f2d4ecf8876b2697fdd473, type: 2}

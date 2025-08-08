@@ -1,42 +1,48 @@
 using UnityEngine;
 using Firebase;
-using Firebase.Extensions;
 using Firebase.RemoteConfig;
 using System;
 using System.Threading.Tasks;
+using Zenject;
 
 namespace _Scripts.GlobalConfigs
 {
-    public class RemoteConfigManager : MonoBehaviour
+    public class RemoteConfigManager : IInitializable
     {
-        public static RemoteConfigManager Instance;
-        
-        [Header("Config Reference")]
-        public GameConfig localGameConfig; // Assign your ScriptableObject here
-        
-        [Header("Remote Config Settings")]
+        private readonly GameConfig _localGameConfig;
         public bool useRemoteConfig = true;
         public bool debugLogs = true;
         
-        private bool firebaseInitialized = false;
+        private bool _firebaseInitialized = false;
         private const string GAME_CONFIG_KEY = "gameConfig";
         
         public event Action OnConfigLoaded;
         public event Action<string> OnConfigError;
-        
-        void Awake()
+
+
+        public RemoteConfigManager(GameConfig localGameConfig)
         {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-                InitializeFirebaseAndLoadConfig();
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            _localGameConfig = localGameConfig;
         }
+        
+        public void Initialize()
+        {
+            InitializeFirebaseAndLoadConfig();
+        }
+        
+        // void Awake()
+        // {
+        //     if (Instance == null)
+        //     {
+        //         Instance = this;
+        //         DontDestroyOnLoad(gameObject);
+        //         InitializeFirebaseAndLoadConfig();
+        //     }
+        //     else
+        //     {
+        //         Destroy(gameObject);
+        //     }
+        // }
         
         private async void InitializeFirebaseAndLoadConfig()
         {
@@ -46,7 +52,7 @@ namespace _Scripts.GlobalConfigs
                 
                 if (dependencyStatus == DependencyStatus.Available)
                 {
-                    firebaseInitialized = true;
+                    _firebaseInitialized = true;
                     LogDebug("Firebase initialized successfully");
                     
                     if (useRemoteConfig)
@@ -78,7 +84,7 @@ namespace _Scripts.GlobalConfigs
             try
             {
                 // Set default values from local ScriptableObject
-                var defaultConfigData = new GameConfigData(localGameConfig);
+                var defaultConfigData = new GameConfigData(_localGameConfig);
                 string defaultJson = JsonUtility.ToJson(defaultConfigData, true);
                 
                 var defaults = new System.Collections.Generic.Dictionary<string, object>
@@ -107,7 +113,7 @@ namespace _Scripts.GlobalConfigs
                 LogDebug($"Remote Config Info - Last Fetch Status: {info.LastFetchStatus},");
                 
                 // Fetch remote config with shorter cache for testing (5 minutes)
-                var fetchTask = FirebaseRemoteConfig.DefaultInstance.FetchAsync(TimeSpan.FromMinutes(5));
+                var fetchTask = FirebaseRemoteConfig.DefaultInstance.FetchAsync(TimeSpan.FromMinutes(.5));
                 await fetchTask;
                 
                 // Get updated info after fetch
@@ -189,12 +195,12 @@ namespace _Scripts.GlobalConfigs
                     
                     if (remoteConfigData != null)
                     {
-                        remoteConfigData.ApplyToScriptableObject(localGameConfig);
+                        remoteConfigData.ApplyToScriptableObject(_localGameConfig);
                         LogDebug("Remote config applied to ScriptableObject successfully");
                         
                         // Log the applied values for verification
-                        LogDebug($"Applied values - Grid: {localGameConfig.gridWidth}x{localGameConfig.gridHeight}, " +
-                               $"Snake Speed: {localGameConfig.snakeMoveInterval}, Score: {localGameConfig.scorePerFood}");
+                        LogDebug($"Applied values - Grid: {_localGameConfig.gridWidth}x{_localGameConfig.gridHeight}, " +
+                               $"Snake Speed: {_localGameConfig.snakeMoveInterval}, Score: {_localGameConfig.scorePerFood}");
                     }
                     else
                     {
@@ -216,7 +222,7 @@ namespace _Scripts.GlobalConfigs
         // Manual refresh method you can call anytime - with force fetch
         public async void RefreshConfig(bool forceRefresh = false)
         {
-            if (firebaseInitialized && useRemoteConfig)
+            if (_firebaseInitialized && useRemoteConfig)
             {
                 try
                 {
@@ -250,13 +256,13 @@ namespace _Scripts.GlobalConfigs
         // Helper method to get current config (returns your ScriptableObject)
         public GameConfig GetCurrentConfig()
         {
-            return localGameConfig;
+            return _localGameConfig;
         }
         
         // Upload current local config to Firebase Console (for initial setup)
         public void LogCurrentConfigForFirebaseConsole()
         {
-            var configData = new GameConfigData(localGameConfig);
+            var configData = new GameConfigData(_localGameConfig);
             string json = JsonUtility.ToJson(configData, true);
             Debug.Log($"Copy this JSON to Firebase Console under key '{GAME_CONFIG_KEY}':\n{json}");
         }
@@ -265,7 +271,7 @@ namespace _Scripts.GlobalConfigs
         [ContextMenu("Test Remote Config Connection")]
         public async void TestRemoteConfigConnection()
         {
-            if (!firebaseInitialized)
+            if (!_firebaseInitialized)
             {
                 LogError("Firebase not initialized yet!");
                 return;

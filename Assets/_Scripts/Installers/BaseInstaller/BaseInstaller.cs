@@ -1,3 +1,4 @@
+using _Scripts.GlobalConfigs;
 using _Scripts.Services.EventBus.Core;
 using _Scripts.Services.Persistence;
 using _Scripts.Services.Persistence.Repositories;
@@ -16,6 +17,8 @@ public class BaseInstaller : ScriptableObjectInstaller<BaseInstaller>
     [SerializeField] private TextAsset _saveDataJsonFile;
     
     [SerializeField] private SceneConfig _sceneConfig;
+    
+    [SerializeField] private GameConfig _gameConfig;
 
     public override void InstallBindings()
     {
@@ -24,6 +27,8 @@ public class BaseInstaller : ScriptableObjectInstaller<BaseInstaller>
         Container.Bind<DataContext>().To<JsonDataContext>().AsSingle();
         Container.BindInterfacesTo<PersistenceSystemInitializer>().AsSingle();
         Container.BindInterfacesTo<UnitOfWork>().AsSingle();
+        Container.BindInterfacesAndSelfTo<RemoteConfigManager>().AsSingle();
+        Container.BindInterfacesAndSelfTo<GameConfig>().FromScriptableObject(_gameConfig).AsSingle();
         
         Container.BindInterfacesTo<UniRxEventBus>().AsSingle();
         
