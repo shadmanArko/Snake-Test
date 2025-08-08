@@ -5,8 +5,8 @@ namespace _Scripts.Entities.GameOverAndPause.Model
     public interface IGameOverAndPauseModel
     {
         GameStateConfig GameOver();
-        void Pause();
-        void Resume();
+        GameStateConfig Pause();
+        GameStateConfig Resume();
         bool ShowNewHighScoreTextTitle();
         int GetScore();
         int GetHighScore();

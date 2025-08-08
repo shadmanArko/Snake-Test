@@ -26,6 +26,8 @@ namespace _Scripts.Entities.GameOverAndPause.Controller
         public void Initialize()
         {
             _view.RestartButton.ClickFunc += OnRestartButtonClicked;
+            _view.PauseButton.ClickFunc += OnPauseButtonClicked;
+            _view.ResumeButton.ClickFunc += OnResumeButtonClicked;
             _eventBus.OnEvent<SnakeDiedEvent>()
                 .Subscribe(_ =>
                 {
@@ -35,11 +37,35 @@ namespace _Scripts.Entities.GameOverAndPause.Controller
                     _view.HighScoreText.text = _model.GetHighScore().ToString();
                 })
                 .AddTo(_disposables);
+            
+            _eventBus.OnEvent<PauseGameEvent>()
+                .Subscribe(_ =>
+                {
+                    _view.ApplyVto(_model.Pause());
+                })
+                .AddTo(_disposables);
+            
+            _eventBus.OnEvent<ResumeGameEvent>()
+                .Subscribe(_ =>
+                {
+                    _view.ApplyVto(_model.Resume());
+                })
+                .AddTo(_disposables);
         }
 
         private void OnRestartButtonClicked()
         {
             _eventBus.Publish(new RestartGameSceneEvent());
+        }
+
+        private void OnPauseButtonClicked()
+        {
+            _eventBus.Publish(new PauseGameEvent());
+        }
+
+        private void OnResumeButtonClicked()
+        {
+            _eventBus.Publish(new ResumeGameEvent());
         }
 
         public void Dispose()

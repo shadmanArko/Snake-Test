@@ -10,6 +10,8 @@ namespace _Scripts.Entities.GameOverAndPause.View
         GameObject GameOverUI { get; }
         GameObject PauseUI { get; }
         Button_UI RestartButton { get; }
+        Button_UI PauseButton { get; }
+        Button_UI ResumeButton { get; }
         GameObject NewHighScoreTitleTest { get; }
         Text ScoreText { get; }
         Text HighScoreText { get; }

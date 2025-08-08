@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ccfc81746104fe6b1328d3d7805e6cc, type: 3}
   m_Name: FoodConfig
   m_EditorClassIdentifier: 
-  _gridConfig: {fileID: 11400000, guid: b638d7e384dc84aa18209f663824e503, type: 2}
-  _foodSpriteAddressableKey: FoodApple
+  gameConfig: {fileID: 11400000, guid: f1311bd983f2d4ecf8876b2697fdd473, type: 2}

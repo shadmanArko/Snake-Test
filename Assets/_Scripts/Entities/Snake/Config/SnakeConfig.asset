@@ -12,11 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa70c79da0841bd9a121f5f6d4c1560, type: 3}
   m_Name: SnakeConfig
   m_EditorClassIdentifier: 
-  _moveInterval: 0.2
   _startPosition: {x: 10, y: 10}
   _startDirection: 1
-  _snakeHeadSpriteAddressableKey: SnakeHead
-  _snakeBodySpriteAddressableKey: SnakeBody
   _bodyPartSortingOrder: 1
   _enableSounds: 1
-  _gridConfig: {fileID: 11400000, guid: b638d7e384dc84aa18209f663824e503, type: 2}
+  gameConfig: {fileID: 11400000, guid: f1311bd983f2d4ecf8876b2697fdd473, type: 2}

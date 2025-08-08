@@ -10,7 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b5f284b300647bfbc5a47c8b10767e5, type: 3}
-  m_Name: GridConfig
+  m_Name: GameConfig
   m_EditorClassIdentifier: 
-  width: 20
-  height: 20
+  gridWidth: 20
+  gridHeight: 20
+  snakeMoveInterval: 0.1
+  snakeHeadSpriteAddressableKey: SnakeHead
+  snakeBodySpriteAddressableKey: SnakeBody
+  maxFoodSpawnAttempts: 1000
+  foodSpriteAddressableKey: FoodApple
+  scorePerFood: 10

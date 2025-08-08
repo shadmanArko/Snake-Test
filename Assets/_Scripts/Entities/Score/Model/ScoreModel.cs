@@ -30,7 +30,7 @@ namespace _Scripts.Entities.Score.Model
 
         public void UpdateScore()
         {
-            _score.Value += _config.ScorePerFood;
+            _score.Value += _config.GameConfig.scorePerFood;
             
             if (_score.Value > _level.highestScore)
             {

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using _Scripts.Entities.Food.Config;
 using Cysharp.Threading.Tasks;
 using _Scripts.Events;
@@ -21,6 +20,7 @@ namespace _Scripts.Entities.Food.Model
         
         private Sprite _foodSprite;
         public IReadOnlyReactiveProperty<Vector2Int> FoodPosition => _foodPosition;
+        public Sprite FoodSprite => _foodSprite;
 
         public FoodModel(IEventBus eventBus, IFoodConfig config, CompositeDisposable disposables)
         {
@@ -29,29 +29,35 @@ namespace _Scripts.Entities.Food.Model
             _disposables = disposables;
         }
         
+        
         public void SpawnFood(List<Vector2Int> occupiedPositions)
         {
             Vector2Int newFoodPosition;
             int attempts = 0;
-            const int maxAttempts = 1000; // Prevent infinite loop
 
             do
             {
                 newFoodPosition = new Vector2Int(
-                    Random.Range(0, _config.GridConfig.width),
-                    Random.Range(0, _config.GridConfig.height)
+                    Random.Range(0, _config.GameConfig.gridWidth),
+                    Random.Range(0, _config.GameConfig.gridHeight)
                 );
                 attempts++;
-            } while (occupiedPositions.Contains(newFoodPosition) && attempts < maxAttempts);
+            } while (occupiedPositions.Contains(newFoodPosition) && attempts < _config.GameConfig.maxFoodSpawnAttempts);
 
             _foodPosition.Value = newFoodPosition;
             _eventBus.Publish(new FoodSpawnedEvent { Position = newFoodPosition });
         }
-        
-        public async UniTask<Sprite> GetVtoAsync()
+
+        public async UniTask LoadFoodSprite()
         {
-            _foodSprite = await AddressableHelper.LoadSpriteAsync(_config.FoodSpriteAddressableKey);
-            return _foodSprite;
+            try
+            {
+                _foodSprite = await AddressableHelper.LoadSpriteAsync(_config.GameConfig.foodSpriteAddressableKey);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
         
         public void Dispose()

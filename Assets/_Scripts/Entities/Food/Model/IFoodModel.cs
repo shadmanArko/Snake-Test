@@ -9,6 +9,7 @@ namespace _Scripts.Entities.Food.Model
     {
         IReadOnlyReactiveProperty<Vector2Int> FoodPosition { get; }
         void SpawnFood(List<Vector2Int> occupiedPositions);
-        UniTask<Sprite> GetVtoAsync();
+        Sprite FoodSprite { get; }
+        UniTask LoadFoodSprite();
     }
 }

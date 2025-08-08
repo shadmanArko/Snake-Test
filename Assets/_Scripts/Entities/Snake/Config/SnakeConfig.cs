@@ -8,15 +8,9 @@ namespace _Scripts.Entities.Snake.Config
     public class SnakeConfig : ScriptableObject, ISnakeConfig
     {
         [Header("Movement")] 
-        [SerializeField] private float _moveInterval = 0.2f;
         [SerializeField] private Vector2Int _startPosition = new Vector2Int(10, 10);
         [SerializeField] private Direction _startDirection = Direction.Right;
         
-        [Header("AssetKey")] 
-        [SerializeField] private string _snakeHeadSpriteAddressableKey;
-        [SerializeField] private string _snakeBodySpriteAddressableKey;
-        
-
         [Header("Body")] 
         [SerializeField] private int _bodyPartSortingOrder = 1;
 
@@ -24,13 +18,8 @@ namespace _Scripts.Entities.Snake.Config
         [SerializeField] private bool _enableSounds = true;
 
         [Header("Grid")] 
-        [SerializeField] private GridConfig _gridConfig;
+        [SerializeField] private GameConfig gameConfig;
         
-        public float MoveInterval
-        {
-            get => _moveInterval;
-            set => _moveInterval = value;
-        }
 
         public Vector2Int StartPosition
         {
@@ -56,22 +45,10 @@ namespace _Scripts.Entities.Snake.Config
             set => _enableSounds = value;
         }
 
-        public GridConfig GridConfig
+        public GameConfig GameConfig
         {
-            get => _gridConfig;
-            set => _gridConfig = value;
-        }
-
-        public string SnakeHeadSpriteAddressableKey 
-        { 
-            get => _snakeHeadSpriteAddressableKey; 
-            set => _snakeHeadSpriteAddressableKey = value; 
-        }
-
-        public string SnakeBodySpriteAddressableKey
-        {
-            get => _snakeBodySpriteAddressableKey; 
-            set => _snakeBodySpriteAddressableKey = value;
+            get => gameConfig;
+            set => gameConfig = value;
         }
     }
 }

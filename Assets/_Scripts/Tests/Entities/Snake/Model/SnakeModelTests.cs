@@ -16,7 +16,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
     {
         private MockEventBus _mockEventBus;
         private SnakeConfig _testConfig;
-        private GridConfig _testGridConfig;
+        private GameConfig _testGameConfig;
         private SnakeModel _snakeModel;
         private CompositeDisposable _disposables;
 
@@ -24,17 +24,17 @@ namespace _Scripts.Tests.Entities.Snake.Model
         public void SetUp()
         {
             // Create test config instances
-            _testGridConfig = ScriptableObject.CreateInstance<GridConfig>();
-            _testGridConfig.width = 20;
-            _testGridConfig.height = 20;
+            _testGameConfig = ScriptableObject.CreateInstance<GameConfig>();
+            _testGameConfig.gridWidth = 20;
+            _testGameConfig.gridHeight = 20;
 
             _testConfig = ScriptableObject.CreateInstance<SnakeConfig>();
-            _testConfig.MoveInterval = 0.2f;
+            _testConfig.GameConfig.snakeMoveInterval = 0.2f;
             _testConfig.StartPosition = new Vector2Int(10, 10);
             _testConfig.StartDirection = Direction.Right;
             _testConfig.BodyPartSortingOrder = 1;
             _testConfig.EnableSounds = true;
-            _testConfig.GridConfig = _testGridConfig;
+            _testConfig.GameConfig = _testGameConfig;
 
             // Setup mock event bus
             _mockEventBus = new MockEventBus();
@@ -50,8 +50,8 @@ namespace _Scripts.Tests.Entities.Snake.Model
             
             if (_testConfig != null)
                 UnityEngine.Object.DestroyImmediate(_testConfig);
-            if (_testGridConfig != null)
-                UnityEngine.Object.DestroyImmediate(_testGridConfig);
+            if (_testGameConfig != null)
+                UnityEngine.Object.DestroyImmediate(_testGameConfig);
         }
 
         #region Constructor Tests
@@ -198,7 +198,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
             var customConfig = ScriptableObject.CreateInstance<SnakeConfig>();
             customConfig.StartDirection = Direction.Down;
             customConfig.StartPosition = new Vector2Int(5, 5);
-            customConfig.GridConfig = _testGridConfig;
+            customConfig.GameConfig = _testGameConfig;
 
             // Act
             var customSnakeModel = new SnakeModel(_mockEventBus, customConfig, _disposables);;
@@ -222,7 +222,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
                 var config = ScriptableObject.CreateInstance<SnakeConfig>();
                 config.StartDirection = direction;
                 config.StartPosition = new Vector2Int(10, 10);
-                config.GridConfig = _testGridConfig;
+                config.GameConfig = _testGameConfig;
 
                 // Act
                 var snakeModel = new SnakeModel(_mockEventBus, config, _disposables);

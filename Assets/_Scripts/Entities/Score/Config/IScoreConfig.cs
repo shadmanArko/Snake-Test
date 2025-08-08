@@ -4,7 +4,7 @@ namespace _Scripts.Entities.Score.Config
 {
     public interface IScoreConfig
     {
-        int ScorePerFood { get; set; }
+        GameConfig GameConfig { get; set; }
         GameLevelConfig GameLevelConfig { get; set; }
     }
 }

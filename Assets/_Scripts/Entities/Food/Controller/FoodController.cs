@@ -6,12 +6,12 @@ using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using Cysharp.Threading.Tasks;
 using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
+using Zenject;
 
 namespace _Scripts.Entities.Food.Controller
 {
-    public class FoodController : IFoodController, IDisposable
+    public class FoodController : IFoodController, IDisposable, IInitializable
     {
         private readonly IFoodModel _model;
         private readonly IFoodView _view;
@@ -28,30 +28,21 @@ namespace _Scripts.Entities.Food.Controller
             _view = view;
             _eventBus = eventBus;
             _disposables = disposables;
-            Initialize();
         }
 
         public void Initialize()
         {
-            SetupView();
-            
             BindModelToView();
-            
             SubscribeToEvents();
+            SetupModelAndView().Forget();
         }
 
-        private void SetupView()
+        private async UniTask SetupModelAndView()
         {
-            LoadAndApplySprite().Forget();
+            await _model.LoadFoodSprite();
+            _view.ApplyVto(_model.FoodSprite);
         }
-
-        private async UniTaskVoid LoadAndApplySprite()
-        {
-            Sprite sprite = await _model.GetVtoAsync();
-            _view.ApplyVto(sprite);
-        }
-
-
+        
         private void BindModelToView()
         {
             _model.FoodPosition

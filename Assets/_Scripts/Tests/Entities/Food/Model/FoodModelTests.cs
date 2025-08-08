@@ -17,7 +17,7 @@ namespace _Scripts.Tests.Entities.Food.Model
     {
         private MockEventBus _mockEventBus;
         private FoodConfig _testConfig;
-        private GridConfig _testGridConfig;
+        private GameConfig _testGameConfig;
         private FoodModel _foodModel;
         private const string TestSpriteKey = "test_food_sprite";
         private CompositeDisposable _disposables;
@@ -26,13 +26,13 @@ namespace _Scripts.Tests.Entities.Food.Model
         public void SetUp()
         {
             // Create test config instances
-            _testGridConfig = ScriptableObject.CreateInstance<GridConfig>();
-            _testGridConfig.width = 10;
-            _testGridConfig.height = 10;
+            _testGameConfig = ScriptableObject.CreateInstance<GameConfig>();
+            _testGameConfig.gridWidth = 10;
+            _testGameConfig.gridHeight = 10;
 
             _testConfig = ScriptableObject.CreateInstance<FoodConfig>();
-            _testConfig.GridConfig = _testGridConfig;
-            _testConfig.FoodSpriteAddressableKey = TestSpriteKey;
+            _testConfig.GameConfig = _testGameConfig;
+            _testConfig.GameConfig.foodSpriteAddressableKey = TestSpriteKey;
 
             // Setup mock event bus
             _mockEventBus = new MockEventBus();
@@ -48,8 +48,8 @@ namespace _Scripts.Tests.Entities.Food.Model
             
             if (_testConfig != null)
                 UnityEngine.Object.DestroyImmediate(_testConfig);
-            if (_testGridConfig != null)
-                UnityEngine.Object.DestroyImmediate(_testGridConfig);
+            if (_testGameConfig != null)
+                UnityEngine.Object.DestroyImmediate(_testGameConfig);
         }
 
         #region Constructor Tests
@@ -94,8 +94,8 @@ namespace _Scripts.Tests.Entities.Food.Model
             _foodModel.SpawnFood(occupiedPositions);
 
             // Assert
-            Assert.IsTrue(capturedPosition.x >= 0 && capturedPosition.x < _testConfig.GridConfig.width);
-            Assert.IsTrue(capturedPosition.y >= 0 && capturedPosition.y < _testConfig.GridConfig.height);
+            Assert.IsTrue(capturedPosition.x >= 0 && capturedPosition.x < _testConfig.GameConfig.gridWidth);
+            Assert.IsTrue(capturedPosition.y >= 0 && capturedPosition.y < _testConfig.GameConfig.gridHeight);
         }
 
         [Test]
@@ -117,8 +117,8 @@ namespace _Scripts.Tests.Entities.Food.Model
 
             // Assert
             Assert.IsFalse(occupiedPositions.Contains(finalPosition));
-            Assert.IsTrue(finalPosition.x >= 0 && finalPosition.x < _testConfig.GridConfig.width);
-            Assert.IsTrue(finalPosition.y >= 0 && finalPosition.y < _testConfig.GridConfig.height);
+            Assert.IsTrue(finalPosition.x >= 0 && finalPosition.x < _testConfig.GameConfig.gridWidth);
+            Assert.IsTrue(finalPosition.y >= 0 && finalPosition.y < _testConfig.GameConfig.gridHeight);
         }
 
         [Test]
@@ -160,13 +160,13 @@ namespace _Scripts.Tests.Entities.Food.Model
         public void SpawnFood_WithSmallGridAndManyOccupiedPositions_DoesNotHangInfinitely()
         {
             // Arrange - Create a model with small grid
-            var smallGridConfig = ScriptableObject.CreateInstance<GridConfig>();
-            smallGridConfig.width = 3;
-            smallGridConfig.height = 3;
+            var smallGridConfig = ScriptableObject.CreateInstance<GameConfig>();
+            smallGridConfig.gridWidth = 3;
+            smallGridConfig.gridHeight = 3;
 
             var smallConfig = ScriptableObject.CreateInstance<FoodConfig>();
-            smallConfig.GridConfig = smallGridConfig;
-            smallConfig.FoodSpriteAddressableKey = TestSpriteKey;
+            smallConfig.GameConfig = smallGridConfig;
+            smallConfig.GameConfig.foodSpriteAddressableKey = TestSpriteKey;
 
             var smallFoodModel = new FoodModel(_mockEventBus, smallConfig, _disposables);
             
@@ -208,7 +208,7 @@ namespace _Scripts.Tests.Entities.Food.Model
             // In production, you might want to refactor AddressableHelper to be injectable
             
             // Act & Assert
-            Assert.DoesNotThrow(async () => await _foodModel.GetVtoAsync());
+            Assert.DoesNotThrow(async () => await _foodModel.LoadFoodSprite());
         }
 
         #endregion

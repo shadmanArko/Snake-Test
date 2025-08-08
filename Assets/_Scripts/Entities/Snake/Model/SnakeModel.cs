@@ -58,20 +58,18 @@ namespace _Scripts.Entities.Snake.Model
         
         public async UniTask LoadSnakeHeadSprite()
         {
-           
-                _snakeHeadSprite = await AddressableHelper.LoadSpriteAsync(_config.SnakeHeadSpriteAddressableKey);
-                
+            _snakeHeadSprite = await AddressableHelper.LoadSpriteAsync(_config.GameConfig.snakeHeadSpriteAddressableKey);
         }
         
         public async UniTask LoadSnakeBodySprite()
         {
-                _snakeBodySprite = await AddressableHelper.LoadSpriteAsync(_config.SnakeBodySpriteAddressableKey);
+            _snakeBodySprite = await AddressableHelper.LoadSpriteAsync(_config.GameConfig.snakeBodySpriteAddressableKey);
         }
         
         private void StartMovementTimer()
         {
             _moveTimer?.Dispose();
-            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_config.MoveInterval))
+            _moveTimer = Observable.Interval(TimeSpan.FromSeconds(_config.GameConfig.snakeMoveInterval))
                 .Where(_ => State.Value == SnakeState.Alive)
                 .Subscribe(_ => Move())
                 .AddTo(_disposables);
@@ -198,13 +196,13 @@ namespace _Scripts.Entities.Snake.Model
             var validatedPosition = position;
 
             if (validatedPosition.x < 0)
-                validatedPosition.x = _config.GridConfig.width - 1;
-            else if (validatedPosition.x >= _config.GridConfig.width)
+                validatedPosition.x = _config.GameConfig.gridWidth - 1;
+            else if (validatedPosition.x >= _config.GameConfig.gridWidth)
                 validatedPosition.x = 0;
 
             if (validatedPosition.y < 0)
-                validatedPosition.y = _config.GridConfig.height - 1;
-            else if (validatedPosition.y >= _config.GridConfig.height)
+                validatedPosition.y = _config.GameConfig.gridHeight - 1;
+            else if (validatedPosition.y >= _config.GameConfig.gridHeight)
                 validatedPosition.y = 0;
 
             return validatedPosition;
@@ -233,7 +231,7 @@ namespace _Scripts.Entities.Snake.Model
         
         public async UniTask<Sprite> GetVtoAsync()
         {
-            return await AddressableHelper.LoadSpriteAsync(_config.SnakeHeadSpriteAddressableKey);
+            return await AddressableHelper.LoadSpriteAsync(_config.GameConfig.snakeHeadSpriteAddressableKey);
         }
         public void Dispose()
         {

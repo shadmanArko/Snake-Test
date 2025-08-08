@@ -7,20 +7,16 @@ namespace _Scripts.Entities.Score.Config
     public class ScoreConfig : ScriptableObject, IScoreConfig
     {
         [SerializeField] private GameLevelConfig gameLevelConfig;
-        
-        [Header("Score")]
-        [SerializeField] private int scorePerFood = 10;
-        
+        [SerializeField] private GameConfig gameConfig;
         public GameLevelConfig GameLevelConfig
         {
             get => gameLevelConfig;
             set => gameLevelConfig = value;
         }
-        
-        public int ScorePerFood
+        public GameConfig GameConfig
         {
-            get => scorePerFood;
-            set => scorePerFood = value;
+            get => gameConfig;
+            set => gameConfig = value;
         }
     }
 }

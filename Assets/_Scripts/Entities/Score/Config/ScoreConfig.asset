@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ScoreConfig
   m_EditorClassIdentifier: 
   gameLevelConfig: {fileID: 11400000, guid: db9a2203e16f24ca0bc8bbd5c1001449, type: 2}
-  scorePerFood: 10
+  gameConfig: {fileID: 11400000, guid: f1311bd983f2d4ecf8876b2697fdd473, type: 2}

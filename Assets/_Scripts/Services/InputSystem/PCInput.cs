@@ -1,22 +1,42 @@
 using _Scripts.Enums;
+using _Scripts.Events;
+using _Scripts.Services.EventBus.Core;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
 namespace _Scripts.Services.InputSystem
 {
-    public class PCInput : IGameInput, ITickable
+    public class PCInput : IGameInput, ITickable, IInitializable
     {
         public ReactiveProperty<Direction?> DirectionInput { get; private set; }
     
         private Direction? _lastDirection;
+        private bool _isPaused = false;
 
-        public PCInput()
+        private readonly IEventBus _eventBus;
+        private readonly CompositeDisposable _disposables;
+        
+        public PCInput(IEventBus eventBus, CompositeDisposable disposables)
         {
+            _eventBus = eventBus;
+            _disposables = disposables;
             DirectionInput = new ReactiveProperty<Direction?>(null);
+        }
+        
+        public void Initialize()
+        {
+            _eventBus.OnEvent<PauseGameEvent>().Subscribe(_=> _isPaused = true).AddTo(_disposables);
+            _eventBus.OnEvent<ResumeGameEvent>().Subscribe(_=> _isPaused = false).AddTo(_disposables);
         }
 
         public void Tick()
+        {
+            HandleDirectionalInput();
+            HandlePauseInput();
+        }
+
+        private void HandleDirectionalInput()
         {
             Direction? newDirection = null;
 
@@ -43,6 +63,21 @@ namespace _Scripts.Services.InputSystem
             {
                 _lastDirection = newDirection;
                 DirectionInput.Value = newDirection;
+            }
+        }
+        
+        private void HandlePauseInput()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (_isPaused)
+                {
+                    _eventBus.Publish(new ResumeGameEvent());
+                }
+                else
+                {
+                    _eventBus.Publish(new PauseGameEvent());
+                }
             }
         }
     }

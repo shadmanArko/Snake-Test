@@ -25,14 +25,16 @@ namespace _Scripts.Entities.GameOverAndPause.Model
         }
         
 
-        public void Pause()
+        public GameStateConfig Pause()
         {
             Time.timeScale = 0f;
+            return _config.PauseStateConfig;
         }
 
-        public void Resume()
+        public GameStateConfig Resume()
         {
             Time.timeScale = 1f;
+            return _config.GameResumeConfig;
         }
 
         public bool ShowNewHighScoreTextTitle()

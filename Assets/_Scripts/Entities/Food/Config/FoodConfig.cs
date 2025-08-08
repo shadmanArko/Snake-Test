@@ -7,22 +7,13 @@ namespace _Scripts.Entities.Food.Config
     public class FoodConfig : ScriptableObject, IFoodConfig
     {
         [Header("Grid")] 
-        [SerializeField] private GridConfig _gridConfig;
-    
-        [Header("Food")]
-        [SerializeField] private string _foodSpriteAddressableKey;
+        [SerializeField] private GameConfig gameConfig;
         
-       
-        public GridConfig GridConfig
+        public GameConfig GameConfig
         {
-            get => _gridConfig;
-            set => _gridConfig = value;
+            get => gameConfig;
+            set => gameConfig = value;
         }
-
-        public string FoodSpriteAddressableKey
-        {
-            get => _foodSpriteAddressableKey;
-            set => _foodSpriteAddressableKey = value;
-        }
+        
     }
 }
