@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridWidth: 20
   gridHeight: 20
-  snakeMoveInterval: 0.1
+  snakeMoveInterval: 0.2
   snakeHeadSpriteAddressableKey: SnakeHead
   snakeBodySpriteAddressableKey: SnakeBody
   maxFoodSpawnAttempts: 1000

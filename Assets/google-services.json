@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "485042515698",
+    "project_id": "snakegame-base",
+    "storage_bucket": "snakegame-base.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485042515698:android:371641ed5cf90c3cb9ea6b",
+        "android_client_info": {
+          "package_name": "com.shadman.snakeGamebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBotGVCmmiQ79iaQIksnptpcC6--xZiPw0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
