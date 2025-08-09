@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: MAIN MENU
+  m_Text: QUIT
 --- !u!1 &599836897081512233
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 3558104371606534995}
   - component: {fileID: 6778203117963837957}
   m_Layer: 0
-  m_Name: mainMenuBtn
+  m_Name: Quit_btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1227,6 +1227,7 @@ MonoBehaviour:
   restartButton: {fileID: 2868088668744912844}
   pauseButton: {fileID: 4934955029709600127}
   resumeButton: {fileID: 8742525863750271444}
+  quitButton: {fileID: 6778203117963837957}
   newHighScoreTitleTest: {fileID: 8782624304956596736}
   scoreText: {fileID: 5189168464078481909}
   highScoreText: {fileID: 4861140887294762531}
