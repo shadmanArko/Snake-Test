@@ -23,7 +23,6 @@ namespace _Scripts.Tests.Entities.Snake.Model
         [SetUp]
         public void SetUp()
         {
-            // Create test config instances
             _testGameConfig = ScriptableObject.CreateInstance<GameConfig>();
             _testGameConfig.gridWidth = 20;
             _testGameConfig.gridHeight = 20;
@@ -35,11 +34,10 @@ namespace _Scripts.Tests.Entities.Snake.Model
             _testConfig.BodyPartSortingOrder = 1;
             _testConfig.EnableSounds = true;
             
-
-            // Setup mock event bus
+            _disposables = new CompositeDisposable();
+            
             _mockEventBus = new MockEventBus();
-
-            // Create the system under test
+            
             _snakeModel = new SnakeModel(_mockEventBus, _testConfig, _disposables, _testGameConfig);
         }
 
@@ -47,6 +45,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
         public void TearDown()
         {
             _snakeModel?.Dispose();
+            _disposables?.Dispose();
             
             if (_testConfig != null)
                 UnityEngine.Object.DestroyImmediate(_testConfig);
@@ -59,7 +58,6 @@ namespace _Scripts.Tests.Entities.Snake.Model
         [Test]
         public void Constructor_WithValidDependencies_InitializesCorrectly()
         {
-            // Assert
             Assert.IsNotNull(_snakeModel);
             Assert.IsNotNull(_snakeModel.BodyPositions);
             Assert.IsNotNull(_snakeModel.CurrentDirection);
@@ -69,7 +67,6 @@ namespace _Scripts.Tests.Entities.Snake.Model
         [Test]
         public void Constructor_InitializesWithStartPosition()
         {
-            // Assert
             Assert.AreEqual(0, _snakeModel.BodyPositions.Value.Count);
         }
 
@@ -80,14 +77,12 @@ namespace _Scripts.Tests.Entities.Snake.Model
         [Test]
         public void CurrentDirection_InitialValueMatchesConfig()
         {
-            // Assert
             Assert.AreEqual(_testConfig.StartDirection, _snakeModel.CurrentDirection.Value);
         }
 
         [Test]
         public void BodyPositions_IsNotEmpty_InitiallyContainsOnePosition()
         {
-            // Assert
             Assert.IsNotNull(_snakeModel.BodyPositions.Value);
             Assert.AreEqual(0, _snakeModel.BodyPositions.Value.Count);
         }
@@ -99,7 +94,6 @@ namespace _Scripts.Tests.Entities.Snake.Model
         [Test]
         public void Constructor_PublishesExpectedEvents()
         {
-            // Assert - Check that some events were published during construction
             Assert.GreaterOrEqual(_mockEventBus.PublishedEvents.Count, 0);
         }
 
@@ -110,14 +104,12 @@ namespace _Scripts.Tests.Entities.Snake.Model
         [Test]
         public void Dispose_DoesNotThrowException()
         {
-            // Act & Assert
             Assert.DoesNotThrow(() => _snakeModel.Dispose());
         }
 
         [Test]
         public void Dispose_CanBeCalledMultipleTimes()
         {
-            // Act & Assert
             Assert.DoesNotThrow(() =>
             {
                 _snakeModel.Dispose();
@@ -133,7 +125,6 @@ namespace _Scripts.Tests.Entities.Snake.Model
         [Test]
         public void CurrentDirection_IsReadOnlyReactiveProperty()
         {
-            // Assert
             Assert.IsNotNull(_snakeModel.CurrentDirection);
             Assert.IsInstanceOf<IReadOnlyReactiveProperty<Direction>>(_snakeModel.CurrentDirection);
         }
@@ -199,15 +190,17 @@ namespace _Scripts.Tests.Entities.Snake.Model
             customConfig.StartDirection = Direction.Down;
             customConfig.StartPosition = new Vector2Int(5, 5);
             
+            var customDisposables = new CompositeDisposable();
 
             // Act
-            var customSnakeModel = new SnakeModel(_mockEventBus, customConfig, _disposables, _testGameConfig);;
+            var customSnakeModel = new SnakeModel(_mockEventBus, customConfig, customDisposables, _testGameConfig);
 
             // Assert
             Assert.AreEqual(Direction.Down, customSnakeModel.CurrentDirection.Value);
             
             // Clean up
             customSnakeModel.Dispose();
+            customDisposables.Dispose();
             UnityEngine.Object.DestroyImmediate(customConfig);
         }
 
@@ -222,9 +215,11 @@ namespace _Scripts.Tests.Entities.Snake.Model
                 var config = ScriptableObject.CreateInstance<SnakeConfig>();
                 config.StartDirection = direction;
                 config.StartPosition = new Vector2Int(10, 10);
+                
+                var disposables = new CompositeDisposable();
 
                 // Act
-                var snakeModel = new SnakeModel(_mockEventBus, config, _disposables,_testGameConfig);
+                var snakeModel = new SnakeModel(_mockEventBus, config, disposables, _testGameConfig);
 
                 // Assert
                 Assert.AreEqual(direction, snakeModel.CurrentDirection.Value, 
@@ -232,6 +227,7 @@ namespace _Scripts.Tests.Entities.Snake.Model
 
                 // Clean up
                 snakeModel.Dispose();
+                disposables.Dispose();
                 UnityEngine.Object.DestroyImmediate(config);
             }
         }
