@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace _Scripts.Entities.MainMenu.View
 {
-    public class MainMenuView : MonoBehaviour
+    public class MainMenuView : MonoBehaviour, IMainMenuView
     {
         [SerializeField] private Button_UI _playButton;
         [SerializeField] private Button_UI _howToPlayButton;

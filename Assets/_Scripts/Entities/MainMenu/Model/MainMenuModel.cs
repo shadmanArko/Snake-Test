@@ -5,28 +5,22 @@ using _Scripts.Entities.MainMenu.DataClasses;
 using _Scripts.Enums;
 using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace _Scripts.Entities.MainMenu.Model
 {
-    public class MainMenuModel : IMainMenuModel, IDisposable
+    public class MainMenuModel : IMainMenuModel, IDisposable, IInitializable
     {
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
-    
-        private readonly ReactiveProperty<MainMenuPageType> _currentPage = 
-            new ReactiveProperty<MainMenuPageType>(MainMenuPageType.Home);
+        private readonly CompositeDisposable _disposables;
+        private readonly ReactiveProperty<MainMenuPageType> _currentPage = new(MainMenuPageType.Home);
 
         public IReadOnlyReactiveProperty<MainMenuPageType> CurrentPage => _currentPage;
 
-        public MainMenuModel()
+        public MainMenuModel(CompositeDisposable disposables)
         {
-            Initialize();
+            _disposables = disposables;
         }
         
-        public void QuitApplication()
-        {
-            Application.Quit();
-        }
-
         public void Initialize()
         {
             SetActivePage(MainMenuPageType.Home);
@@ -34,9 +28,7 @@ namespace _Scripts.Entities.MainMenu.Model
 
         public void SetActivePage(MainMenuPageType pageType)
         {
-            var previousPage = _currentPage.Value;
-        
-            if (previousPage != pageType)
+            if (_currentPage.Value != pageType)
             {
                 _currentPage.Value = pageType;
             }
@@ -50,33 +42,32 @@ namespace _Scripts.Entities.MainMenu.Model
         public void SetPageActive(MainMenuPageType pageType, List<MainMenuPage> mainMenuPages, bool isActive)
         {
             var page = GetPageByType(pageType, mainMenuPages);
-            
-            if (page?.gameObject != null)
-            {
-                page.gameObject.SetActive(isActive);
-            }
+            page?.gameObject?.SetActive(isActive);
         }
 
         public void SetAllPagesInactive(List<MainMenuPage> mainMenuPages)
         {
-            foreach (var page in mainMenuPages)
+            if (mainMenuPages == null) return;
+
+            foreach (var page in mainMenuPages.Where(page => page?.gameObject != null))
             {
-                if (page?.gameObject != null)
-                {
-                    page.gameObject.SetActive(false);
-                }
+                page.gameObject.SetActive(false);
             }
+        }
+
+        public void QuitApplication()
+        {
+            Application.Quit();
+        }
+
+        public void Dispose()
+        {
+            _currentPage?.Dispose();
         }
         
         private MainMenuPage GetPageByType(MainMenuPageType pageType, List<MainMenuPage> mainMenuPages)
         {
             return mainMenuPages?.FirstOrDefault(page => page.type == pageType);
-        }
-
-        public void Dispose()
-        {
-            _disposables?.Dispose();
-            _currentPage?.Dispose();
         }
     }
 }

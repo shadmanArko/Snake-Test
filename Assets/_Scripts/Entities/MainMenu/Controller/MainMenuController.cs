@@ -6,45 +6,71 @@ using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using _Scripts.Services.Utils;
 using UniRx;
+using Zenject;
 
 namespace _Scripts.Entities.MainMenu.Controller
 {
-    public class MainMenuController : IMainMenuController, IDisposable
+    public class MainMenuController : IMainMenuController, IDisposable, IInitializable
     {
         private readonly IMainMenuModel _model;
-        private readonly MainMenuView _view;
+        private readonly IMainMenuView _view;
         private readonly IEventBus _eventBus;
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly CompositeDisposable _disposables;
 
-        public MainMenuController(IMainMenuModel model, MainMenuView view, IEventBus eventBus)
+        public MainMenuController(IMainMenuModel model, IMainMenuView view, IEventBus eventBus, CompositeDisposable disposables)
         {
             _model = model;
             _view = view;
             _eventBus = eventBus;
-            Initialize();
+            _disposables = disposables;
         }
 
         public void Initialize()
         {
+            BindModelToView();
+            SetupButtonActions();
+            SetupButtonSounds();
+        }
+        
+        public void Dispose()
+        {
+            UnsubscribeButtonActions();
+        }
+
+        private void BindModelToView()
+        {
             _model.CurrentPage
-                .Subscribe(pageType => {
+                .Subscribe(pageType =>
+                {
                     _model.SetAllPagesInactive(_view.MainMenuPages);
                     _model.SetPageActive(pageType, _view.MainMenuPages, true);
                 })
                 .AddTo(_disposables);
-
-            _view.PlayButton.ClickFunc += () => _eventBus.Publish(new LoadGameSceneEvent());
-            
-            _view.QuitButton.ClickFunc += () => _model.QuitApplication();
-            
-            _view.HowToPlayButton.ClickFunc += () => _model.SetActivePage(MainMenuPageType.HowToPlay);
-            
-            _view.BackButton.ClickFunc += () => _model.SetActivePage(MainMenuPageType.Home);
-
-            SetupButtonSounds();
         }
-        
-        
+
+        private void SetupButtonActions()
+        {
+            _view.PlayButton.ClickFunc += OnPlayButtonClicked;
+            _view.QuitButton.ClickFunc += OnQuitButtonClicked;
+            _view.HowToPlayButton.ClickFunc += OnHowToPlayButtonClicked;
+            _view.BackButton.ClickFunc += OnBackButtonClicked;
+        }
+
+        private void UnsubscribeButtonActions()
+        {
+            if (_view?.PlayButton != null)
+                _view.PlayButton.ClickFunc -= OnPlayButtonClicked;
+            
+            if (_view?.QuitButton != null)
+                _view.QuitButton.ClickFunc -= OnQuitButtonClicked;
+            
+            if (_view?.HowToPlayButton != null)
+                _view.HowToPlayButton.ClickFunc -= OnHowToPlayButtonClicked;
+            
+            if (_view?.BackButton != null)
+                _view.BackButton.ClickFunc -= OnBackButtonClicked;
+        }
+
         private void SetupButtonSounds()
         {
             SetupButtonSound(_view.PlayButton);
@@ -61,14 +87,24 @@ namespace _Scripts.Entities.MainMenu.Controller
             button.ClickFunc += () => _eventBus.Publish(new PlaySfxEvent { ClipName = SoundClipName.ButtonClick });
         }
 
-        public void Dispose()
+        private void OnPlayButtonClicked()
         {
-            _view.PlayButton.ClickFunc -= () => _eventBus.Publish(new LoadGameSceneEvent());
-            _view.QuitButton.ClickFunc -= () => _model.QuitApplication();
-            _view.HowToPlayButton.ClickFunc -= () => _model.SetActivePage(MainMenuPageType.HowToPlay);
-            _view.BackButton.ClickFunc -= () => _model.SetActivePage(MainMenuPageType.Home);
-            
-            _disposables?.Dispose();
+            _eventBus.Publish(new LoadGameSceneEvent());
+        }
+
+        private void OnQuitButtonClicked()
+        {
+            _model.QuitApplication();
+        }
+
+        private void OnHowToPlayButtonClicked()
+        {
+            _model.SetActivePage(MainMenuPageType.HowToPlay);
+        }
+
+        private void OnBackButtonClicked()
+        {
+            _model.SetActivePage(MainMenuPageType.Home);
         }
     }
 }
