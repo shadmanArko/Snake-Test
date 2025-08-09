@@ -4,7 +4,6 @@ using _Scripts.Entities.Score.View;
 using _Scripts.Events;
 using _Scripts.Services.EventBus.Core;
 using UniRx;
-using UniRx.Triggers;
 using Zenject;
 
 namespace _Scripts.Entities.Score.Controller
@@ -26,21 +25,30 @@ namespace _Scripts.Entities.Score.Controller
         
         public void Initialize()
         {
+            BindModelToView();
+            SubscribeToEvents();
+        }
+       
+        public void Dispose()
+        {
+        }
+
+        private void BindModelToView()
+        {
             _model.Score
                 .Subscribe(score => _view.ScoreText.text = score.ToString())
                 .AddTo(_disposables);
             
             _model.HighScore
-                .Subscribe(score => _view.HighScoreText.text = score.ToString())
+                .Subscribe(highScore => _view.HighScoreText.text = highScore.ToString())
                 .AddTo(_disposables);
-            
+        }
+
+        private void SubscribeToEvents()
+        {
             _eventBus.OnEvent<FoodEatenEvent>()
                 .Subscribe(_ => _model.UpdateScore())
                 .AddTo(_disposables);
-        }
-       
-        public void Dispose()
-        {
         }
     }
 }
