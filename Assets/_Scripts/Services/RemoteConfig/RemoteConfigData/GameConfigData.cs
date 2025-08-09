@@ -1,6 +1,7 @@
 using System;
+using _Scripts.GlobalConfigs;
 
-namespace _Scripts.GlobalConfigs
+namespace _Scripts.Services.RemoteConfig
 {
     [Serializable]
     public class GameConfigData

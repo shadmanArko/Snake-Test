@@ -3,9 +3,10 @@ using Firebase;
 using Firebase.RemoteConfig;
 using System;
 using System.Threading.Tasks;
+using _Scripts.GlobalConfigs;
 using Zenject;
 
-namespace _Scripts.GlobalConfigs
+namespace _Scripts.Services.RemoteConfig
 {
     public class RemoteConfigManager : IInitializable, IRemoteConfigManager
     {

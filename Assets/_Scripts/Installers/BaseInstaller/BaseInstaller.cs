@@ -2,6 +2,7 @@ using _Scripts.GlobalConfigs;
 using _Scripts.Services.EventBus.Core;
 using _Scripts.Services.Persistence;
 using _Scripts.Services.Persistence.Repositories;
+using _Scripts.Services.RemoteConfig;
 using _Scripts.Services.SceneFlowManagementSystem.Config;
 using _Scripts.Services.SceneFlowManagementSystem.SceneFlowManager;
 using _Scripts.Services.SoundSystem.Config;
