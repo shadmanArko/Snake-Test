@@ -1,0 +1,85 @@
+<linker>
+  <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="GameSceneInstaller" preserve="all" />
+    <type fullname="LoaderCallback" preserve="all" />
+    <type fullname="MainMenuSceneInstaller" preserve="all" />
+  </assembly>
+  <assembly fullname="Food, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="_Scripts.Entities.Food.View.FoodView" preserve="all" />
+  </assembly>
+  <assembly fullname="GameOverAndPause, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="_Scripts.Entities.GameOverAndPause.Config.GameOverAndPauseConfig" preserve="all" />
+    <type fullname="_Scripts.Entities.GameOverAndPause.Config.GameStateConfig" preserve="all" />
+    <type fullname="_Scripts.Entities.GameOverAndPause.View.GameOverAndPauseView" preserve="all" />
+  </assembly>
+  <assembly fullname="GlobalConfig, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="_Scripts.GlobalConfigs.GameLevelConfig" preserve="all" />
+  </assembly>
+  <assembly fullname="MainMenu, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="_Scripts.Entities.MainMenu.View.MainMenuView" preserve="all" />
+    <type fullname="_Scripts.Entities.MainMenu.DataClasses.MainMenuPage" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Score, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="_Scripts.Entities.Score.Config.ScoreConfig" preserve="all" />
+    <type fullname="_Scripts.Entities.Score.View.ScoreView" preserve="all" />
+  </assembly>
+  <assembly fullname="Services, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="_Scripts.Services.Utils.Button_UI" preserve="all" />
+  </assembly>
+  <assembly fullname="Snake, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="_Scripts.Entities.Snake.Config.SnakeConfig" preserve="all" />
+    <type fullname="_Scripts.Entities.Snake.View.SnakeView" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.InstanceProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.LegacyResourcesProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneProvider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.AudioListener" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Camera" preserve="all" />
+    <type fullname="UnityEngine.Cubemap" preserve="all" />
+    <type fullname="UnityEngine.GameObject" preserve="all" />
+    <type fullname="UnityEngine.LightingSettings" preserve="all" />
+    <type fullname="UnityEngine.LightmapSettings" preserve="all" />
+    <type fullname="UnityEngine.Material" preserve="all" />
+    <type fullname="UnityEngine.Object" preserve="all" />
+    <type fullname="UnityEngine.RectTransform" preserve="all" />
+    <type fullname="UnityEngine.RenderSettings" preserve="all" />
+    <type fullname="UnityEngine.Shader" preserve="all" />
+    <type fullname="UnityEngine.Sprite" preserve="all" />
+    <type fullname="UnityEngine.SpriteRenderer" preserve="all" />
+    <type fullname="UnityEngine.Texture2D" preserve="all" />
+    <type fullname="UnityEngine.Transform" preserve="all" />
+    <type fullname="UnityEngine.Events.PersistentCallGroup" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.Events.UnityEvent" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.EventSystems.EventSystem" preserve="all" />
+    <type fullname="UnityEngine.EventSystems.StandaloneInputModule" preserve="all" />
+    <type fullname="UnityEngine.UI.CanvasScaler" preserve="all" />
+    <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />
+    <type fullname="UnityEngine.UI.Image" preserve="all" />
+    <type fullname="UnityEngine.UI.Outline" preserve="all" />
+    <type fullname="UnityEngine.UI.Text" preserve="all" />
+    <type fullname="UnityEngine.UI.FontData" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.UI.MaskableGraphic/CullStateChangedEvent" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Canvas" preserve="all" />
+    <type fullname="UnityEngine.CanvasRenderer" preserve="all" />
+  </assembly>
+  <assembly fullname="Zenject, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="Zenject.SceneContext" preserve="all" />
+  </assembly>
+  <assembly fullname="Enums">
+    <type fullname="_Scripts.Enums.Direction" preserve="nothing" serialized="true" />
+  </assembly>
+</linker>
