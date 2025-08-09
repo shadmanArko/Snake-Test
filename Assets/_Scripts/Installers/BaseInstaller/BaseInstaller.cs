@@ -27,7 +27,7 @@ public class BaseInstaller : ScriptableObjectInstaller<BaseInstaller>
         Container.Bind<DataContext>().To<JsonDataContext>().AsSingle();
         Container.BindInterfacesTo<PersistenceSystemInitializer>().AsSingle();
         Container.BindInterfacesTo<UnitOfWork>().AsSingle();
-        Container.BindInterfacesAndSelfTo<RemoteConfigManager>().AsSingle();
+        Container.BindInterfacesTo<RemoteConfigManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<GameConfig>().FromScriptableObject(_gameConfig).AsSingle();
         
         Container.BindInterfacesTo<UniRxEventBus>().AsSingle();

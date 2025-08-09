@@ -18,8 +18,7 @@ namespace _Scripts.Services.Persistence
         }
 
         public Levels Levels => _levels;
-
-
+        
         public async void Save()
         {
             try
@@ -31,6 +30,5 @@ namespace _Scripts.Services.Persistence
                 Debug.LogError($"Unable to save data: {e}");
             }
         }
-        
     }
 }

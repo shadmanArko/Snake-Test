@@ -7,18 +7,21 @@ using Zenject;
 
 namespace _Scripts.GlobalConfigs
 {
-    public class RemoteConfigManager : IInitializable
+    public class RemoteConfigManager : IInitializable, IRemoteConfigManager
     {
+        private const string GAME_CONFIG_KEY = "gameConfig";
+        private const float DEFAULT_CACHE_EXPIRATION_MINUTES = 5f;
+        private const float TESTING_CACHE_EXPIRATION_MINUTES = 0.5f;
+        
         private readonly GameConfig _localGameConfig;
+        
         public bool useRemoteConfig = true;
         public bool debugLogs = true;
         
         private bool _firebaseInitialized = false;
-        private const string GAME_CONFIG_KEY = "gameConfig";
         
         public event Action OnConfigLoaded;
         public event Action<string> OnConfigError;
-
 
         public RemoteConfigManager(GameConfig localGameConfig)
         {
@@ -29,21 +32,87 @@ namespace _Scripts.GlobalConfigs
         {
             InitializeFirebaseAndLoadConfig();
         }
+
+        public async void RefreshConfig(bool forceRefresh = false)
+        {
+            if (!_firebaseInitialized || !useRemoteConfig) return;
+
+            try
+            {
+                LogDebug($"Refreshing config (force: {forceRefresh})...");
+                
+                TimeSpan cacheExpiration = forceRefresh ? TimeSpan.Zero : TimeSpan.FromMinutes(DEFAULT_CACHE_EXPIRATION_MINUTES);
+                
+                await FirebaseRemoteConfig.DefaultInstance.FetchAsync(cacheExpiration);
+                bool activated = await FirebaseRemoteConfig.DefaultInstance.ActivateAsync();
+                
+                LogDebug($"Config refresh completed. Activated: {activated}");
+                
+                ApplyRemoteConfig();
+                OnConfigLoaded?.Invoke();
+            }
+            catch (Exception e)
+            {
+                LogError($"Failed to refresh config: {e.Message}");
+            }
+        }
         
-        // void Awake()
-        // {
-        //     if (Instance == null)
-        //     {
-        //         Instance = this;
-        //         DontDestroyOnLoad(gameObject);
-        //         InitializeFirebaseAndLoadConfig();
-        //     }
-        //     else
-        //     {
-        //         Destroy(gameObject);
-        //     }
-        // }
+        public void ForceRefreshConfig()
+        {
+            RefreshConfig(true);
+        }
         
+        public GameConfig GetCurrentConfig()
+        {
+            return _localGameConfig;
+        }
+        
+        public void LogCurrentConfigForFirebaseConsole()
+        {
+            var configData = new GameConfigData(_localGameConfig);
+            string json = JsonUtility.ToJson(configData, true);
+            Debug.Log($"Copy this JSON to Firebase Console under key '{GAME_CONFIG_KEY}':\n{json}");
+        }
+        
+        public async void TestRemoteConfigConnection()
+        {
+            if (!_firebaseInitialized)
+            {
+                LogError("Firebase not initialized yet!");
+                return;
+            }
+            
+            try
+            {
+                LogDebug("Testing Remote Config connection...");
+                
+                var info = FirebaseRemoteConfig.DefaultInstance.Info;
+                LogDebug($"Current Remote Config Status: {info.LastFetchStatus}");
+                
+                await FirebaseRemoteConfig.DefaultInstance.FetchAsync(TimeSpan.Zero);
+                
+                var keys = FirebaseRemoteConfig.DefaultInstance.Keys;
+                LogDebug($"Available Remote Config Keys: [{string.Join(", ", keys)}]");
+                
+                var value = FirebaseRemoteConfig.DefaultInstance.GetValue(GAME_CONFIG_KEY);
+                LogDebug($"GameConfig Value: {value.StringValue}");
+                LogDebug($"GameConfig Source: {value.Source}");
+                
+                bool activated = await FirebaseRemoteConfig.DefaultInstance.ActivateAsync();
+                LogDebug($"Activation result: {activated}");
+                
+                if (activated)
+                {
+                    var activatedValue = FirebaseRemoteConfig.DefaultInstance.GetValue(GAME_CONFIG_KEY);
+                    LogDebug($"Activated GameConfig Value: {activatedValue.StringValue}");
+                }
+            }
+            catch (Exception e)
+            {
+                LogError($"Test failed: {e.Message}");
+            }
+        }
+
         private async void InitializeFirebaseAndLoadConfig()
         {
             try
@@ -68,22 +137,25 @@ namespace _Scripts.GlobalConfigs
                 }
                 else
                 {
-                    LogError($"Firebase initialization failed: {dependencyStatus}");
-                    OnConfigError?.Invoke($"Firebase initialization failed: {dependencyStatus}");
+                    HandleFirebaseInitializationError(dependencyStatus.ToString());
                 }
             }
             catch (Exception e)
             {
-                LogError($"Exception during Firebase initialization: {e.Message}");
-                OnConfigError?.Invoke(e.Message);
+                HandleFirebaseInitializationError(e.Message);
             }
+        }
+
+        private void HandleFirebaseInitializationError(string errorMessage)
+        {
+            LogError($"Firebase initialization failed: {errorMessage}");
+            OnConfigError?.Invoke($"Firebase initialization failed: {errorMessage}");
         }
         
         private async Task SetupRemoteConfigDefaults()
         {
             try
             {
-                // Set default values from local ScriptableObject
                 var defaultConfigData = new GameConfigData(_localGameConfig);
                 string defaultJson = JsonUtility.ToJson(defaultConfigData, true);
                 
@@ -108,66 +180,22 @@ namespace _Scripts.GlobalConfigs
             {
                 LogDebug("Fetching remote config...");
                 
-                // Check current remote config info
                 var info = FirebaseRemoteConfig.DefaultInstance.Info;
-                LogDebug($"Remote Config Info - Last Fetch Status: {info.LastFetchStatus},");
+                LogDebug($"Remote Config Info - Last Fetch Status: {info.LastFetchStatus}");
                 
-                // Fetch remote config with shorter cache for testing (5 minutes)
-                var fetchTask = FirebaseRemoteConfig.DefaultInstance.FetchAsync(TimeSpan.FromMinutes(.5));
+                var fetchTask = FirebaseRemoteConfig.DefaultInstance.FetchAsync(TimeSpan.FromMinutes(TESTING_CACHE_EXPIRATION_MINUTES));
                 await fetchTask;
                 
-                // Get updated info after fetch
                 info = FirebaseRemoteConfig.DefaultInstance.Info;
                 LogDebug($"After Fetch - Last Fetch Status: {info.LastFetchStatus}");
                 
                 if (fetchTask.IsCompletedSuccessfully)
                 {
-                    LogDebug("Remote config fetched successfully");
-                    
-                    // Check if we have any remote values before activation
-                    var testValue = FirebaseRemoteConfig.DefaultInstance.GetValue(GAME_CONFIG_KEY);
-                    LogDebug($"Remote config value before activation: {testValue.StringValue}");
-                    LogDebug($"Value source: {testValue.Source}");
-                    
-                    // Activate the fetched config
-                    var activateTask = FirebaseRemoteConfig.DefaultInstance.ActivateAsync();
-                    await activateTask;
-                    
-                    // Check value after activation attempt (regardless of activation result)
-                    var currentValue = FirebaseRemoteConfig.DefaultInstance.GetValue(GAME_CONFIG_KEY);
-                    LogDebug($"Current config value: {currentValue.StringValue}");
-                    LogDebug($"Current value source: {currentValue.Source}");
-                    
-                    if (activateTask.Result)
-                    {
-                        LogDebug("Remote config activated successfully - new data available");
-                        ApplyRemoteConfig();
-                        OnConfigLoaded?.Invoke();
-                    }
-                    else
-                    {
-                        LogDebug($"No new remote config to activate (cached data is current). Fetch Status: {info.LastFetchStatus}");
-                        
-                        // Even if activation returns false, we might still have valid remote data
-                        // Check if we have remote data (not default) and apply it
-                        if (currentValue.Source == Firebase.RemoteConfig.ValueSource.RemoteValue || 
-                            (currentValue.Source == Firebase.RemoteConfig.ValueSource.DefaultValue && !string.IsNullOrEmpty(currentValue.StringValue)))
-                        {
-                            LogDebug("Applying existing remote config data");
-                            ApplyRemoteConfig();
-                        }
-                        else
-                        {
-                            LogWarning("No valid remote config data available, using local config");
-                        }
-                        
-                        OnConfigLoaded?.Invoke();
-                    }
+                    await HandleSuccessfulFetch();
                 }
                 else
                 {
-                    LogWarning($"Failed to fetch remote config. Status: {info.LastFetchStatus}");
-                    OnConfigLoaded?.Invoke();
+                    HandleFailedFetch(info);
                 }
             }
             catch (Exception e)
@@ -176,6 +204,61 @@ namespace _Scripts.GlobalConfigs
                 LogError($"Stack trace: {e.StackTrace}");
                 OnConfigError?.Invoke(e.Message);
             }
+        }
+
+        private async Task HandleSuccessfulFetch()
+        {
+            LogDebug("Remote config fetched successfully");
+            
+            var testValue = FirebaseRemoteConfig.DefaultInstance.GetValue(GAME_CONFIG_KEY);
+            LogDebug($"Remote config value before activation: {testValue.StringValue}");
+            LogDebug($"Value source: {testValue.Source}");
+            
+            var activateTask = FirebaseRemoteConfig.DefaultInstance.ActivateAsync();
+            await activateTask;
+            
+            var currentValue = FirebaseRemoteConfig.DefaultInstance.GetValue(GAME_CONFIG_KEY);
+            LogDebug($"Current config value: {currentValue.StringValue}");
+            LogDebug($"Current value source: {currentValue.Source}");
+            
+            if (activateTask.Result)
+            {
+                LogDebug("Remote config activated successfully - new data available");
+                ApplyRemoteConfig();
+            }
+            else
+            {
+                HandleNoNewConfigToActivate(currentValue);
+            }
+            
+            OnConfigLoaded?.Invoke();
+        }
+
+        private void HandleNoNewConfigToActivate(ConfigValue currentValue)
+        {
+            LogDebug("No new remote config to activate (cached data is current)");
+            
+            if (IsValidRemoteConfigValue(currentValue))
+            {
+                LogDebug("Applying existing remote config data");
+                ApplyRemoteConfig();
+            }
+            else
+            {
+                LogWarning("No valid remote config data available, using local config");
+            }
+        }
+
+        private bool IsValidRemoteConfigValue(ConfigValue value)
+        {
+            return value.Source == ValueSource.RemoteValue ||
+                   (value.Source == ValueSource.DefaultValue && !string.IsNullOrEmpty(value.StringValue));
+        }
+
+        private void HandleFailedFetch(ConfigInfo info)
+        {
+            LogWarning($"Failed to fetch remote config. Status: {info.LastFetchStatus}");
+            OnConfigLoaded?.Invoke();
         }
         
         private void ApplyRemoteConfig()
@@ -187,29 +270,25 @@ namespace _Scripts.GlobalConfigs
                 
                 LogDebug($"Applying config from source: {configValue.Source}");
                 
-                if (!string.IsNullOrEmpty(remoteConfigJson))
+                if (string.IsNullOrEmpty(remoteConfigJson))
                 {
-                    LogDebug($"Config JSON: {remoteConfigJson}");
-                    
-                    var remoteConfigData = JsonUtility.FromJson<GameConfigData>(remoteConfigJson);
-                    
-                    if (remoteConfigData != null)
-                    {
-                        remoteConfigData.ApplyToScriptableObject(_localGameConfig);
-                        LogDebug("Remote config applied to ScriptableObject successfully");
-                        
-                        // Log the applied values for verification
-                        LogDebug($"Applied values - Grid: {_localGameConfig.gridWidth}x{_localGameConfig.gridHeight}, " +
-                               $"Snake Speed: {_localGameConfig.snakeMoveInterval}, Score: {_localGameConfig.scorePerFood}");
-                    }
-                    else
-                    {
-                        LogError("Failed to parse remote config JSON");
-                    }
+                    LogWarning("Remote config JSON is empty, keeping local values");
+                    return;
+                }
+
+                LogDebug($"Config JSON: {remoteConfigJson}");
+                
+                var remoteConfigData = JsonUtility.FromJson<GameConfigData>(remoteConfigJson);
+                
+                if (remoteConfigData != null)
+                {
+                    remoteConfigData.ApplyToScriptableObject(_localGameConfig);
+                    LogDebug("Remote config applied to ScriptableObject successfully");
+                    LogAppliedConfigValues();
                 }
                 else
                 {
-                    LogWarning("Remote config JSON is empty, keeping local values");
+                    LogError("Failed to parse remote config JSON");
                 }
             }
             catch (Exception e)
@@ -218,100 +297,11 @@ namespace _Scripts.GlobalConfigs
                 LogError($"Stack trace: {e.StackTrace}");
             }
         }
-        
-        // Manual refresh method you can call anytime - with force fetch
-        public async void RefreshConfig(bool forceRefresh = false)
+
+        private void LogAppliedConfigValues()
         {
-            if (_firebaseInitialized && useRemoteConfig)
-            {
-                try
-                {
-                    LogDebug($"Refreshing config (force: {forceRefresh})...");
-                    
-                    // Use zero cache time to force fetch if needed
-                    TimeSpan cacheExpiration = forceRefresh ? TimeSpan.Zero : TimeSpan.FromMinutes(5);
-                    
-                    await FirebaseRemoteConfig.DefaultInstance.FetchAsync(cacheExpiration);
-                    bool activated = await FirebaseRemoteConfig.DefaultInstance.ActivateAsync();
-                    
-                    LogDebug($"Config refresh completed. Activated: {activated}");
-                    
-                    // Apply config regardless of activation result (it might be cached)
-                    ApplyRemoteConfig();
-                    OnConfigLoaded?.Invoke();
-                }
-                catch (Exception e)
-                {
-                    LogError($"Failed to refresh config: {e.Message}");
-                }
-            }
-        }
-        
-        // Force refresh config (ignores cache)
-        public async void ForceRefreshConfig()
-        {
-            RefreshConfig(true);
-        }
-        
-        // Helper method to get current config (returns your ScriptableObject)
-        public GameConfig GetCurrentConfig()
-        {
-            return _localGameConfig;
-        }
-        
-        // Upload current local config to Firebase Console (for initial setup)
-        public void LogCurrentConfigForFirebaseConsole()
-        {
-            var configData = new GameConfigData(_localGameConfig);
-            string json = JsonUtility.ToJson(configData, true);
-            Debug.Log($"Copy this JSON to Firebase Console under key '{GAME_CONFIG_KEY}':\n{json}");
-        }
-        
-        // Test method to check Firebase Remote Config setup
-        [ContextMenu("Test Remote Config Connection")]
-        public async void TestRemoteConfigConnection()
-        {
-            if (!_firebaseInitialized)
-            {
-                LogError("Firebase not initialized yet!");
-                return;
-            }
-            
-            try
-            {
-                LogDebug("Testing Remote Config connection...");
-                
-                // Check current status
-                var info = FirebaseRemoteConfig.DefaultInstance.Info;
-                LogDebug($"Current Remote Config Status: {info.LastFetchStatus}");
-                //LogDebug($"Last Fetch Time: {info.LastFetchTime}");
-                
-                // Force fetch with no cache
-                await FirebaseRemoteConfig.DefaultInstance.FetchAsync(TimeSpan.Zero);
-                
-                // Check all available keys
-                var keys = FirebaseRemoteConfig.DefaultInstance.Keys;
-                LogDebug($"Available Remote Config Keys: [{string.Join(", ", keys)}]");
-                
-                // Check our specific key
-                var value = FirebaseRemoteConfig.DefaultInstance.GetValue(GAME_CONFIG_KEY);
-                LogDebug($"GameConfig Value: {value.StringValue}");
-                LogDebug($"GameConfig Source: {value.Source}");
-                
-                // Try to activate
-                bool activated = await FirebaseRemoteConfig.DefaultInstance.ActivateAsync();
-                LogDebug($"Activation result: {activated}");
-                
-                if (activated)
-                {
-                    var activatedValue = FirebaseRemoteConfig.DefaultInstance.GetValue(GAME_CONFIG_KEY);
-                    LogDebug($"Activated GameConfig Value: {activatedValue.StringValue}");
-                }
-            }
-            catch (Exception e)
-            {
-                LogError($"Test failed: {e.Message}");
-            }
+            LogDebug($"Applied values - Grid: {_localGameConfig.gridWidth}x{_localGameConfig.gridHeight}, " +
+                   $"Snake Speed: {_localGameConfig.snakeMoveInterval}, Score: {_localGameConfig.scorePerFood}");
         }
         
         private void LogDebug(string message)
