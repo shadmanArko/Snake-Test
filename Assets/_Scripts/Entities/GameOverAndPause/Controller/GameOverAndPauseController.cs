@@ -32,7 +32,6 @@ namespace _Scripts.Entities.GameOverAndPause.Controller
         public void Dispose()
         {
             UnsubscribeButtonActions();
-            _disposables?.Dispose();
         }
 
         private void SetupButtonActions()

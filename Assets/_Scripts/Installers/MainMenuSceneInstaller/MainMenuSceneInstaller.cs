@@ -26,7 +26,7 @@ public class MainMenuSceneInstaller : ScriptableObjectInstaller<MainMenuSceneIns
     public override void InstallBindings()
     {
         Container.Bind<CompositeDisposable>().AsSingle();
-        Container.Bind<MainMenuGameSceneInit>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<MainMenuGameSceneInit>().AsSingle().NonLazy();
         
         Container.BindInterfacesTo<MainMenuModel>().AsSingle();
         Container.BindInterfacesTo<MainMenuView>().FromComponentInNewPrefab(mainMenuView).AsSingle();

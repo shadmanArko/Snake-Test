@@ -57,7 +57,7 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
     public override void InstallBindings()
     {
         Container.Bind<CompositeDisposable>().AsSingle();
-        Container.Bind<GameSceneInit>().AsSingle().NonLazy();
+        Container.BindInterfacesTo<GameSceneInit>().AsSingle().NonLazy();
         
         Container.BindInterfacesTo<SnakeController>().AsSingle();
         Container.BindInterfacesTo<SnakeModel>().AsSingle();
