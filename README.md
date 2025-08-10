@@ -212,10 +212,6 @@ The project is designed with testability in mind:
 - Document complex systems
 - Write meaningful commit messages
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - **Zenject** for dependency injection framework
